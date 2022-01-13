@@ -64,8 +64,6 @@
 
 static const char* configFile = "/boot/frc.json";
 
-namespace {
-
 unsigned int team;
 bool server = false;
 
@@ -264,8 +262,6 @@ cs::MjpegServer StartSwitchedCamera(const SwitchedCameraConfig& config) {
 
     return server;
 }
-
-} // namespace
 
 int main(int argc, char* argv[]) {
     if (argc >= 2) configFile = argv[1];

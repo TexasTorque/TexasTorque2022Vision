@@ -6,8 +6,6 @@
 #include "networktables/NetworkTableInstance.h"
 #include "vision/VisionPipeline.h"
 
-namespace {
-
 class Pipeline : public frc::VisionPipeline {
   public:
     // Define class scope variables
@@ -20,7 +18,5 @@ class Pipeline : public frc::VisionPipeline {
     // Update function definition
     void Process(cv::Mat& mat) override;
 };
-
-} 
 
 #endif
