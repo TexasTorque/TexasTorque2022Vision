@@ -1,6 +1,7 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+// This file is a slight modifications of the
+// original main file from the WPILib example,
+// but is setup to call the useable pipeline 
+// in ./pipeline.cc and ./pipeline.h
 
 #include <cstdio>
 #include <string>
@@ -14,12 +15,9 @@
 #include "wpi/json.h"
 #include "wpi/raw_istream.h"
 #include "wpi/raw_ostream.h"
-
 #include "cameraserver/CameraServer.h"
 
-// THIS MAIN.CC FILE HAS NOT BEEN TOUCHED BY ME, AS IT DOES NOT INCLUDE ANY
-// CODE BESIDES THE PIPELINE EXAMPLE CODE. NOW THAT THE BUILD SYSTEM IS WORKING,
-// I WILL BE UPDATING THIS FILE TO INCLUDE OUR DESIRED FUNCTIONALITY.
+#include "pipeline.h"
 
 /*
    JSON format:
@@ -72,15 +70,15 @@ unsigned int team;
 bool server = false;
 
 struct CameraConfig {
-  std::string name;
-  std::string path;
-  wpi::json config;
-  wpi::json streamConfig;
+    std::string name;
+    std::string path;
+    wpi::json config;
+    wpi::json streamConfig;
 };
 
 struct SwitchedCameraConfig {
-  std::string name;
-  std::string key;
+    std::string name;
+    std::string key;
 };
 
 std::vector<CameraConfig> cameraConfigs;
@@ -88,233 +86,225 @@ std::vector<SwitchedCameraConfig> switchedCameraConfigs;
 std::vector<cs::VideoSource> cameras;
 
 wpi::raw_ostream& ParseError() {
-  return wpi::errs() << "config error in '" << configFile << "': ";
+    return wpi::errs() << "config error in '" << configFile << "': ";
 }
 
 bool ReadCameraConfig(const wpi::json& config) {
-  CameraConfig c;
+    CameraConfig c;
 
-  // name
-  try {
-    c.name = config.at("name").get<std::string>();
-  } catch (const wpi::json::exception& e) {
-    ParseError() << "could not read camera name: " << e.what() << '\n';
-    return false;
-  }
+    // name
+    try {
+        c.name = config.at("name").get<std::string>();
+    } catch (const wpi::json::exception& e) {
+        ParseError() << "could not read camera name: " << e.what() << '\n';
+        return false;
+    }
 
-  // path
-  try {
-    c.path = config.at("path").get<std::string>();
-  } catch (const wpi::json::exception& e) {
-    ParseError() << "camera '" << c.name
-                 << "': could not read path: " << e.what() << '\n';
-    return false;
-  }
+    // path
+    try {
+        c.path = config.at("path").get<std::string>();
+    } catch (const wpi::json::exception& e) {
+        ParseError() << "camera '" << c.name
+                     << "': could not read path: " << e.what() << '\n';
+        return false;
+    }
 
-  // stream properties
-  if (config.count("stream") != 0) c.streamConfig = config.at("stream");
+    // stream properties
+    if (config.count("stream") != 0) c.streamConfig = config.at("stream");
 
-  c.config = config;
+    c.config = config;
 
-  cameraConfigs.emplace_back(std::move(c));
-  return true;
+    cameraConfigs.emplace_back(std::move(c));
+    return true;
 }
 
 bool ReadSwitchedCameraConfig(const wpi::json& config) {
-  SwitchedCameraConfig c;
+    SwitchedCameraConfig c;
 
-  // name
-  try {
-    c.name = config.at("name").get<std::string>();
-  } catch (const wpi::json::exception& e) {
-    ParseError() << "could not read switched camera name: " << e.what() << '\n';
-    return false;
-  }
+    // name
+    try {
+        c.name = config.at("name").get<std::string>();
+    } catch (const wpi::json::exception& e) {
+        ParseError() << "could not read switched camera name: " << e.what()
+                     << '\n';
+        return false;
+    }
 
-  // key
-  try {
-    c.key = config.at("key").get<std::string>();
-  } catch (const wpi::json::exception& e) {
-    ParseError() << "switched camera '" << c.name
-                 << "': could not read key: " << e.what() << '\n';
-    return false;
-  }
+    // key
+    try {
+        c.key = config.at("key").get<std::string>();
+    } catch (const wpi::json::exception& e) {
+        ParseError() << "switched camera '" << c.name
+                     << "': could not read key: " << e.what() << '\n';
+        return false;
+    }
 
-  switchedCameraConfigs.emplace_back(std::move(c));
-  return true;
+    switchedCameraConfigs.emplace_back(std::move(c));
+    return true;
 }
 
 bool ReadConfig() {
-  // open config file
-  std::error_code ec;
-  wpi::raw_fd_istream is(configFile, ec);
-  if (ec) {
-    wpi::errs() << "could not open '" << configFile << "': " << ec.message()
-                << '\n';
-    return false;
-  }
+    // open config file
+    std::error_code ec;
+    wpi::raw_fd_istream is(configFile, ec);
+    if (ec) {
+        wpi::errs() << "could not open '" << configFile << "': " << ec.message()
+                    << '\n';
+        return false;
+    }
 
-  // parse file
-  wpi::json j;
-  try {
-    j = wpi::json::parse(is);
-  } catch (const wpi::json::parse_error& e) {
-    ParseError() << "byte " << e.byte << ": " << e.what() << '\n';
-    return false;
-  }
-
-  // top level must be an object
-  if (!j.is_object()) {
-    ParseError() << "must be JSON object\n";
-    return false;
-  }
-
-  // team number
-  try {
-    team = j.at("team").get<unsigned int>();
-  } catch (const wpi::json::exception& e) {
-    ParseError() << "could not read team number: " << e.what() << '\n';
-    return false;
-  }
-
-  // ntmode (optional)
-  if (j.count("ntmode") != 0) {
+    // parse file
+    wpi::json j;
     try {
-      auto str = j.at("ntmode").get<std::string>();
-      wpi::StringRef s(str);
-      if (s.equals_lower("client")) {
-        server = false;
-      } else if (s.equals_lower("server")) {
-        server = true;
-      } else {
-        ParseError() << "could not understand ntmode value '" << str << "'\n";
-      }
-    } catch (const wpi::json::exception& e) {
-      ParseError() << "could not read ntmode: " << e.what() << '\n';
+        j = wpi::json::parse(is);
+    } catch (const wpi::json::parse_error& e) {
+        ParseError() << "byte " << e.byte << ": " << e.what() << '\n';
+        return false;
     }
-  }
 
-  // cameras
-  try {
-    for (auto&& camera : j.at("cameras")) {
-      if (!ReadCameraConfig(camera)) return false;
+    // top level must be an object
+    if (!j.is_object()) {
+        ParseError() << "must be JSON object\n";
+        return false;
     }
-  } catch (const wpi::json::exception& e) {
-    ParseError() << "could not read cameras: " << e.what() << '\n';
-    return false;
-  }
 
-  // switched cameras (optional)
-  if (j.count("switched cameras") != 0) {
+    // team number
     try {
-      for (auto&& camera : j.at("switched cameras")) {
-        if (!ReadSwitchedCameraConfig(camera)) return false;
-      }
+        team = j.at("team").get<unsigned int>();
     } catch (const wpi::json::exception& e) {
-      ParseError() << "could not read switched cameras: " << e.what() << '\n';
-      return false;
+        ParseError() << "could not read team number: " << e.what() << '\n';
+        return false;
     }
-  }
 
-  return true;
+    // ntmode (optional)
+    if (j.count("ntmode") != 0) {
+        try {
+            auto str = j.at("ntmode").get<std::string>();
+            wpi::StringRef s(str);
+            if (s.equals_lower("client")) {
+                server = false;
+            } else if (s.equals_lower("server")) {
+                server = true;
+            } else {
+                ParseError() << "could not understand ntmode value '" << str
+                             << "'\n";
+            }
+        } catch (const wpi::json::exception& e) {
+            ParseError() << "could not read ntmode: " << e.what() << '\n';
+        }
+    }
+
+    // cameras
+    try {
+        for (auto&& camera : j.at("cameras")) {
+            if (!ReadCameraConfig(camera)) return false;
+        }
+    } catch (const wpi::json::exception& e) {
+        ParseError() << "could not read cameras: " << e.what() << '\n';
+        return false;
+    }
+
+    // switched cameras (optional)
+    if (j.count("switched cameras") != 0) {
+        try {
+            for (auto&& camera : j.at("switched cameras")) {
+                if (!ReadSwitchedCameraConfig(camera)) return false;
+            }
+        } catch (const wpi::json::exception& e) {
+            ParseError() << "could not read switched cameras: " << e.what()
+                         << '\n';
+            return false;
+        }
+    }
+
+    return true;
 }
 
 cs::UsbCamera StartCamera(const CameraConfig& config) {
-  wpi::outs() << "Starting camera '" << config.name << "' on " << config.path
-              << '\n';
-  auto inst = frc::CameraServer::GetInstance();
-  cs::UsbCamera camera{config.name, config.path};
-  auto server = inst->StartAutomaticCapture(camera);
+    wpi::outs() << "Starting camera '" << config.name << "' on " << config.path
+                << '\n';
+    auto inst = frc::CameraServer::GetInstance();
+    cs::UsbCamera camera{config.name, config.path};
+    auto server = inst->StartAutomaticCapture(camera);
 
-  camera.SetConfigJson(config.config);
-  camera.SetConnectionStrategy(cs::VideoSource::kConnectionKeepOpen);
+    camera.SetConfigJson(config.config);
+    camera.SetConnectionStrategy(cs::VideoSource::kConnectionKeepOpen);
 
-  if (config.streamConfig.is_object())
-    server.SetConfigJson(config.streamConfig);
+    if (config.streamConfig.is_object())
+        server.SetConfigJson(config.streamConfig);
 
-  return camera;
+    return camera;
 }
 
 cs::MjpegServer StartSwitchedCamera(const SwitchedCameraConfig& config) {
-  wpi::outs() << "Starting switched camera '" << config.name << "' on "
-              << config.key << '\n';
-  auto server =
-      frc::CameraServer::GetInstance()->AddSwitchedCamera(config.name);
+    wpi::outs() << "Starting switched camera '" << config.name << "' on "
+                << config.key << '\n';
+    auto server =
+            frc::CameraServer::GetInstance()->AddSwitchedCamera(config.name);
 
-  nt::NetworkTableInstance::GetDefault()
-      .GetEntry(config.key)
-      .AddListener(
-          [server](const auto& event) mutable {
-            if (event.value->IsDouble()) {
-              int i = event.value->GetDouble();
-              if (i >= 0 && i < cameras.size()) server.SetSource(cameras[i]);
-            } else if (event.value->IsString()) {
-              auto str = event.value->GetString();
-              for (int i = 0; i < cameraConfigs.size(); ++i) {
-                if (str == cameraConfigs[i].name) {
-                  server.SetSource(cameras[i]);
-                  break;
-                }
-              }
-            }
-          },
-          NT_NOTIFY_IMMEDIATE | NT_NOTIFY_NEW | NT_NOTIFY_UPDATE);
+    nt::NetworkTableInstance::GetDefault()
+            .GetEntry(config.key)
+            .AddListener(
+                    [server](const auto& event) mutable {
+                        if (event.value->IsDouble()) {
+                            int i = event.value->GetDouble();
+                            if (i >= 0 && i < cameras.size())
+                                server.SetSource(cameras[i]);
+                        } else if (event.value->IsString()) {
+                            auto str = event.value->GetString();
+                            for (int i = 0; i < cameraConfigs.size(); ++i) {
+                                if (str == cameraConfigs[i].name) {
+                                    server.SetSource(cameras[i]);
+                                    break;
+                                }
+                            }
+                        }
+                    },
+                    NT_NOTIFY_IMMEDIATE | NT_NOTIFY_NEW | NT_NOTIFY_UPDATE);
 
-  return server;
+    return server;
 }
 
-// example pipeline
-class MyPipeline : public frc::VisionPipeline {
- public:
-  int val = 0;
-
-  void Process(cv::Mat& mat) override {
-    ++val;
-  }
-};
-}  // namespace
+} // namespace
 
 int main(int argc, char* argv[]) {
-  if (argc >= 2) configFile = argv[1];
+    if (argc >= 2) configFile = argv[1];
 
-  // read configuration
-  if (!ReadConfig()) return EXIT_FAILURE;
+    // read configuration
+    if (!ReadConfig()) return EXIT_FAILURE;
 
-  // start NetworkTables
-  auto ntinst = nt::NetworkTableInstance::GetDefault();
-  if (server) {
-    wpi::outs() << "Setting up NetworkTables server\n";
-    ntinst.StartServer();
-  } else {
-    wpi::outs() << "Setting up NetworkTables client for team " << team << '\n';
-    ntinst.StartClientTeam(team);
-    ntinst.StartDSClient();
-  }
+    // start NetworkTables
+    auto ntinst = nt::NetworkTableInstance::GetDefault();
+    if (server) {
+        wpi::outs() << "Setting up NetworkTables server\n";
+        ntinst.StartServer();
+    } else {
+        wpi::outs() << "Setting up NetworkTables client for team " << team
+                    << '\n';
+        ntinst.StartClientTeam(team);
+        ntinst.StartDSClient();
+    }
 
-  // start cameras
-  for (const auto& config : cameraConfigs)
-    cameras.emplace_back(StartCamera(config));
+    // start cameras
+    for (const auto& config : cameraConfigs)
+        cameras.emplace_back(StartCamera(config));
 
-  // start switched cameras
-  for (const auto& config : switchedCameraConfigs) StartSwitchedCamera(config);
+    // start switched cameras
+    for (const auto& config : switchedCameraConfigs)
+        StartSwitchedCamera(config);
 
-  // start image processing on camera 0 if present
-  if (cameras.size() >= 1) {
-    std::thread([&] {
-      frc::VisionRunner<MyPipeline> runner(cameras[0], new MyPipeline(),
-                                           [&](MyPipeline &pipeline) {
-        // do something with pipeline results
-      });
-      /* something like this for GRIP:
-      frc::VisionRunner<MyPipeline> runner(cameras[0], new grip::GripPipeline(),
-                                           [&](grip::GripPipeline& pipeline) {
-        ...
-      });
-       */
-      runner.RunForever();
-    }).detach();
-  }
+    // start image processing on camera 0 if present
+    if (cameras.size() >= 1) {
+        Pipeline* prepipeline = new Pipeline(ntinst);
 
-  // loop forever
-  for (;;) std::this_thread::sleep_for(std::chrono::seconds(10));
+        std::thread([&] {
+            frc::VisionRunner<Pipeline> runner(
+                    cameras[0], prepipeline, [&](Pipeline& pipeline) {
+                        // do something with pipeline results
+                    });
+            runner.RunForever();
+        }).detach();
+    }
+
+    for (;;) std::this_thread::sleep_for(std::chrono::seconds(10));
 }
