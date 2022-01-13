@@ -1,3 +1,0 @@
-/Users/justuslanguell/TexasTorque/TexasTorque2022Vision/build/CMakeFiles/rebuild_cache.dir
-/Users/justuslanguell/TexasTorque/TexasTorque2022Vision/build/CMakeFiles/edit_cache.dir
-/Users/justuslanguell/TexasTorque/TexasTorque2022Vision/build/CMakeFiles/detect.dir

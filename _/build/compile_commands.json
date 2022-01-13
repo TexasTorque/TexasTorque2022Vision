@@ -1,7 +1,0 @@
-[
-{
-  "directory": "/Users/justuslanguell/TexasTorque/TexasTorque2022Vision/build",
-  "command": "/usr/bin/clang++  -isystem /usr/local/include/opencv4 -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX11.3.sdk -std=gnu++11 -o CMakeFiles/detect.dir/detect.cc.o -c /Users/justuslanguell/TexasTorque/TexasTorque2022Vision/detect.cc",
-  "file": "/Users/justuslanguell/TexasTorque/TexasTorque2022Vision/detect.cc"
-}
-]
