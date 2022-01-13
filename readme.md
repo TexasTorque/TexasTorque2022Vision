@@ -50,6 +50,13 @@ like below.
 I am assuming `./make.exe` is a portable GNU Make
 binary for Windows, but I have yet to test it.
 
+This project uses Clang-Format for, you guessed it,
+code formatting. Clang-Format has a VSCode plugin
+that I perfer to the command line utility, and it
+should download all software automatically. Dont
+try and format outside of `./src` because it will
+run forever and waste your time.
+
 ## Cross-Compile
 
 Run `make` to run the Makefile. The Makefile builds
