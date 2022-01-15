@@ -41,7 +41,7 @@ camera = cv2.VideoCapture(working[0])
 while True:
     _, frame = camera.read()
     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-  #  #print(frame.size)
+    # print(frame.size)
 
     output.putFrame(frame)
     
