@@ -237,8 +237,7 @@ cs::UsbCamera StartCamera(const CameraConfig& config) {
 cs::MjpegServer StartSwitchedCamera(const SwitchedCameraConfig& config) {
     wpi::outs() << "Starting switched camera '" << config.name << "' on "
                 << config.key << '\n';
-    auto server =
-            frc::CameraServer::GetInstance()->AddSwitchedCamera(config.name);
+    auto server = frc::CameraServer::GetInstance()->AddSwitchedCamera(config.name);
 
     nt::NetworkTableInstance::GetDefault()
             .GetEntry(config.key)
