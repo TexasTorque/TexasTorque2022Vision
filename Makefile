@@ -1,6 +1,9 @@
 # Makefile for cross-compiling a C++ vision project to a
 # Raspberry-Pi from a Unix system.
 #
+# Can also compile OpenCV logic using local library, but
+# this is a scuffed implementation.
+#
 # Relies on the Rasbian10 compiler toolchain being added
 # to the PATH. 
 #
@@ -9,6 +12,9 @@
 #
 # This file was initially part of the WPILib project, and
 # modified by Texas Torque to fit specific needs.
+#
+# Update: this file no longer resembles the original
+# 		  WPILib Makefile at all.
 #
 # Copyright (c) 2009-2021 FIRST and other WPILib contributors
 # Copyright (c) 2021-2022 Justus Languell and Texas Torque

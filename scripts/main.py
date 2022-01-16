@@ -1,5 +1,14 @@
-import cv2
-from cscore import CameraServer
+
+import sys
+
+if '-l' not in sys.argv:
+    import cv2
+    from cscore import CameraServer
+else:
+    import opencv2
+    
+    
+    
 
 def list_ports():
     """
@@ -27,21 +36,30 @@ def list_ports():
         dev_port +=1
     return available_ports, working_ports
 
-_, working = list_ports()
+def main():
+    _, working = list_ports()
 
-if len(working) <= 0:
-    print("AHHHH no working motors")
-    exit(-1)
+    if len(working) <= 0:
+        print("AHHHH no working motors")
+        exit(-1)
 
-cs = CameraServer()
-output = cs.putVideo("Name", 480, 640)
+    cs = CameraServer()
+    output = cs.putVideo("Name", 480, 640)
 
-camera = cv2.VideoCapture(working[0])
+    camera = cv2.VideoCapture(working[0])
 
-while True:
-    _, frame = camera.read()
-    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-    # print(frame.size)
+    while True:
+        _, frame = camera.read()
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        # print(frame.size)
 
-    output.putFrame(frame)
+        output.putFrame(frame)
+        
+        
+if __name__ == "__main__":
+    if '-l' in sys.argv:
+        main()
+    else:
+        debug()
+        
     
