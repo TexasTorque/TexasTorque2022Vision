@@ -70,6 +70,17 @@ Raspberry-Pi system libraries, not x86 or Apple ARM.
 
 To clean up the build generated `.o` files, run `make clean`.
 
+## Subprojects
+
+### Scripts
+
+`./scripts` is a directory that containts Python scripts
+used to test the functionality that will later be implemented
+into the C++ pipeline.
+
+`./project` is a cross-robot WPILib project that is used
+to test the interface with the vision pipeline.
+
 ## Licensing
 
 This project is licensed under the WPILib License, I
