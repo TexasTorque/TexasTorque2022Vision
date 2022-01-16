@@ -47,18 +47,15 @@ Bound detectionRange(Alliance alliance) {
 
 enum Shape { CIRCLE, TRIANGLE, SQUARE, RECTANGLE, PENTAGON };
 
+int approxSidesOfContour(std::vector<cv::Point> points) {
+    double arc = cv::arcLength(points, true);
+    cv::approxPolyDP(points, points, 0.04 * arc, true);  
+    return (int) points.size();
+}
+
 Shape detectShape(std::vector<cv::Point> points) {
     double arc = cv::arcLength(points, true);
-    std::printf("%f\n", arc);
     cv::approxPolyDP(points, points, 0.04 * arc, true);
-    /*
-    if (out.rows == 3) return TRIANGLE;
-    else if (out.rows == 4) return RECTANGLE;
-    else if (out.rows == 5) return PENTAGON;
-    else if (out.rows == 8) return SQUARE;
-    else return CIRCLE;
-    */
-    std::printf("%lu\n", points.size());
     if (points.size() == 3) return TRIANGLE;
     else if (points.size() == 4) return RECTANGLE;
     else if (points.size() == 5) return PENTAGON;
@@ -77,22 +74,28 @@ std::string getShapeString(Shape shape) {
     }
 }
 
+std::vector<cv::Point> getLargestContourByArea(std::vector<std::vector<cv::Point>> contours) {
+    int id = -1;
+    for (double i = 0, area = 0; i < contours.size(); i++) {
+        double newArea = cv::contourArea(contours.at(i));
+        if (newArea <= area) continue;
+        area = newArea;
+        id = i;
+    } 
+    return contours[id];
+} 
+
 void update(cv::Mat* input, cv::Mat* output, Alliance alliance) {
         std::vector<cv::Point> points;
         cv::Mat ellipse = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5));
         Bound bound = detectionRange(alliance);
 
-        // 50% resize leads to 50-75% performance improvement
         cv::resize(*input, *input, cv::Size(), .5, .5, cv::INTER_LANCZOS4);
 
-        // Convert color to Hue-Saturation-Value scale
         cv::cvtColor(*input, *output, cv::COLOR_BGR2HSV);
 
-        // Write the mask matrix from pixels within color bounds
         cv::inRange(*output, bound.upper, bound.lower, *output);
 
-
-        // Apply morphological opening to remove noise
         cv::erode(*output, *output, ellipse);
         cv::dilate(*output, *output, ellipse);
         cv::dilate(*output, *output, ellipse);
@@ -104,19 +107,52 @@ void update(cv::Mat* input, cv::Mat* output, Alliance alliance) {
 
         cv::findContours(*output, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_NONE);
 
-        cv::drawContours(*input, contours, -1, cv::Scalar(255, 255, 255), 2);
+        //cv::drawContours(*input, contours, -1, cv::Scalar(255, 255, 255), 2);
 
+        if (contours.size() <= 0) return;
+
+        //std::sort(contours.begin(), contours.end(), cv::contourArea);
+        //std::vector<cv::Point> contour = contours[0];
+        std::vector<cv::Point> contour = getLargestContourByArea(contours);
+
+        if (approxSidesOfContour(contour) <= 4) return;
+
+        cv::Point2f _center;
+        float radius;
+        cv::minEnclosingCircle(contour, _center, radius);
+
+        cv::Moments m = cv::moments(contour);
+
+        cv::Point center = cv::Point(m.m10 / m.m00, m.m01 / m.m00);
+
+        if (radius <= 50) return;
+
+        cv::circle(*input, center, radius, cv::Scalar(0, 255, 0), 4);
+
+        /*
         for (const std::vector<cv::Point>& contour : contours) {
-            Shape s = detectShape(contour);
             cv::RotatedRect rect = cv::minAreaRect(contour);
             cv::Point2f vertices[4];
             rect.points(vertices);
+
+            if (rect.size.height < 25 || rect.size.width < 25) continue;
+
+            if (rect.size.height * 5/4 < rect.size.width
+                ||rect.size.height * 4/5 > rect.size.width )
+                continue;
+
+
             for (int i = 0; i < 4; i++) {
                 cv::line(*input, vertices[i], vertices[(i + 1) % 4], cv::Scalar(255, 255, 255), 2);
             } 
-            cv::putText(*input, getShapeString(s), rect.center, cv::FONT_HERSHEY_SIMPLEX, 1, 
-                    cv::Scalar(255, 255, 255), 2);
-        }
+
+            //cv::putText(*input, getShapeString(detectShape(contour)), 
+            //        rect.center, cv::FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 255, 255), 2);
+            
+            cv::putText(*input, std::to_string(rect.size.width) + " x "
+                    + std::to_string(rect.size.height),  rect.center, 
+                    cv::FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 255, 255), 2);
+        }*/
 
         // Find all identified points in the mask
         //cv::findNonZero(*output, points);
