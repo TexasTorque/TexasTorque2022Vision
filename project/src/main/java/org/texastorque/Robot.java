@@ -34,6 +34,13 @@ public class Robot extends TorqueIterative {
         return bruh;
     }
 
+    public void pushAlliance() {
+        NT_instance = NetworkTableInstance.getDefault();
+        NT_table = NT_instance.getTable("BallTable");
+        test = NT_table.getEntry("ballentry");
+        String bruh = test.getString("nowork");
+    }
+
 
     @Override
     public void robotInit() {
