@@ -1,5 +1,7 @@
 
 import sys
+from networktables import NetworkTables, NetworkTablesInstance
+import threading
 
 if '-l' not in sys.argv:
     import cv2
@@ -7,8 +9,9 @@ if '-l' not in sys.argv:
 else:
     import opencv2
     
-    
-    
+team = 1477
+ip = "10.14.77.2"
+
 
 def list_ports():
     """
@@ -37,6 +40,26 @@ def list_ports():
     return available_ports, working_ports
 
 def main():
+    notified = False
+    condition = threading.Condition()
+    # notify as soon as connection is made
+    def connection_listener(connected, info):
+        with condition:
+            notified = True
+            condition.notify()
+    
+    NetworkTables.initialize(server=ip)
+    NetworkTables.addConnectionListener(connection_listener, immediateNotify=True)
+    with condition:
+        if not notified:
+            condition.wait()
+
+    ntinst = NetworkTablesInstance.getDefault()
+    tb = ntinst.getTable("BallTable")
+    tb.getEntry("ballentry").forceSetString("balls")
+    
+    
+    
     _, working = list_ports()
 
     if len(working) <= 0:
@@ -47,19 +70,18 @@ def main():
     output = cs.putVideo("Name", 480, 640)
 
     camera = cv2.VideoCapture(working[0])
-
+    frameEntry = tb.getEntry("frameC")
+    frameC = 0
     while True:
         _, frame = camera.read()
+        frameC += 1
+        frameEntry.forceSetNumber(frameC)
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         # print(frame.size)
 
         output.putFrame(frame)
-        
-        
+    
 if __name__ == "__main__":
-    if '-l' in sys.argv:
-        main()
-    else:
-        debug()
-        
+    main()
+  
     
