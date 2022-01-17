@@ -25,7 +25,8 @@
 # Constants
 BUILD_DIR ?= ./bin
 SRC_DIRS ?= ./src
-SRCS := $(shell find $(SRC_DIRS) -name *.cpp -or -name *.cc -or -name *.c -or -name *.s)
+#SRCS := $(shell find $(SRC_DIRS) -name *.cpp -or -name *.cc -or -name *.c -or -name *.s)
+SRCS := src/main.cc
 OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
 DEPS := $(OBJS:.o=.d)
 CC = arm-raspbian10-linux-gnueabihf-gcc
@@ -55,17 +56,17 @@ $(BUILD_DIR)/$(EXE): $(OBJS)
 
 # C++ source files with .cpp extension (non-perfered extension)
 $(BUILD_DIR)/%.cpp.o: %.cpp
-	$(MKDIR_P) $(dir $@)
+#$(MKDIR_P) $(dir $@)
 	${CXX} -pthread -g -Og -c -o $@ -std=c++17 ${CXXFLAGS} ${DEPS_CFLAGS} $<
 
 # C++ source files with .cc extension (perfered extension)
 $(BUILD_DIR)/%.cc.o: %.cc
-	$(MKDIR_P) $(dir $@)
+#$(MKDIR_P) $(dir $@)
 	${CXX} -pthread -g -Og -c -o $@ -std=c++17 ${CXXFLAGS} ${DEPS_CFLAGS} $<
 
 # C source files with .c extension (obviously)
 $(BUILD_DIR)/%.c.o: %.c
-	$(MKDIR_P) $(dir $@)
+#$(MKDIR_P) $(dir $@)
 	${CC} -pthread -g -Og -c -o $@ -std=c17 ${CFLAGS} ${DEPS_CFLAGS} $<
 	
 MKDIR_P ?= mkdir -p

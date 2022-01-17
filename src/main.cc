@@ -6,7 +6,7 @@
 #include "opencv2/highgui.hpp"
 #include "opencv2/imgproc.hpp"
 #include "opencv2/videoio.hpp"
-
+//pe
 class Bound { 
     public:
     cv::Scalar upper, lower; 
@@ -30,14 +30,13 @@ Bound detectionRange(Alliance alliance) {
     return Bound(cv::Scalar(0, 0, 0), cv::Scalar(0, 0, 0));
 }
 
-void update(cv::Mat* input, cv::Mat* output) {
-    std::printf("Updating!");
-
-}
 
 int main(int argc, char** argv) {
     nt::NetworkTableInstance ntinst = nt::NetworkTableInstance::GetDefault();
+    auto tb = ntinst.GetTable("BallTable");
+    auto tb_entry = tb
     
+
     int cameraDevice = 0;
 	cv::VideoCapture capture;
     capture.open(cameraDevice);
@@ -57,7 +56,8 @@ int main(int argc, char** argv) {
         }
 
         // Update the mask
-        update(&frame, &mask);
+        std::printf("Updating!");
+
 
         // Output log and frame while checking for keyboard break 
        
