@@ -4,9 +4,15 @@ import org.texastorque.torquelib.base.*;
 
 import java.util.ArrayList;
 
+import javax.lang.model.type.DeclaredType;
+
 import org.texastorque.inputs.*;
 import org.texastorque.inputs.State.RobotState;
 import org.texastorque.subsystems.*;
+
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class Robot extends TorqueIterative {
 
@@ -16,9 +22,22 @@ public class Robot extends TorqueIterative {
 
     ArrayList<TorqueSubsystem> subsystems = new ArrayList<TorqueSubsystem>();
 
+    public static NetworkTableInstance NT_instance;
+    public static NetworkTable NT_table;
+    public static NetworkTableEntry test;
+
+    public String NT() {
+        NT_instance = NetworkTableInstance.getDefault();
+        NT_table = NT_instance.getTable("BallTable");
+        test = NT_table.getEntry("ballentry");
+        String bruh = test.getString("nowork");
+        return bruh;
+    }
+
+
     @Override
     public void robotInit() {
-        subsystems.add(Drivebase.getInstance());
+
     }
 
     @Override
@@ -26,6 +45,7 @@ public class Robot extends TorqueIterative {
         feedback.update();
         feedback.smartDashboard();
         subsystems.forEach(TorqueSubsystem::updateSmartDashboard);
+        System.out.println(NT());
     }
     
     @Override
