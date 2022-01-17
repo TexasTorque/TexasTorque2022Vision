@@ -6,6 +6,7 @@
 #include "opencv2/highgui.hpp"
 #include "opencv2/imgproc.hpp"
 #include "opencv2/videoio.hpp"
+
 //pe
 class Bound { 
     public:
@@ -33,9 +34,8 @@ Bound detectionRange(Alliance alliance) {
 
 int main(int argc, char** argv) {
     nt::NetworkTableInstance ntinst = nt::NetworkTableInstance::GetDefault();
-    auto tb = ntinst.GetTable("BallTable");
-    auto tb_entry = tb
-    
+    std::shared_ptr<nt::NetworkTable> tb = ntinst.GetTable("AllianceColor");
+    bool isRed = (*tb.get()).GetEntry("RedBlue").GetBoolean(false);
 
     int cameraDevice = 0;
 	cv::VideoCapture capture;
@@ -56,7 +56,11 @@ int main(int argc, char** argv) {
         }
 
         // Update the mask
-        std::printf("Updating!");
+        std::printf(isRed ? "Red" : "Blue");
+
+        nt::NetworkTableInstance ntinst = nt::NetworkTableInstance::GetDefault();
+        std::shared_ptr<nt::NetworkTable> tb = ntinst.GetTable("BallTable");
+        (*tb.get()).GetEntry("ballentry").SetDouble(-1);
 
 
         // Output log and frame while checking for keyboard break 

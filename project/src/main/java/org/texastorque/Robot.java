@@ -22,24 +22,24 @@ public class Robot extends TorqueIterative {
 
     ArrayList<TorqueSubsystem> subsystems = new ArrayList<TorqueSubsystem>();
 
-    public static NetworkTableInstance NT_instance;
-    public static NetworkTable NT_table;
-    public static NetworkTableEntry test;
 
-    public String NT() {
-        NT_instance = NetworkTableInstance.getDefault();
-        NT_table = NT_instance.getTable("BallTable");
-        test = NT_table.getEntry("ballentry");
-        String bruh = test.getString("nowork");
-        return bruh;
+    
+    //Example of how to pull a value from NT
+    public double PullFromNT() {
+        NetworkTableInstance nTInstance = NetworkTableInstance.getDefault();
+        NetworkTable nTTable = nTInstance.getTable("BallTable");
+        NetworkTableEntry nTEntry = nTTable.getEntry("ballentry");
+        return nTEntry.getDouble(9999);
     }
 
-    public void pushAlliance() {
-        NT_instance = NetworkTableInstance.getDefault();
-        NT_table = NT_instance.getTable("BallTable");
-        test = NT_table.getEntry("ballentry");
-        String bruh = test.getString("nowork");
+    //True = Red, False = Blue
+    public void setAlliance(boolean red) {
+        NetworkTableInstance nTInstance = NetworkTableInstance.getDefault();
+        NetworkTable redBlueTable = nTInstance.getTable("AllianceColor");
+        NetworkTableEntry redBlue = redBlueTable.getEntry("RedBlue");
+        if (red) redBlue.forceSetBoolean(true); else redBlue.forceSetBoolean(false);
     }
+    
 
 
     @Override
@@ -52,7 +52,7 @@ public class Robot extends TorqueIterative {
         feedback.update();
         feedback.smartDashboard();
         subsystems.forEach(TorqueSubsystem::updateSmartDashboard);
-        System.out.println(NT());
+        //System.out.println(PullFromNT());
     }
     
     @Override
