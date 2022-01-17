@@ -47,8 +47,8 @@ like below.
 }
 ```
 
-I am assuming `./make.exe` is a portable GNU Make
-binary for Windows, but I have yet to test it.
+`./make.exe` is a portable GNU Make binary for Windows, 
+but the Makefile is not updated to support Windows `find`.
 
 This project uses Clang-Format for, you guessed it,
 code formatting. Clang-Format has a VSCode plugin
@@ -78,8 +78,15 @@ To clean up the build generated `.o` files, run `make clean`.
 used to test the functionality that will later be implemented
 into the C++ pipeline.
 
+### Project
+
 `./project` is a cross-robot WPILib project that is used
 to test the interface with the vision pipeline.
+
+### Tests
+
+`./tests` is a OpenCV C++ project for Unix. It is used
+to test logic before being implemented in the main pipe.
 
 ## Licensing
 
