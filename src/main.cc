@@ -7,7 +7,6 @@
 #include "opencv2/imgproc.hpp"
 #include "opencv2/videoio.hpp"
 
-//pe
 class Bound { 
     public:
     cv::Scalar upper, lower; 
@@ -33,9 +32,16 @@ Bound detectionRange(Alliance alliance) {
 
 
 int main(int argc, char** argv) {
-    nt::NetworkTableInstance ntinst = nt::NetworkTableInstance::GetDefault();
-    std::shared_ptr<nt::NetworkTable> tb = ntinst.GetTable("AllianceColor");
-    bool isRed = (*tb.get()).GetEntry("RedBlue").GetBoolean(false);
+    nt::NetworkTableInstance ntInstance = nt::NetworkTableInstance::GetDefault();
+	
+	// We can probably use a single table for everything.
+	// Do we really have enough entries to warrent it?
+    
+	std::shared_ptr<nt::NetworkTable> allianceColorTable = ntInstance.GetTable("AllianceColor");
+    bool isRed = (*allianceColorTable.get()).GetEntry("RedBlue").GetBoolean(false);
+
+	// Possible one liner
+	// (*ntInstance.GetTable("AllianceColor").get()).GetEntry("RedBlue").GetBoolean(false);
 
     int cameraDevice = 0;
 	cv::VideoCapture capture;
@@ -47,9 +53,8 @@ int main(int argc, char** argv) {
 
     Alliance alliance = getAllianceFromNT(0);
 
-    nt::NetworkTableInstance ntinst = nt::NetworkTableInstance::GetDefault();
-    std::shared_ptr<nt::NetworkTable> tb = ntinst.GetTable("BallTable");
-    nt::NetworkTableEntry nt_entry = (*tb.get()).GetEntry("ballentry");
+    std::shared_ptr<nt::NetworkTable> ballTable = ntInstance.GetTable("BallTable");
+    nt::NetworkTableEntry ballEntry = (*ballTable.get()).GetEntry("ballentry");
 
     // Initialize program loop while reading 
     // frames and incrementing frame counter
@@ -62,7 +67,7 @@ int main(int argc, char** argv) {
         // Update the mask
         std::printf(isRed ? "Red" : "Blue");
 
-        nt_entry.SetDouble(-1);
+        ballEntry.SetDouble(-1);
 
         // Output log and frame while checking for keyboard break 
        

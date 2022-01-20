@@ -48,7 +48,7 @@ like below.
 ```
 
 `./make.exe` is a portable GNU Make binary for Windows, 
-but the Makefile is not updated to support Windows `find`.
+but you must used the Makefile-DOS, which has some limitations.
 
 This project uses Clang-Format for, you guessed it,
 code formatting. Clang-Format has a VSCode plugin
@@ -59,9 +59,19 @@ run forever and waste your time.
 
 ## Cross-Compile
 
+### Unix
+
 Run `make` to run the Makefile. The Makefile builds
 all `.c`, `.cc`, (perfered C++ extension) and `.cpp`
-files in `./src`.
+files in `./src`. 
+
+### Windows
+
+Run `./make.exe -f Makefile-DOS` to run the Windows Makefile.
+You will need to individually specify all the source files
+to compile in this Makefile.
+
+### Results
 
 The resulting binary at `./bin/camera-binary` is the
 binary to upload to WPILibPI. *Do not try and run this
