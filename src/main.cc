@@ -47,6 +47,10 @@ int main(int argc, char** argv) {
 
     Alliance alliance = getAllianceFromNT(0);
 
+    nt::NetworkTableInstance ntinst = nt::NetworkTableInstance::GetDefault();
+    std::shared_ptr<nt::NetworkTable> tb = ntinst.GetTable("BallTable");
+    nt::NetworkTableEntry nt_entry = (*tb.get()).GetEntry("ballentry");
+
     // Initialize program loop while reading 
     // frames and incrementing frame counter
     for (int fc = 0; capture.read(frame); fc++) {
@@ -58,10 +62,7 @@ int main(int argc, char** argv) {
         // Update the mask
         std::printf(isRed ? "Red" : "Blue");
 
-        nt::NetworkTableInstance ntinst = nt::NetworkTableInstance::GetDefault();
-        std::shared_ptr<nt::NetworkTable> tb = ntinst.GetTable("BallTable");
-        (*tb.get()).GetEntry("ballentry").SetDouble(-1);
-
+        nt_entry.SetDouble(-1);
 
         // Output log and frame while checking for keyboard break 
        
