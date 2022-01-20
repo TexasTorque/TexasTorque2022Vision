@@ -116,6 +116,6 @@ HAL_Bool HAL_GetUserActive3V3(int32_t* status);
  */
 int32_t HAL_GetUserCurrentFaults3V3(int32_t* status);
 #ifdef __cplusplus
-}  // extern "C"
+} // extern "C"
 #endif
 /** @} */

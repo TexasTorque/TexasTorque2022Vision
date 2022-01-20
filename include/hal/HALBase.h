@@ -167,6 +167,6 @@ void HAL_SimPeriodicBefore(void);
 void HAL_SimPeriodicAfter(void);
 
 #ifdef __cplusplus
-}  // extern "C"
+} // extern "C"
 #endif
 /** @} */

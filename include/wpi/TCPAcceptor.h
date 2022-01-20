@@ -36,22 +36,22 @@ namespace wpi {
 class Logger;
 
 class TCPAcceptor : public NetworkAcceptor {
-  int m_lsd;
-  int m_port;
-  std::string m_address;
-  bool m_listening;
-  std::atomic_bool m_shutdown;
-  Logger& m_logger;
+    int m_lsd;
+    int m_port;
+    std::string m_address;
+    bool m_listening;
+    std::atomic_bool m_shutdown;
+    Logger& m_logger;
 
- public:
-  TCPAcceptor(int port, const char* address, Logger& logger);
-  ~TCPAcceptor() override;
+  public:
+    TCPAcceptor(int port, const char* address, Logger& logger);
+    ~TCPAcceptor() override;
 
-  int start() override;
-  void shutdown() final;
-  std::unique_ptr<NetworkStream> accept() override;
+    int start() override;
+    void shutdown() final;
+    std::unique_ptr<NetworkStream> accept() override;
 };
 
-}  // namespace wpi
+} // namespace wpi
 
-#endif  // WPIUTIL_WPI_TCPACCEPTOR_H_
+#endif // WPIUTIL_WPI_TCPACCEPTOR_H_

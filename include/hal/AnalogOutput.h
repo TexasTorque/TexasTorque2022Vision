@@ -62,6 +62,6 @@ double HAL_GetAnalogOutput(HAL_AnalogOutputHandle analogOutputHandle,
  */
 HAL_Bool HAL_CheckAnalogOutputChannel(int32_t channel);
 #ifdef __cplusplus
-}  // extern "C"
+} // extern "C"
 #endif
 /** @} */

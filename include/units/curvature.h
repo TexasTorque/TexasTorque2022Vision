@@ -10,5 +10,5 @@
 
 namespace units {
 using curvature_t = units::unit_t<
-    units::compound_unit<units::radians, units::inverse<units::meters>>>;
-}  // namespace units
+        units::compound_unit<units::radians, units::inverse<units::meters>>>;
+} // namespace units

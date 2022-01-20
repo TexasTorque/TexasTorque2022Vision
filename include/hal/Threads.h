@@ -75,6 +75,6 @@ HAL_Bool HAL_SetCurrentThreadPriority(HAL_Bool realTime, int32_t priority,
                                       int32_t* status);
 
 #ifdef __cplusplus
-}  // extern "C"
+} // extern "C"
 #endif
 /** @} */

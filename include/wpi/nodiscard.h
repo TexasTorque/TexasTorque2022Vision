@@ -18,4 +18,4 @@
 
 #endif
 
-#endif  // WPIUTIL_WPI_NODISCARD_H_
+#endif // WPIUTIL_WPI_NODISCARD_H_

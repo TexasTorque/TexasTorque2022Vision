@@ -16,8 +16,8 @@
 
 #define HAL_IO_CONFIG_DATA_SIZE 32
 #define HAL_SYS_STATUS_DATA_SIZE 44
-#define HAL_USER_STATUS_DATA_SIZE \
-  (984 - HAL_IO_CONFIG_DATA_SIZE - HAL_SYS_STATUS_DATA_SIZE)
+#define HAL_USER_STATUS_DATA_SIZE                                              \
+    (984 - HAL_IO_CONFIG_DATA_SIZE - HAL_SYS_STATUS_DATA_SIZE)
 
 #define HALFRC_NetworkCommunication_DynamicType_DSEnhancedIO_Input 17
 #define HALFRC_NetworkCommunication_DynamicType_DSEnhancedIO_Output 18
@@ -30,13 +30,13 @@
 #define HALFRC_NetworkCommunication_DynamicType_Kinect_Custom 25
 
 struct HAL_ControlWord {
-  uint32_t enabled : 1;
-  uint32_t autonomous : 1;
-  uint32_t test : 1;
-  uint32_t eStop : 1;
-  uint32_t fmsAttached : 1;
-  uint32_t dsAttached : 1;
-  uint32_t control_reserved : 26;
+    uint32_t enabled : 1;
+    uint32_t autonomous : 1;
+    uint32_t test : 1;
+    uint32_t eStop : 1;
+    uint32_t fmsAttached : 1;
+    uint32_t dsAttached : 1;
+    uint32_t control_reserved : 26;
 };
 typedef struct HAL_ControlWord HAL_ControlWord;
 
@@ -67,41 +67,41 @@ HAL_ENUM(HAL_MatchType) {
 #define HAL_kMaxJoysticks 6
 
 struct HAL_JoystickAxes {
-  int16_t count;
-  float axes[HAL_kMaxJoystickAxes];
+    int16_t count;
+    float axes[HAL_kMaxJoystickAxes];
 };
 typedef struct HAL_JoystickAxes HAL_JoystickAxes;
 
 struct HAL_JoystickPOVs {
-  int16_t count;
-  int16_t povs[HAL_kMaxJoystickPOVs];
+    int16_t count;
+    int16_t povs[HAL_kMaxJoystickPOVs];
 };
 typedef struct HAL_JoystickPOVs HAL_JoystickPOVs;
 
 struct HAL_JoystickButtons {
-  uint32_t buttons;
-  uint8_t count;
+    uint32_t buttons;
+    uint8_t count;
 };
 typedef struct HAL_JoystickButtons HAL_JoystickButtons;
 
 struct HAL_JoystickDescriptor {
-  uint8_t isXbox;
-  uint8_t type;
-  char name[256];
-  uint8_t axisCount;
-  uint8_t axisTypes[HAL_kMaxJoystickAxes];
-  uint8_t buttonCount;
-  uint8_t povCount;
+    uint8_t isXbox;
+    uint8_t type;
+    char name[256];
+    uint8_t axisCount;
+    uint8_t axisTypes[HAL_kMaxJoystickAxes];
+    uint8_t buttonCount;
+    uint8_t povCount;
 };
 typedef struct HAL_JoystickDescriptor HAL_JoystickDescriptor;
 
 struct HAL_MatchInfo {
-  char eventName[64];
-  HAL_MatchType matchType;
-  uint16_t matchNumber;
-  uint8_t replayNumber;
-  uint8_t gameSpecificMessage[64];
-  uint16_t gameSpecificMessageSize;
+    char eventName[64];
+    HAL_MatchType matchType;
+    uint16_t matchNumber;
+    uint8_t replayNumber;
+    uint8_t gameSpecificMessage[64];
+    uint16_t gameSpecificMessageSize;
 };
 typedef struct HAL_MatchInfo HAL_MatchInfo;
 /** @} */

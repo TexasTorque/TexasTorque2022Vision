@@ -146,6 +146,6 @@ void HAL_ReadCANPacketTimeout(HAL_CANHandle handle, int32_t apiId,
                               int32_t* status);
 
 #ifdef __cplusplus
-}  // extern "C"
+} // extern "C"
 #endif
 /** @} */

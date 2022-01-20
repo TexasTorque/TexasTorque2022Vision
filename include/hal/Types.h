@@ -67,9 +67,9 @@ typedef int32_t HAL_Bool;
 #ifdef __cplusplus
 #define HAL_ENUM(name) enum name : int32_t
 #else
-#define HAL_ENUM(name)  \
-  typedef int32_t name; \
-  enum name
+#define HAL_ENUM(name)                                                         \
+    typedef int32_t name;                                                      \
+    enum name
 #endif
 
 #ifdef __cplusplus
@@ -79,29 +79,33 @@ namespace hal {
  * A move-only C++ wrapper around a HAL handle.
  * Does not ensure destruction.
  */
-template <typename CType, int32_t CInvalid = HAL_kInvalidHandle>
-class Handle {
- public:
-  Handle() = default;
-  /*implicit*/ Handle(CType val) : m_handle(val) {}  // NOLINT
+template<typename CType, int32_t CInvalid = HAL_kInvalidHandle> class Handle {
+  public:
+    Handle() = default;
+    /*implicit*/ Handle(CType val) : m_handle(val) {
+    } // NOLINT
 
-  Handle(const Handle&) = delete;
-  Handle& operator=(const Handle&) = delete;
+    Handle(const Handle&) = delete;
+    Handle& operator=(const Handle&) = delete;
 
-  Handle(Handle&& rhs) : m_handle(rhs.m_handle) { rhs.m_handle = CInvalid; }
+    Handle(Handle&& rhs) : m_handle(rhs.m_handle) {
+        rhs.m_handle = CInvalid;
+    }
 
-  Handle& operator=(Handle&& rhs) {
-    m_handle = rhs.m_handle;
-    rhs.m_handle = CInvalid;
-    return *this;
-  }
+    Handle& operator=(Handle&& rhs) {
+        m_handle = rhs.m_handle;
+        rhs.m_handle = CInvalid;
+        return *this;
+    }
 
-  operator CType() const { return m_handle; }  // NOLINT
+    operator CType() const {
+        return m_handle;
+    } // NOLINT
 
- private:
-  CType m_handle = CInvalid;
+  private:
+    CType m_handle = CInvalid;
 };
 
-}  // namespace hal
+} // namespace hal
 #endif
 /** @} */

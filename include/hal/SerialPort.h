@@ -238,6 +238,6 @@ void HAL_ClearSerial(HAL_SerialPortHandle handle, int32_t* status);
  */
 void HAL_CloseSerial(HAL_SerialPortHandle handle, int32_t* status);
 #ifdef __cplusplus
-}  // extern "C"
+} // extern "C"
 #endif
 /** @} */

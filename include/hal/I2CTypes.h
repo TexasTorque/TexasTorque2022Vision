@@ -27,6 +27,6 @@ namespace hal {
  */
 using I2CPort = Handle<HAL_I2CPort, HAL_I2C_kInvalid>;
 
-}  // namespace hal
+} // namespace hal
 #endif
 /** @} */

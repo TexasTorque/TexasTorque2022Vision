@@ -71,6 +71,6 @@ double HAL_GetAccelerometerY(void);
  */
 double HAL_GetAccelerometerZ(void);
 #ifdef __cplusplus
-}  // extern "C"
+} // extern "C"
 /** @} */
 #endif

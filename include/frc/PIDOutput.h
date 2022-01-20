@@ -15,8 +15,8 @@ namespace frc {
  * PIDController to read directly from the inputs.
  */
 class PIDOutput {
- public:
-  virtual void PIDWrite(double output) = 0;
+  public:
+    virtual void PIDWrite(double output) = 0;
 };
 
-}  // namespace frc
+} // namespace frc

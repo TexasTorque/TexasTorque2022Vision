@@ -10,11 +10,10 @@
 #include "wpi/StringRef.h"
 
 namespace wpi {
-template <typename T>
-class SmallVectorImpl;
+template<typename T> class SmallVectorImpl;
 
 std::string GetHostname();
 StringRef GetHostname(SmallVectorImpl<char>& name);
-}  // namespace wpi
+} // namespace wpi
 
-#endif  // WPIUTIL_WPI_HOSTNAME_H_
+#endif // WPIUTIL_WPI_HOSTNAME_H_

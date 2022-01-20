@@ -35,204 +35,203 @@ class SendableBuilder;
  *   - 0 = disabled (i.e. PWM output is held low)
  */
 class PWM : public MotorSafety, public Sendable, public SendableHelper<PWM> {
- public:
-  friend class AddressableLED;
-  /**
-   * Represents the amount to multiply the minimum servo-pulse pwm period by.
-   */
-  enum PeriodMultiplier {
+  public:
+    friend class AddressableLED;
     /**
-     * Don't skip pulses. PWM pulses occur every 5.005 ms
+     * Represents the amount to multiply the minimum servo-pulse pwm period by.
      */
-    kPeriodMultiplier_1X = 1,
+    enum PeriodMultiplier {
+        /**
+         * Don't skip pulses. PWM pulses occur every 5.005 ms
+         */
+        kPeriodMultiplier_1X = 1,
+        /**
+         * Skip every other pulse. PWM pulses occur every 10.010 ms
+         */
+        kPeriodMultiplier_2X = 2,
+        /**
+         * Skip three out of four pulses. PWM pulses occur every 20.020 ms
+         */
+        kPeriodMultiplier_4X = 4
+    };
+
     /**
-     * Skip every other pulse. PWM pulses occur every 10.010 ms
+     * Allocate a PWM given a channel number.
+     *
+     * Checks channel value range and allocates the appropriate channel.
+     * The allocation is only done to help users ensure that they don't double
+     * assign channels.
+     *
+     * @param channel The PWM channel number. 0-9 are on-board, 10-19 are on the
+     *                MXP port
      */
-    kPeriodMultiplier_2X = 2,
+    explicit PWM(int channel);
+
     /**
-     * Skip three out of four pulses. PWM pulses occur every 20.020 ms
+     * Free the PWM channel.
+     *
+     * Free the resource associated with the PWM channel and set the value to 0.
      */
-    kPeriodMultiplier_4X = 4
-  };
+    ~PWM() override;
 
-  /**
-   * Allocate a PWM given a channel number.
-   *
-   * Checks channel value range and allocates the appropriate channel.
-   * The allocation is only done to help users ensure that they don't double
-   * assign channels.
-   *
-   * @param channel The PWM channel number. 0-9 are on-board, 10-19 are on the
-   *                MXP port
-   */
-  explicit PWM(int channel);
+    PWM(PWM&&) = default;
+    PWM& operator=(PWM&&) = default;
 
-  /**
-   * Free the PWM channel.
-   *
-   * Free the resource associated with the PWM channel and set the value to 0.
-   */
-  ~PWM() override;
+    // MotorSafety interface
+    void StopMotor() override;
+    void GetDescription(wpi::raw_ostream& desc) const override;
 
-  PWM(PWM&&) = default;
-  PWM& operator=(PWM&&) = default;
+    /**
+     * Set the PWM value directly to the hardware.
+     *
+     * Write a raw value to a PWM channel.
+     *
+     * @param value Raw PWM value.
+     */
+    virtual void SetRaw(uint16_t value);
 
-  // MotorSafety interface
-  void StopMotor() override;
-  void GetDescription(wpi::raw_ostream& desc) const override;
+    /**
+     * Get the PWM value directly from the hardware.
+     *
+     * Read a raw value from a PWM channel.
+     *
+     * @return Raw PWM control value.
+     */
+    virtual uint16_t GetRaw() const;
 
-  /**
-   * Set the PWM value directly to the hardware.
-   *
-   * Write a raw value to a PWM channel.
-   *
-   * @param value Raw PWM value.
-   */
-  virtual void SetRaw(uint16_t value);
+    /**
+     * Set the PWM value based on a position.
+     *
+     * This is intended to be used by servos.
+     *
+     * @pre SetMaxPositivePwm() called.
+     * @pre SetMinNegativePwm() called.
+     *
+     * @param pos The position to set the servo between 0.0 and 1.0.
+     */
+    virtual void SetPosition(double pos);
 
-  /**
-   * Get the PWM value directly from the hardware.
-   *
-   * Read a raw value from a PWM channel.
-   *
-   * @return Raw PWM control value.
-   */
-  virtual uint16_t GetRaw() const;
+    /**
+     * Get the PWM value in terms of a position.
+     *
+     * This is intended to be used by servos.
+     *
+     * @pre SetMaxPositivePwm() called.
+     * @pre SetMinNegativePwm() called.
+     *
+     * @return The position the servo is set to between 0.0 and 1.0.
+     */
+    virtual double GetPosition() const;
 
-  /**
-   * Set the PWM value based on a position.
-   *
-   * This is intended to be used by servos.
-   *
-   * @pre SetMaxPositivePwm() called.
-   * @pre SetMinNegativePwm() called.
-   *
-   * @param pos The position to set the servo between 0.0 and 1.0.
-   */
-  virtual void SetPosition(double pos);
+    /**
+     * Set the PWM value based on a speed.
+     *
+     * This is intended to be used by speed controllers.
+     *
+     * @pre SetMaxPositivePwm() called.
+     * @pre SetMinPositivePwm() called.
+     * @pre SetCenterPwm() called.
+     * @pre SetMaxNegativePwm() called.
+     * @pre SetMinNegativePwm() called.
+     *
+     * @param speed The speed to set the speed controller between -1.0 and 1.0.
+     */
+    virtual void SetSpeed(double speed);
 
-  /**
-   * Get the PWM value in terms of a position.
-   *
-   * This is intended to be used by servos.
-   *
-   * @pre SetMaxPositivePwm() called.
-   * @pre SetMinNegativePwm() called.
-   *
-   * @return The position the servo is set to between 0.0 and 1.0.
-   */
-  virtual double GetPosition() const;
+    /**
+     * Get the PWM value in terms of speed.
+     *
+     * This is intended to be used by speed controllers.
+     *
+     * @pre SetMaxPositivePwm() called.
+     * @pre SetMinPositivePwm() called.
+     * @pre SetMaxNegativePwm() called.
+     * @pre SetMinNegativePwm() called.
+     *
+     * @return The most recently set speed between -1.0 and 1.0.
+     */
+    virtual double GetSpeed() const;
 
-  /**
-   * Set the PWM value based on a speed.
-   *
-   * This is intended to be used by speed controllers.
-   *
-   * @pre SetMaxPositivePwm() called.
-   * @pre SetMinPositivePwm() called.
-   * @pre SetCenterPwm() called.
-   * @pre SetMaxNegativePwm() called.
-   * @pre SetMinNegativePwm() called.
-   *
-   * @param speed The speed to set the speed controller between -1.0 and 1.0.
-   */
-  virtual void SetSpeed(double speed);
+    /**
+     * Temporarily disables the PWM output. The next set call will reenable
+     * the output.
+     */
+    virtual void SetDisabled();
 
-  /**
-   * Get the PWM value in terms of speed.
-   *
-   * This is intended to be used by speed controllers.
-   *
-   * @pre SetMaxPositivePwm() called.
-   * @pre SetMinPositivePwm() called.
-   * @pre SetMaxNegativePwm() called.
-   * @pre SetMinNegativePwm() called.
-   *
-   * @return The most recently set speed between -1.0 and 1.0.
-   */
-  virtual double GetSpeed() const;
+    /**
+     * Slow down the PWM signal for old devices.
+     *
+     * @param mult The period multiplier to apply to this channel
+     */
+    void SetPeriodMultiplier(PeriodMultiplier mult);
 
-  /**
-   * Temporarily disables the PWM output. The next set call will reenable
-   * the output.
-   */
-  virtual void SetDisabled();
+    void SetZeroLatch();
 
-  /**
-   * Slow down the PWM signal for old devices.
-   *
-   * @param mult The period multiplier to apply to this channel
-   */
-  void SetPeriodMultiplier(PeriodMultiplier mult);
+    /**
+     * Optionally eliminate the deadband from a speed controller.
+     *
+     * @param eliminateDeadband If true, set the motor curve on the Jaguar to
+     *                          eliminate the deadband in the middle of the
+     * range. Otherwise, keep the full range without modifying any values.
+     */
+    void EnableDeadbandElimination(bool eliminateDeadband);
 
-  void SetZeroLatch();
+    /**
+     * Set the bounds on the PWM pulse widths.
+     *
+     * This sets the bounds on the PWM values for a particular type of
+     * controller. The values determine the upper and lower speeds as well as
+     * the deadband bracket.
+     *
+     * @param max         The max PWM pulse width in ms
+     * @param deadbandMax The high end of the deadband range pulse width in ms
+     * @param center      The center (off) pulse width in ms
+     * @param deadbandMin The low end of the deadband pulse width in ms
+     * @param min         The minimum pulse width in ms
+     */
+    void SetBounds(double max, double deadbandMax, double center,
+                   double deadbandMin, double min);
 
-  /**
-   * Optionally eliminate the deadband from a speed controller.
-   *
-   * @param eliminateDeadband If true, set the motor curve on the Jaguar to
-   *                          eliminate the deadband in the middle of the range.
-   *                          Otherwise, keep the full range without modifying
-   *                          any values.
-   */
-  void EnableDeadbandElimination(bool eliminateDeadband);
+    /**
+     * Set the bounds on the PWM values.
+     *
+     * This sets the bounds on the PWM values for a particular each type of
+     * controller. The values determine the upper and lower speeds as well as
+     * the deadband bracket.
+     *
+     * @param max         The Minimum pwm value
+     * @param deadbandMax The high end of the deadband range
+     * @param center      The center speed (off)
+     * @param deadbandMin The low end of the deadband range
+     * @param min         The minimum pwm value
+     */
+    void SetRawBounds(int max, int deadbandMax, int center, int deadbandMin,
+                      int min);
 
-  /**
-   * Set the bounds on the PWM pulse widths.
-   *
-   * This sets the bounds on the PWM values for a particular type of controller.
-   * The values determine the upper and lower speeds as well as the deadband
-   * bracket.
-   *
-   * @param max         The max PWM pulse width in ms
-   * @param deadbandMax The high end of the deadband range pulse width in ms
-   * @param center      The center (off) pulse width in ms
-   * @param deadbandMin The low end of the deadband pulse width in ms
-   * @param min         The minimum pulse width in ms
-   */
-  void SetBounds(double max, double deadbandMax, double center,
-                 double deadbandMin, double min);
+    /**
+     * Get the bounds on the PWM values.
+     *
+     * This Gets the bounds on the PWM values for a particular each type of
+     * controller. The values determine the upper and lower speeds as well as
+     * the deadband bracket.
+     *
+     * @param max         The Minimum pwm value
+     * @param deadbandMax The high end of the deadband range
+     * @param center      The center speed (off)
+     * @param deadbandMin The low end of the deadband range
+     * @param min         The minimum pwm value
+     */
+    void GetRawBounds(int32_t* max, int32_t* deadbandMax, int32_t* center,
+                      int32_t* deadbandMin, int32_t* min);
 
-  /**
-   * Set the bounds on the PWM values.
-   *
-   * This sets the bounds on the PWM values for a particular each type of
-   * controller. The values determine the upper and lower speeds as well as the
-   * deadband bracket.
-   *
-   * @param max         The Minimum pwm value
-   * @param deadbandMax The high end of the deadband range
-   * @param center      The center speed (off)
-   * @param deadbandMin The low end of the deadband range
-   * @param min         The minimum pwm value
-   */
-  void SetRawBounds(int max, int deadbandMax, int center, int deadbandMin,
-                    int min);
+    int GetChannel() const;
 
-  /**
-   * Get the bounds on the PWM values.
-   *
-   * This Gets the bounds on the PWM values for a particular each type of
-   * controller. The values determine the upper and lower speeds as well as the
-   * deadband bracket.
-   *
-   * @param max         The Minimum pwm value
-   * @param deadbandMax The high end of the deadband range
-   * @param center      The center speed (off)
-   * @param deadbandMin The low end of the deadband range
-   * @param min         The minimum pwm value
-   */
-  void GetRawBounds(int32_t* max, int32_t* deadbandMax, int32_t* center,
-                    int32_t* deadbandMin, int32_t* min);
+  protected:
+    void InitSendable(SendableBuilder& builder) override;
 
-  int GetChannel() const;
-
- protected:
-  void InitSendable(SendableBuilder& builder) override;
-
- private:
-  int m_channel;
-  hal::Handle<HAL_DigitalHandle> m_handle;
+  private:
+    int m_channel;
+    hal::Handle<HAL_DigitalHandle> m_handle;
 };
 
-}  // namespace frc
+} // namespace frc

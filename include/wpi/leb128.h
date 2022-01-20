@@ -60,6 +60,6 @@ uint64_t ReadUleb128(const char* addr, uint64_t* ret);
  */
 bool ReadUleb128(raw_istream& is, uint64_t* ret);
 
-}  // namespace wpi
+} // namespace wpi
 
-#endif  // WPIUTIL_WPI_LEB128_H_
+#endif // WPIUTIL_WPI_LEB128_H_

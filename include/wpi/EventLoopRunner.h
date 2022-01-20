@@ -17,46 +17,46 @@ namespace wpi {
  * Executes an event loop on a separate thread.
  */
 class EventLoopRunner {
- public:
-  using LoopFunc = std::function<void(uv::Loop&)>;
+  public:
+    using LoopFunc = std::function<void(uv::Loop&)>;
 
-  EventLoopRunner();
-  virtual ~EventLoopRunner();
+    EventLoopRunner();
+    virtual ~EventLoopRunner();
 
-  /**
-   * Stop the loop.  Once the loop is stopped it cannot be restarted.
-   * This function does not return until the loop has exited.
-   */
-  void Stop();
+    /**
+     * Stop the loop.  Once the loop is stopped it cannot be restarted.
+     * This function does not return until the loop has exited.
+     */
+    void Stop();
 
-  /**
-   * Run a function asynchronously (once) on the loop.
-   * This is safe to call from any thread, but is NOT safe to call from the
-   * provided function (it will deadlock).
-   * @param func function to execute on the loop
-   */
-  void ExecAsync(LoopFunc func);
+    /**
+     * Run a function asynchronously (once) on the loop.
+     * This is safe to call from any thread, but is NOT safe to call from the
+     * provided function (it will deadlock).
+     * @param func function to execute on the loop
+     */
+    void ExecAsync(LoopFunc func);
 
-  /**
-   * Run a function synchronously (once) on the loop.
-   * This is safe to call from any thread, but is NOT safe to call from the
-   * provided function (it will deadlock).
-   * This does not return until the function finishes executing.
-   * @param func function to execute on the loop
-   */
-  void ExecSync(LoopFunc func);
+    /**
+     * Run a function synchronously (once) on the loop.
+     * This is safe to call from any thread, but is NOT safe to call from the
+     * provided function (it will deadlock).
+     * This does not return until the function finishes executing.
+     * @param func function to execute on the loop
+     */
+    void ExecSync(LoopFunc func);
 
-  /**
-   * Get the loop.  If the loop thread is not running, returns nullptr.
-   * @return The loop
-   */
-  std::shared_ptr<uv::Loop> GetLoop();
+    /**
+     * Get the loop.  If the loop thread is not running, returns nullptr.
+     * @return The loop
+     */
+    std::shared_ptr<uv::Loop> GetLoop();
 
- private:
-  class Thread;
-  SafeThreadOwner<Thread> m_owner;
+  private:
+    class Thread;
+    SafeThreadOwner<Thread> m_owner;
 };
 
-}  // namespace wpi
+} // namespace wpi
 
-#endif  // WPIUTIL_WPI_EVENTLOOPRUNNER_H_
+#endif // WPIUTIL_WPI_EVENTLOOPRUNNER_H_

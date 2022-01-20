@@ -11,6 +11,6 @@ namespace wpi {
 
 StringRef MimeTypeFromPath(StringRef path);
 
-}  // namespace wpi
+} // namespace wpi
 
-#endif  // WPIUTIL_WPI_MIMETYPES_H_
+#endif // WPIUTIL_WPI_MIMETYPES_H_

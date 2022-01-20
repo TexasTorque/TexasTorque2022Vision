@@ -39,8 +39,8 @@ namespace units {
  * @anchor velocityContainers
  * @sa See unit_t for more information on unit type containers.
  */
-#if !defined(DISABLE_PREDEFINED_UNITS) || \
-    defined(ENABLE_PREDEFINED_VELOCITY_UNITS)
+#if !defined(DISABLE_PREDEFINED_UNITS) ||                                      \
+        defined(ENABLE_PREDEFINED_VELOCITY_UNITS)
 UNIT_ADD(velocity, meters_per_second, meters_per_second, mps,
          unit<std::ratio<1>, units::category::velocity_unit>)
 UNIT_ADD(velocity, feet_per_second, feet_per_second, fps,
@@ -56,4 +56,4 @@ UNIT_ADD_CATEGORY_TRAIT(velocity)
 #endif
 
 using namespace velocity;
-}  // namespace units
+} // namespace units

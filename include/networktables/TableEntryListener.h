@@ -35,8 +35,8 @@ using wpi::StringRef;
 typedef std::function<void(NetworkTable* table, StringRef name,
                            NetworkTableEntry entry,
                            std::shared_ptr<Value> value, int flags)>
-    TableEntryListener;
+        TableEntryListener;
 
-}  // namespace nt
+} // namespace nt
 
-#endif  // NTCORE_NETWORKTABLES_TABLEENTRYLISTENER_H_
+#endif // NTCORE_NETWORKTABLES_TABLEENTRYLISTENER_H_

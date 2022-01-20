@@ -29,4 +29,4 @@ using nullopt_t [[deprecated("use std::nullopt_t")]] = std::nullopt_t;
 
 // clang-format on
 
-#endif  // WPIUTIL_WPI_OPTIONAL_H_
+#endif // WPIUTIL_WPI_OPTIONAL_H_

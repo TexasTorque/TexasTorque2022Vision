@@ -26,17 +26,17 @@ namespace frc {
  * \li 0.997ms = full "reverse"
  */
 class PWMVictorSPX : public PWMSpeedController {
- public:
-  /**
-   * Construct a Victor SPX connected via PWM.
-   *
-   * @param channel The PWM channel that the Victor SPX is attached to. 0-9
-   *                are on-board, 10-19 are on the MXP port
-   */
-  explicit PWMVictorSPX(int channel);
+  public:
+    /**
+     * Construct a Victor SPX connected via PWM.
+     *
+     * @param channel The PWM channel that the Victor SPX is attached to. 0-9
+     *                are on-board, 10-19 are on the MXP port
+     */
+    explicit PWMVictorSPX(int channel);
 
-  PWMVictorSPX(PWMVictorSPX&&) = default;
-  PWMVictorSPX& operator=(PWMVictorSPX&&) = default;
+    PWMVictorSPX(PWMVictorSPX&&) = default;
+    PWMVictorSPX& operator=(PWMVictorSPX&&) = default;
 };
 
-}  // namespace frc
+} // namespace frc

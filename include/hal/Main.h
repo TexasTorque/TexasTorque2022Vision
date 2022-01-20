@@ -57,6 +57,6 @@ void HAL_RunMain(void);
 void HAL_ExitMain(void);
 
 #ifdef __cplusplus
-}  // extern "C"
+} // extern "C"
 #endif
 /** @} */

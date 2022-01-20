@@ -20,15 +20,15 @@ namespace frc {
  * a digital input or analog trigger but not both.
  */
 class DigitalSource : public InterruptableSensorBase {
- public:
-  DigitalSource() = default;
-  DigitalSource(DigitalSource&&) = default;
-  DigitalSource& operator=(DigitalSource&&) = default;
+  public:
+    DigitalSource() = default;
+    DigitalSource(DigitalSource&&) = default;
+    DigitalSource& operator=(DigitalSource&&) = default;
 
-  HAL_Handle GetPortHandleForRouting() const override = 0;
-  AnalogTriggerType GetAnalogTriggerTypeForRouting() const override = 0;
-  virtual bool IsAnalogTrigger() const = 0;
-  virtual int GetChannel() const = 0;
+    HAL_Handle GetPortHandleForRouting() const override = 0;
+    AnalogTriggerType GetAnalogTriggerTypeForRouting() const override = 0;
+    virtual bool IsAnalogTrigger() const = 0;
+    virtual int GetChannel() const = 0;
 };
 
-}  // namespace frc
+} // namespace frc

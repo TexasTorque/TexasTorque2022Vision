@@ -161,6 +161,6 @@ void HAL_SetInterruptUpSourceEdge(HAL_InterruptHandle interruptHandle,
 void HAL_ReleaseWaitingInterrupt(HAL_InterruptHandle interruptHandle,
                                  int32_t* status);
 #ifdef __cplusplus
-}  // extern "C"
+} // extern "C"
 #endif
 /** @} */

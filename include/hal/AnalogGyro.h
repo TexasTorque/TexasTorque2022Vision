@@ -130,6 +130,6 @@ double HAL_GetAnalogGyroOffset(HAL_GyroHandle handle, int32_t* status);
  */
 int32_t HAL_GetAnalogGyroCenter(HAL_GyroHandle handle, int32_t* status);
 #ifdef __cplusplus
-}  // extern "C"
+} // extern "C"
 #endif
 /** @} */

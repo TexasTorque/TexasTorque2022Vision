@@ -54,4 +54,4 @@ bool SetThreadPriority(std::thread& thread, bool realTime, int priority);
  */
 bool SetCurrentThreadPriority(bool realTime, int priority);
 
-}  // namespace frc
+} // namespace frc

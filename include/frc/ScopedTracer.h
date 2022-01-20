@@ -13,7 +13,7 @@
 
 namespace wpi {
 class raw_ostream;
-}  // namespace wpi
+} // namespace wpi
 
 namespace frc {
 /**
@@ -24,22 +24,22 @@ namespace frc {
  * destroyed), the epoch is printed to the provided raw_ostream.
  */
 class ScopedTracer {
- public:
-  /**
-   * Constructs a ScopedTracer instance.
-   *
-   * @param name The name of the epoch.
-   * @param os A reference to the raw_ostream to print data to.
-   */
-  ScopedTracer(wpi::Twine name, wpi::raw_ostream& os);
-  ~ScopedTracer();
+  public:
+    /**
+     * Constructs a ScopedTracer instance.
+     *
+     * @param name The name of the epoch.
+     * @param os A reference to the raw_ostream to print data to.
+     */
+    ScopedTracer(wpi::Twine name, wpi::raw_ostream& os);
+    ~ScopedTracer();
 
-  ScopedTracer(const ScopedTracer&) = delete;
-  ScopedTracer& operator=(const ScopedTracer&) = delete;
+    ScopedTracer(const ScopedTracer&) = delete;
+    ScopedTracer& operator=(const ScopedTracer&) = delete;
 
- private:
-  Tracer m_tracer;
-  std::string m_name;
-  wpi::raw_ostream& m_os;
+  private:
+    Tracer m_tracer;
+    std::string m_name;
+    wpi::raw_ostream& m_os;
 };
-}  // namespace frc
+} // namespace frc

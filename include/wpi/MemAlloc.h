@@ -31,31 +31,28 @@ namespace wpi {
 #pragma warning(disable : 28183)
 #endif
 
-LLVM_ATTRIBUTE_RETURNS_NONNULL inline void *safe_malloc(size_t Sz) {
-  void *Result = std::malloc(Sz);
-  if (Result == nullptr)
-    report_bad_alloc_error("Allocation failed");
-  return Result;
+LLVM_ATTRIBUTE_RETURNS_NONNULL inline void* safe_malloc(size_t Sz) {
+    void* Result = std::malloc(Sz);
+    if (Result == nullptr) report_bad_alloc_error("Allocation failed");
+    return Result;
 }
 
-LLVM_ATTRIBUTE_RETURNS_NONNULL inline void *safe_calloc(size_t Count,
+LLVM_ATTRIBUTE_RETURNS_NONNULL inline void* safe_calloc(size_t Count,
                                                         size_t Sz) {
-  void *Result = std::calloc(Count, Sz);
-  if (Result == nullptr)
-    report_bad_alloc_error("Allocation failed");
-  return Result;
+    void* Result = std::calloc(Count, Sz);
+    if (Result == nullptr) report_bad_alloc_error("Allocation failed");
+    return Result;
 }
 
-LLVM_ATTRIBUTE_RETURNS_NONNULL inline void *safe_realloc(void *Ptr, size_t Sz) {
-  void *Result = std::realloc(Ptr, Sz);
-  if (Result == nullptr)
-    report_bad_alloc_error("Allocation failed");
-  return Result;
+LLVM_ATTRIBUTE_RETURNS_NONNULL inline void* safe_realloc(void* Ptr, size_t Sz) {
+    void* Result = std::realloc(Ptr, Sz);
+    if (Result == nullptr) report_bad_alloc_error("Allocation failed");
+    return Result;
 }
 
 #ifdef _WIN32
 #pragma warning(pop)
 #endif
 
-}
+} // namespace wpi
 #endif

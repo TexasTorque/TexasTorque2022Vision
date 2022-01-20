@@ -15,22 +15,22 @@ enum class PIDSourceType { kDisplacement, kRate };
  * that returns a standard value that will be used in the PID code.
  */
 class PIDSource {
- public:
-  virtual ~PIDSource() = default;
+  public:
+    virtual ~PIDSource() = default;
 
-  /**
-   * Set which parameter you are using as a process control variable.
-   *
-   * @param pidSource An enum to select the parameter.
-   */
-  virtual void SetPIDSourceType(PIDSourceType pidSource);
+    /**
+     * Set which parameter you are using as a process control variable.
+     *
+     * @param pidSource An enum to select the parameter.
+     */
+    virtual void SetPIDSourceType(PIDSourceType pidSource);
 
-  virtual PIDSourceType GetPIDSourceType() const;
+    virtual PIDSourceType GetPIDSourceType() const;
 
-  virtual double PIDGet() = 0;
+    virtual double PIDGet() = 0;
 
- protected:
-  PIDSourceType m_pidSource = PIDSourceType::kDisplacement;
+  protected:
+    PIDSourceType m_pidSource = PIDSourceType::kDisplacement;
 };
 
-}  // namespace frc
+} // namespace frc

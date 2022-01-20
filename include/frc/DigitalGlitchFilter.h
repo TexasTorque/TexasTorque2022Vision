@@ -30,103 +30,103 @@ class Counter;
 class DigitalGlitchFilter : public ErrorBase,
                             public Sendable,
                             public SendableHelper<DigitalGlitchFilter> {
- public:
-  DigitalGlitchFilter();
-  ~DigitalGlitchFilter() override;
+  public:
+    DigitalGlitchFilter();
+    ~DigitalGlitchFilter() override;
 
-  DigitalGlitchFilter(DigitalGlitchFilter&& rhs);
-  DigitalGlitchFilter& operator=(DigitalGlitchFilter&& rhs);
+    DigitalGlitchFilter(DigitalGlitchFilter&& rhs);
+    DigitalGlitchFilter& operator=(DigitalGlitchFilter&& rhs);
 
-  /**
-   * Assigns the DigitalSource to this glitch filter.
-   *
-   * @param input The DigitalSource to add.
-   */
-  void Add(DigitalSource* input);
+    /**
+     * Assigns the DigitalSource to this glitch filter.
+     *
+     * @param input The DigitalSource to add.
+     */
+    void Add(DigitalSource* input);
 
-  /**
-   * Assigns the Encoder to this glitch filter.
-   *
-   * @param input The Encoder to add.
-   */
-  void Add(Encoder* input);
+    /**
+     * Assigns the Encoder to this glitch filter.
+     *
+     * @param input The Encoder to add.
+     */
+    void Add(Encoder* input);
 
-  /**
-   * Assigns the Counter to this glitch filter.
-   *
-   * @param input The Counter to add.
-   */
-  void Add(Counter* input);
+    /**
+     * Assigns the Counter to this glitch filter.
+     *
+     * @param input The Counter to add.
+     */
+    void Add(Counter* input);
 
-  /**
-   * Removes a digital input from this filter.
-   *
-   * Removes the DigitalSource from this glitch filter and re-assigns it to
-   * the default filter.
-   *
-   * @param input The DigitalSource to remove.
-   */
-  void Remove(DigitalSource* input);
+    /**
+     * Removes a digital input from this filter.
+     *
+     * Removes the DigitalSource from this glitch filter and re-assigns it to
+     * the default filter.
+     *
+     * @param input The DigitalSource to remove.
+     */
+    void Remove(DigitalSource* input);
 
-  /**
-   * Removes an encoder from this filter.
-   *
-   * Removes the Encoder from this glitch filter and re-assigns it to
-   * the default filter.
-   *
-   * @param input The Encoder to remove.
-   */
-  void Remove(Encoder* input);
+    /**
+     * Removes an encoder from this filter.
+     *
+     * Removes the Encoder from this glitch filter and re-assigns it to
+     * the default filter.
+     *
+     * @param input The Encoder to remove.
+     */
+    void Remove(Encoder* input);
 
-  /**
-   * Removes a counter from this filter.
-   *
-   * Removes the Counter from this glitch filter and re-assigns it to
-   * the default filter.
-   *
-   * @param input The Counter to remove.
-   */
-  void Remove(Counter* input);
+    /**
+     * Removes a counter from this filter.
+     *
+     * Removes the Counter from this glitch filter and re-assigns it to
+     * the default filter.
+     *
+     * @param input The Counter to remove.
+     */
+    void Remove(Counter* input);
 
-  /**
-   * Sets the number of cycles that the input must not change state for.
-   *
-   * @param fpgaCycles The number of FPGA cycles.
-   */
-  void SetPeriodCycles(int fpgaCycles);
+    /**
+     * Sets the number of cycles that the input must not change state for.
+     *
+     * @param fpgaCycles The number of FPGA cycles.
+     */
+    void SetPeriodCycles(int fpgaCycles);
 
-  /**
-   * Sets the number of nanoseconds that the input must not change state for.
-   *
-   * @param nanoseconds The number of nanoseconds.
-   */
-  void SetPeriodNanoSeconds(uint64_t nanoseconds);
+    /**
+     * Sets the number of nanoseconds that the input must not change state for.
+     *
+     * @param nanoseconds The number of nanoseconds.
+     */
+    void SetPeriodNanoSeconds(uint64_t nanoseconds);
 
-  /**
-   * Gets the number of cycles that the input must not change state for.
-   *
-   * @return The number of cycles.
-   */
-  int GetPeriodCycles();
+    /**
+     * Gets the number of cycles that the input must not change state for.
+     *
+     * @return The number of cycles.
+     */
+    int GetPeriodCycles();
 
-  /**
-   * Gets the number of nanoseconds that the input must not change state for.
-   *
-   * @return The number of nanoseconds.
-   */
-  uint64_t GetPeriodNanoSeconds();
+    /**
+     * Gets the number of nanoseconds that the input must not change state for.
+     *
+     * @return The number of nanoseconds.
+     */
+    uint64_t GetPeriodNanoSeconds();
 
-  void InitSendable(SendableBuilder& builder) override;
+    void InitSendable(SendableBuilder& builder) override;
 
- private:
-  // Sets the filter for the input to be the requested index. A value of 0
-  // disables the filter, and the filter value must be between 1 and 3,
-  // inclusive.
-  void DoAdd(DigitalSource* input, int requested_index);
+  private:
+    // Sets the filter for the input to be the requested index. A value of 0
+    // disables the filter, and the filter value must be between 1 and 3,
+    // inclusive.
+    void DoAdd(DigitalSource* input, int requested_index);
 
-  int m_channelIndex = -1;
-  static wpi::mutex m_mutex;
-  static std::array<bool, 3> m_filterAllocated;
+    int m_channelIndex = -1;
+    static wpi::mutex m_mutex;
+    static std::array<bool, 3> m_filterAllocated;
 };
 
-}  // namespace frc
+} // namespace frc

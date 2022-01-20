@@ -39,8 +39,8 @@ namespace units {
  * @anchor chargeContainers
  * @sa See unit_t for more information on unit type containers.
  */
-#if !defined(DISABLE_PREDEFINED_UNITS) || \
-    defined(ENABLE_PREDEFINED_CHARGE_UNITS)
+#if !defined(DISABLE_PREDEFINED_UNITS) ||                                      \
+        defined(ENABLE_PREDEFINED_CHARGE_UNITS)
 UNIT_ADD_WITH_METRIC_PREFIXES(charge, coulomb, coulombs, C,
                               unit<std::ratio<1>, units::category::charge_unit>)
 UNIT_ADD_WITH_METRIC_PREFIXES(charge, ampere_hour, ampere_hours, Ah,
@@ -50,4 +50,4 @@ UNIT_ADD_CATEGORY_TRAIT(charge)
 #endif
 
 using namespace charge;
-}  // namespace units
+} // namespace units

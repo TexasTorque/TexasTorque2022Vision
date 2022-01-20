@@ -23,28 +23,28 @@ namespace frc {
  * more regular execution periods.
  */
 class IterativeRobot : public IterativeRobotBase {
- public:
-  WPI_DEPRECATED(
-      "Use TimedRobot instead. It's a drop-in replacement that provides more "
-      "regular execution periods.")
-  IterativeRobot();
-  ~IterativeRobot() override = default;
+  public:
+    WPI_DEPRECATED("Use TimedRobot instead. It's a drop-in replacement that "
+                   "provides more "
+                   "regular execution periods.")
+    IterativeRobot();
+    ~IterativeRobot() override = default;
 
-  /**
-   * Provide an alternate "main loop" via StartCompetition().
-   *
-   * This specific StartCompetition() implements "main loop" behavior synced
-   * with the DS packets.
-   */
-  void StartCompetition() override;
+    /**
+     * Provide an alternate "main loop" via StartCompetition().
+     *
+     * This specific StartCompetition() implements "main loop" behavior synced
+     * with the DS packets.
+     */
+    void StartCompetition() override;
 
-  /**
-   * Ends the main loop in StartCompetition().
-   */
-  void EndCompetition() override;
+    /**
+     * Ends the main loop in StartCompetition().
+     */
+    void EndCompetition() override;
 
- private:
-  std::atomic<bool> m_exit{false};
+  private:
+    std::atomic<bool> m_exit{false};
 };
 
-}  // namespace frc
+} // namespace frc

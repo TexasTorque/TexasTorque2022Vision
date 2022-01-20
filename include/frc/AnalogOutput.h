@@ -20,45 +20,45 @@ class SendableBuilder;
 class AnalogOutput : public ErrorBase,
                      public Sendable,
                      public SendableHelper<AnalogOutput> {
- public:
-  /**
-   * Construct an analog output on the given channel.
-   *
-   * All analog outputs are located on the MXP port.
-   *
-   * @param channel The channel number on the roboRIO to represent.
-   */
-  explicit AnalogOutput(int channel);
+  public:
+    /**
+     * Construct an analog output on the given channel.
+     *
+     * All analog outputs are located on the MXP port.
+     *
+     * @param channel The channel number on the roboRIO to represent.
+     */
+    explicit AnalogOutput(int channel);
 
-  ~AnalogOutput() override;
+    ~AnalogOutput() override;
 
-  AnalogOutput(AnalogOutput&&) = default;
-  AnalogOutput& operator=(AnalogOutput&&) = default;
+    AnalogOutput(AnalogOutput&&) = default;
+    AnalogOutput& operator=(AnalogOutput&&) = default;
 
-  /**
-   * Set the value of the analog output.
-   *
-   * @param voltage The output value in Volts, from 0.0 to +5.0
-   */
-  void SetVoltage(double voltage);
+    /**
+     * Set the value of the analog output.
+     *
+     * @param voltage The output value in Volts, from 0.0 to +5.0
+     */
+    void SetVoltage(double voltage);
 
-  /**
-   * Get the voltage of the analog output
-   *
-   * @return The value in Volts, from 0.0 to +5.0
-   */
-  double GetVoltage() const;
+    /**
+     * Get the voltage of the analog output
+     *
+     * @return The value in Volts, from 0.0 to +5.0
+     */
+    double GetVoltage() const;
 
-  /**
-   * Get the channel of this AnalogOutput.
-   */
-  int GetChannel() const;
+    /**
+     * Get the channel of this AnalogOutput.
+     */
+    int GetChannel() const;
 
-  void InitSendable(SendableBuilder& builder) override;
+    void InitSendable(SendableBuilder& builder) override;
 
- protected:
-  int m_channel;
-  hal::Handle<HAL_AnalogOutputHandle> m_port;
+  protected:
+    int m_channel;
+    hal::Handle<HAL_AnalogOutputHandle> m_port;
 };
 
-}  // namespace frc
+} // namespace frc

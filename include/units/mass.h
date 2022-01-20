@@ -39,7 +39,8 @@ namespace units {
  */
 #if !defined(DISABLE_PREDEFINED_UNITS) || defined(ENABLE_PREDEFINED_MASS_UNITS)
 UNIT_ADD_WITH_METRIC_PREFIXES(
-    mass, gram, grams, g, unit<std::ratio<1, 1000>, units::category::mass_unit>)
+        mass, gram, grams, g,
+        unit<std::ratio<1, 1000>, units::category::mass_unit>)
 UNIT_ADD(mass, metric_ton, metric_tons, t, unit<std::ratio<1000>, kilograms>)
 UNIT_ADD(mass, pound, pounds, lb,
          unit<std::ratio<45359237, 100000000>, kilograms>)
@@ -55,4 +56,4 @@ UNIT_ADD_CATEGORY_TRAIT(mass)
 #endif
 
 using namespace mass;
-}  // namespace units
+} // namespace units

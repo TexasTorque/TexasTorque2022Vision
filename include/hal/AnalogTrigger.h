@@ -36,15 +36,16 @@ extern "C" {
  * @param portHandle the analog input to use for triggering
  * @return           the created analog trigger handle
  */
-HAL_AnalogTriggerHandle HAL_InitializeAnalogTrigger(
-    HAL_AnalogInputHandle portHandle, int32_t* status);
+HAL_AnalogTriggerHandle
+HAL_InitializeAnalogTrigger(HAL_AnalogInputHandle portHandle, int32_t* status);
 
 /**
  * Initializes an analog trigger with a Duty Cycle input
  *
  */
-HAL_AnalogTriggerHandle HAL_InitializeAnalogTriggerDutyCycle(
-    HAL_DutyCycleHandle dutyCycleHandle, int32_t* status);
+HAL_AnalogTriggerHandle
+HAL_InitializeAnalogTriggerDutyCycle(HAL_DutyCycleHandle dutyCycleHandle,
+                                     int32_t* status);
 
 /**
  * Frees an analog trigger.
@@ -78,12 +79,12 @@ void HAL_SetAnalogTriggerLimitsRaw(HAL_AnalogTriggerHandle analogTriggerHandle,
  * @param upper               the upper voltage value
  */
 void HAL_SetAnalogTriggerLimitsVoltage(
-    HAL_AnalogTriggerHandle analogTriggerHandle, double lower, double upper,
-    int32_t* status);
+        HAL_AnalogTriggerHandle analogTriggerHandle, double lower, double upper,
+        int32_t* status);
 
 void HAL_SetAnalogTriggerLimitsDutyCycle(
-    HAL_AnalogTriggerHandle analogTriggerHandle, double lower, double upper,
-    int32_t* status);
+        HAL_AnalogTriggerHandle analogTriggerHandle, double lower, double upper,
+        int32_t* status);
 
 /**
  * Configures the analog trigger to use the averaged vs. raw values.
@@ -124,8 +125,9 @@ void HAL_SetAnalogTriggerFiltered(HAL_AnalogTriggerHandle analogTriggerHandle,
  * @param analogTriggerHandle the trigger handle
  * @return                    the InWindow output of the analog trigger
  */
-HAL_Bool HAL_GetAnalogTriggerInWindow(
-    HAL_AnalogTriggerHandle analogTriggerHandle, int32_t* status);
+HAL_Bool
+HAL_GetAnalogTriggerInWindow(HAL_AnalogTriggerHandle analogTriggerHandle,
+                             int32_t* status);
 
 /**
  * Returns the TriggerState output of the analog trigger.
@@ -137,8 +139,9 @@ HAL_Bool HAL_GetAnalogTriggerInWindow(
  * @param analogTriggerHandle the trigger handle
  * @return                    the TriggerState output of the analog trigger
  */
-HAL_Bool HAL_GetAnalogTriggerTriggerState(
-    HAL_AnalogTriggerHandle analogTriggerHandle, int32_t* status);
+HAL_Bool
+HAL_GetAnalogTriggerTriggerState(HAL_AnalogTriggerHandle analogTriggerHandle,
+                                 int32_t* status);
 
 /**
  * Gets the state of the analog trigger output.
@@ -157,9 +160,10 @@ HAL_Bool HAL_GetAnalogTriggerOutput(HAL_AnalogTriggerHandle analogTriggerHandle,
  * @param analogTriggerHandle the trigger handle
  * @return the FPGA index
  */
-int32_t HAL_GetAnalogTriggerFPGAIndex(
-    HAL_AnalogTriggerHandle analogTriggerHandle, int32_t* status);
+int32_t
+HAL_GetAnalogTriggerFPGAIndex(HAL_AnalogTriggerHandle analogTriggerHandle,
+                              int32_t* status);
 #ifdef __cplusplus
-}  // extern "C"
+} // extern "C"
 #endif
 /** @} */

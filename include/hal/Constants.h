@@ -23,6 +23,6 @@ extern "C" {
  */
 int32_t HAL_GetSystemClockTicksPerMicrosecond(void);
 #ifdef __cplusplus
-}  // extern "C"
+} // extern "C"
 #endif
 /** @} */

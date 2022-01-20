@@ -44,7 +44,7 @@ int64_t HAL_Report(int32_t resource, int32_t instanceNumber, int32_t context,
 
 #ifdef __cplusplus
 namespace HALUsageReporting {
-  enum tResourceType : int32_t {
+enum tResourceType : int32_t {
     kResourceType_Controller = 0,
     kResourceType_Module = 1,
     kResourceType_Language = 2,
@@ -139,8 +139,8 @@ namespace HALUsageReporting {
     kResourceType_DutyCycle = 91,
     kResourceType_AddressableLEDs = 92,
     kResourceType_FusionVenom = 93,
-  };
-  enum tInstances : int32_t {
+};
+enum tInstances : int32_t {
     kLanguage_LabVIEW = 1,
     kLanguage_CPlusPlus = 2,
     kLanguage_Java = 3,
@@ -193,6 +193,6 @@ namespace HALUsageReporting {
     kOdometry_DifferentialDrive = 1,
     kOdometry_MecanumDrive = 2,
     kOdometry_SwerveDrive = 3,
-  };
-}
+};
+} // namespace HALUsageReporting
 #endif

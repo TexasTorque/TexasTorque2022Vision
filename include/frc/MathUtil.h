@@ -17,19 +17,19 @@ namespace frc {
  * @param minimumInput The minimum value expected from the input.
  * @param maximumInput The maximum value expected from the input.
  */
-template <typename T>
+template<typename T>
 constexpr T InputModulus(T input, T minimumInput, T maximumInput) {
-  T modulus = maximumInput - minimumInput;
+    T modulus = maximumInput - minimumInput;
 
-  // Wrap input if it's above the maximum input
-  int numMax = (input - minimumInput) / modulus;
-  input -= numMax * modulus;
+    // Wrap input if it's above the maximum input
+    int numMax = (input - minimumInput) / modulus;
+    input -= numMax * modulus;
 
-  // Wrap input if it's below the minimum input
-  int numMin = (input - maximumInput) / modulus;
-  input -= numMin * modulus;
+    // Wrap input if it's below the minimum input
+    int numMin = (input - maximumInput) / modulus;
+    input -= numMin * modulus;
 
-  return input;
+    return input;
 }
 
 /**
@@ -38,8 +38,8 @@ constexpr T InputModulus(T input, T minimumInput, T maximumInput) {
  * @param angle Angle to wrap.
  */
 constexpr units::radian_t AngleModulus(units::radian_t angle) {
-  return InputModulus<units::radian_t>(angle, units::radian_t{-wpi::math::pi},
-                                       units::radian_t{wpi::math::pi});
+    return InputModulus<units::radian_t>(angle, units::radian_t{-wpi::math::pi},
+                                         units::radian_t{wpi::math::pi});
 }
 
-}  // namespace frc
+} // namespace frc

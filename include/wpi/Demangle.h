@@ -19,6 +19,6 @@ namespace wpi {
  */
 std::string Demangle(const Twine& mangledSymbol);
 
-}  // namespace wpi
+} // namespace wpi
 
-#endif  // WPIUTIL_WPI_DEMANGLE_H_
+#endif // WPIUTIL_WPI_DEMANGLE_H_

@@ -26,17 +26,17 @@ namespace frc {
  * \li 0.997ms = full "reverse"
  */
 class PWMTalonFX : public PWMSpeedController {
- public:
-  /**
-   * Construct a Talon FX connected via PWM.
-   *
-   * @param channel The PWM channel that the Talon FX is attached to. 0-9 are
-   *                on-board, 10-19 are on the MXP port
-   */
-  explicit PWMTalonFX(int channel);
+  public:
+    /**
+     * Construct a Talon FX connected via PWM.
+     *
+     * @param channel The PWM channel that the Talon FX is attached to. 0-9 are
+     *                on-board, 10-19 are on the MXP port
+     */
+    explicit PWMTalonFX(int channel);
 
-  PWMTalonFX(PWMTalonFX&&) = default;
-  PWMTalonFX& operator=(PWMTalonFX&&) = default;
+    PWMTalonFX(PWMTalonFX&&) = default;
+    PWMTalonFX& operator=(PWMTalonFX&&) = default;
 };
 
-}  // namespace frc
+} // namespace frc

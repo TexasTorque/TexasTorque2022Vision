@@ -14,9 +14,9 @@ int SocketErrno();
 std::string SocketStrerror(int code);
 
 inline std::string SocketStrerror() {
-  return SocketStrerror(SocketErrno());
+    return SocketStrerror(SocketErrno());
 }
 
-}  // namespace wpi
+} // namespace wpi
 
-#endif  // WPIUTIL_WPI_SOCKETERROR_H_
+#endif // WPIUTIL_WPI_SOCKETERROR_H_

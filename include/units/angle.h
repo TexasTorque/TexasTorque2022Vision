@@ -53,4 +53,4 @@ UNIT_ADD_CATEGORY_TRAIT(angle)
 #endif
 
 using namespace angle;
-}  // namespace units
+} // namespace units

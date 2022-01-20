@@ -63,6 +63,6 @@ void HAL_SetRelay(HAL_RelayHandle relayPortHandle, HAL_Bool on,
  */
 HAL_Bool HAL_GetRelay(HAL_RelayHandle relayPortHandle, int32_t* status);
 #ifdef __cplusplus
-}  // extern "C"
+} // extern "C"
 #endif
 /** @} */

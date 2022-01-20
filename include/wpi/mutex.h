@@ -18,4 +18,4 @@ using mutex = ::std::mutex;
 using recursive_mutex = ::std::recursive_mutex;
 #endif
 
-}  // namespace wpi
+} // namespace wpi

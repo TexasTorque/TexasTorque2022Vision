@@ -12,20 +12,21 @@ namespace wpi {
 class NetworkStream;
 
 class raw_socket_istream : public raw_istream {
- public:
-  explicit raw_socket_istream(NetworkStream& stream, int timeout = 0)
-      : m_stream(stream), m_timeout(timeout) {}
+  public:
+    explicit raw_socket_istream(NetworkStream& stream, int timeout = 0)
+        : m_stream(stream), m_timeout(timeout) {
+    }
 
-  void close() override;
-  size_t in_avail() const override;
+    void close() override;
+    size_t in_avail() const override;
 
- private:
-  void read_impl(void* data, size_t len) override;
+  private:
+    void read_impl(void* data, size_t len) override;
 
-  NetworkStream& m_stream;
-  int m_timeout;
+    NetworkStream& m_stream;
+    int m_timeout;
 };
 
-}  // namespace wpi
+} // namespace wpi
 
-#endif  // WPIUTIL_WPI_RAW_SOCKET_ISTREAM_H_
+#endif // WPIUTIL_WPI_RAW_SOCKET_ISTREAM_H_

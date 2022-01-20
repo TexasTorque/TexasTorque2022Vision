@@ -56,11 +56,13 @@ extern "C" {
  * @param encodingType         the encoding type
    @return                     the created encoder handle
  */
-HAL_EncoderHandle HAL_InitializeEncoder(
-    HAL_Handle digitalSourceHandleA, HAL_AnalogTriggerType analogTriggerTypeA,
-    HAL_Handle digitalSourceHandleB, HAL_AnalogTriggerType analogTriggerTypeB,
-    HAL_Bool reverseDirection, HAL_EncoderEncodingType encodingType,
-    int32_t* status);
+HAL_EncoderHandle
+HAL_InitializeEncoder(HAL_Handle digitalSourceHandleA,
+                      HAL_AnalogTriggerType analogTriggerTypeA,
+                      HAL_Handle digitalSourceHandleB,
+                      HAL_AnalogTriggerType analogTriggerTypeB,
+                      HAL_Bool reverseDirection,
+                      HAL_EncoderEncodingType encodingType, int32_t* status);
 
 /**
  * Frees an encoder.
@@ -299,9 +301,9 @@ double HAL_GetEncoderDistancePerPulse(HAL_EncoderHandle encoderHandle,
  * @param encoderHandle the encoder handle
  * @return              the encoding type
  */
-HAL_EncoderEncodingType HAL_GetEncoderEncodingType(
-    HAL_EncoderHandle encoderHandle, int32_t* status);
+HAL_EncoderEncodingType
+HAL_GetEncoderEncodingType(HAL_EncoderHandle encoderHandle, int32_t* status);
 #ifdef __cplusplus
-}  // extern "C"
+} // extern "C"
 #endif
 /** @} */

@@ -37,8 +37,8 @@ namespace units {
  * @anchor energyContainers
  * @sa See unit_t for more information on unit type containers.
  */
-#if !defined(DISABLE_PREDEFINED_UNITS) || \
-    defined(ENABLE_PREDEFINED_ENERGY_UNITS)
+#if !defined(DISABLE_PREDEFINED_UNITS) ||                                      \
+        defined(ENABLE_PREDEFINED_ENERGY_UNITS)
 UNIT_ADD_WITH_METRIC_PREFIXES(energy, joule, joules, J,
                               unit<std::ratio<1>, units::category::energy_unit>)
 UNIT_ADD_WITH_METRIC_PREFIXES(energy, calorie, calories, cal,
@@ -62,4 +62,4 @@ UNIT_ADD_CATEGORY_TRAIT(energy)
 #endif
 
 using namespace energy;
-}  // namespace units
+} // namespace units

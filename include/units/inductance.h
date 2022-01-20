@@ -37,14 +37,14 @@ namespace units {
  * @anchor inductanceContainers
  * @sa See unit_t for more information on unit type containers.
  */
-#if !defined(DISABLE_PREDEFINED_UNITS) || \
-    defined(ENABLE_PREDEFINED_INDUCTANCE_UNITS)
+#if !defined(DISABLE_PREDEFINED_UNITS) ||                                      \
+        defined(ENABLE_PREDEFINED_INDUCTANCE_UNITS)
 UNIT_ADD_WITH_METRIC_PREFIXES(
-    inductance, henry, henries, H,
-    unit<std::ratio<1>, units::category::inductance_unit>)
+        inductance, henry, henries, H,
+        unit<std::ratio<1>, units::category::inductance_unit>)
 
 UNIT_ADD_CATEGORY_TRAIT(inductance)
 #endif
 
 using namespace inductance;
-}  // namespace units
+} // namespace units

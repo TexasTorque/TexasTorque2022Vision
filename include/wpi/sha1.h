@@ -27,27 +27,26 @@
 #include "wpi/StringRef.h"
 
 namespace wpi {
-template <typename T>
-class SmallVectorImpl;
+template<typename T> class SmallVectorImpl;
 class raw_istream;
 
 class SHA1 {
- public:
-  SHA1();
-  void Update(StringRef s);
-  void Update(raw_istream& is);
-  std::string Final();
-  StringRef Final(SmallVectorImpl<char>& buf);
-  StringRef RawFinal(SmallVectorImpl<char>& buf);
-  static std::string FromFile(StringRef filename);
+  public:
+    SHA1();
+    void Update(StringRef s);
+    void Update(raw_istream& is);
+    std::string Final();
+    StringRef Final(SmallVectorImpl<char>& buf);
+    StringRef RawFinal(SmallVectorImpl<char>& buf);
+    static std::string FromFile(StringRef filename);
 
- private:
-  uint32_t digest[5];
-  unsigned char buffer[64];
-  size_t buf_size;
-  uint64_t transforms;
+  private:
+    uint32_t digest[5];
+    unsigned char buffer[64];
+    size_t buf_size;
+    uint64_t transforms;
 };
 
-}  // namespace wpi
+} // namespace wpi
 
-#endif  // WPIUTIL_WPI_SHA1_H_
+#endif // WPIUTIL_WPI_SHA1_H_

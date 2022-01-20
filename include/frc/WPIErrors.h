@@ -6,9 +6,13 @@
 
 #include <stdint.h>
 
-#define S(label, offset, message)                                        \
-  constexpr inline const char* wpi_error_s_##label() { return message; } \
-  constexpr inline int wpi_error_value_##label() { return offset; }
+#define S(label, offset, message)                                              \
+    constexpr inline const char* wpi_error_s_##label() {                       \
+        return message;                                                        \
+    }                                                                          \
+    constexpr inline int wpi_error_value_##label() {                           \
+        return offset;                                                         \
+    }
 
 // Fatal errors
 S(ModuleIndexOutOfRange, -1,

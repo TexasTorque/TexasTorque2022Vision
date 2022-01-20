@@ -25,17 +25,17 @@ namespace frc {
  * \li 0.697ms = full "reverse"
  */
 class Jaguar : public PWMSpeedController {
- public:
-  /**
-   * Constructor for a Jaguar connected via PWM.
-   *
-   * @param channel The PWM channel that the Jaguar is attached to. 0-9 are
-   *                on-board, 10-19 are on the MXP port
-   */
-  explicit Jaguar(int channel);
+  public:
+    /**
+     * Constructor for a Jaguar connected via PWM.
+     *
+     * @param channel The PWM channel that the Jaguar is attached to. 0-9 are
+     *                on-board, 10-19 are on the MXP port
+     */
+    explicit Jaguar(int channel);
 
-  Jaguar(Jaguar&&) = default;
-  Jaguar& operator=(Jaguar&&) = default;
+    Jaguar(Jaguar&&) = default;
+    Jaguar& operator=(Jaguar&&) = default;
 };
 
-}  // namespace frc
+} // namespace frc

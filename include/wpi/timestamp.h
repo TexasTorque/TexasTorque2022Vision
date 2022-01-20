@@ -34,7 +34,7 @@ void WPI_SetNowImpl(uint64_t (*func)(void));
 uint64_t WPI_Now(void);
 
 #ifdef __cplusplus
-}  // extern "C"
+} // extern "C"
 #endif
 
 #ifdef __cplusplus
@@ -62,7 +62,7 @@ void SetNowImpl(uint64_t (*func)());
  */
 uint64_t Now(void);
 
-}  // namespace wpi
+} // namespace wpi
 #endif
 
-#endif  // WPIUTIL_WPI_TIMESTAMP_H_
+#endif // WPIUTIL_WPI_TIMESTAMP_H_

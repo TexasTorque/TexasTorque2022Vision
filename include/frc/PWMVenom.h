@@ -24,17 +24,17 @@ namespace frc {
  * \li 0.997ms = full "reverse"
  */
 class PWMVenom : public PWMSpeedController {
- public:
-  /**
-   * Construct a Venom connected via PWM.
-   *
-   * @param channel The PWM channel that the Venom is attached to. 0-9 are
-   *                on-board, 10-19 are on the MXP port
-   */
-  explicit PWMVenom(int channel);
+  public:
+    /**
+     * Construct a Venom connected via PWM.
+     *
+     * @param channel The PWM channel that the Venom is attached to. 0-9 are
+     *                on-board, 10-19 are on the MXP port
+     */
+    explicit PWMVenom(int channel);
 
-  PWMVenom(PWMVenom&&) = default;
-  PWMVenom& operator=(PWMVenom&&) = default;
+    PWMVenom(PWMVenom&&) = default;
+    PWMVenom& operator=(PWMVenom&&) = default;
 };
 
-}  // namespace frc
+} // namespace frc

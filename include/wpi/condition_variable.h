@@ -16,4 +16,4 @@ using condition_variable = ::std::condition_variable_any;
 using condition_variable = ::std::condition_variable;
 #endif
 
-}  // namespace wpi
+} // namespace wpi

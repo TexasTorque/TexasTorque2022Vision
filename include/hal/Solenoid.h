@@ -133,6 +133,6 @@ void HAL_SetOneShotDuration(HAL_SolenoidHandle solenoidPortHandle,
  */
 void HAL_FireOneShot(HAL_SolenoidHandle solenoidPortHandle, int32_t* status);
 #ifdef __cplusplus
-}  // extern "C"
+} // extern "C"
 #endif
 /** @} */

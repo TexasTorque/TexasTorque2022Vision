@@ -37,8 +37,8 @@ namespace units {
  * @anchor lengthContainers
  * @sa See unit_t for more information on unit type containers.
  */
-#if !defined(DISABLE_PREDEFINED_UNITS) || \
-    defined(ENABLE_PREDEFINED_LENGTH_UNITS)
+#if !defined(DISABLE_PREDEFINED_UNITS) ||                                      \
+        defined(ENABLE_PREDEFINED_LENGTH_UNITS)
 UNIT_ADD_WITH_METRIC_PREFIXES(length, meter, meters, m,
                               unit<std::ratio<1>, units::category::length_unit>)
 UNIT_ADD(length, foot, feet, ft, unit<std::ratio<381, 1250>, meters>)
@@ -69,4 +69,4 @@ UNIT_ADD_CATEGORY_TRAIT(length)
 #endif
 
 using namespace length;
-}  // namespace units
+} // namespace units

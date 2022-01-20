@@ -11,8 +11,7 @@
 #include "wpi/StringRef.h"
 
 namespace wpi {
-template <typename T>
-class SmallVectorImpl;
+template<typename T> class SmallVectorImpl;
 class raw_ostream;
 
 size_t Base64Decode(raw_ostream& os, StringRef encoded);
@@ -28,6 +27,6 @@ void Base64Encode(StringRef plain, std::string* encoded);
 
 StringRef Base64Encode(StringRef plain, SmallVectorImpl<char>& buf);
 
-}  // namespace wpi
+} // namespace wpi
 
-#endif  // WPIUTIL_WPI_BASE64_H_
+#endif // WPIUTIL_WPI_BASE64_H_

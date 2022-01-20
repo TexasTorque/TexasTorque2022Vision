@@ -38,14 +38,14 @@ namespace units {
  * @anchor conductanceContainers
  * @sa See unit_t for more information on unit type containers.
  */
-#if !defined(DISABLE_PREDEFINED_UNITS) || \
-    defined(ENABLE_PREDEFINED_CONDUCTANCE_UNITS)
+#if !defined(DISABLE_PREDEFINED_UNITS) ||                                      \
+        defined(ENABLE_PREDEFINED_CONDUCTANCE_UNITS)
 UNIT_ADD_WITH_METRIC_PREFIXES(
-    conductance, siemens, siemens, S,
-    unit<std::ratio<1>, units::category::conductance_unit>)
+        conductance, siemens, siemens, S,
+        unit<std::ratio<1>, units::category::conductance_unit>)
 
 UNIT_ADD_CATEGORY_TRAIT(conductance)
 #endif
 
 using namespace conductance;
-}  // namespace units
+} // namespace units

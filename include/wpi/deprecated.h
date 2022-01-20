@@ -9,4 +9,4 @@
 #define WPI_DEPRECATED(msg) [[deprecated(msg)]]
 #endif
 
-#endif  // WPIUTIL_WPI_DEPRECATED_H_
+#endif // WPIUTIL_WPI_DEPRECATED_H_

@@ -32,101 +32,101 @@ class DMASample;
 class DutyCycle : public ErrorBase,
                   public Sendable,
                   public SendableHelper<DutyCycle> {
-  friend class AnalogTrigger;
-  friend class DMA;
-  friend class DMASample;
+    friend class AnalogTrigger;
+    friend class DMA;
+    friend class DMASample;
 
- public:
-  /**
-   * Constructs a DutyCycle input from a DigitalSource input.
-   *
-   * <p> This class does not own the inputted source.
-   *
-   * @param source The DigitalSource to use.
-   */
-  explicit DutyCycle(DigitalSource& source);
-  /**
-   * Constructs a DutyCycle input from a DigitalSource input.
-   *
-   * <p> This class does not own the inputted source.
-   *
-   * @param source The DigitalSource to use.
-   */
-  explicit DutyCycle(DigitalSource* source);
-  /**
-   * Constructs a DutyCycle input from a DigitalSource input.
-   *
-   * <p> This class does not own the inputted source.
-   *
-   * @param source The DigitalSource to use.
-   */
-  explicit DutyCycle(std::shared_ptr<DigitalSource> source);
+  public:
+    /**
+     * Constructs a DutyCycle input from a DigitalSource input.
+     *
+     * <p> This class does not own the inputted source.
+     *
+     * @param source The DigitalSource to use.
+     */
+    explicit DutyCycle(DigitalSource& source);
+    /**
+     * Constructs a DutyCycle input from a DigitalSource input.
+     *
+     * <p> This class does not own the inputted source.
+     *
+     * @param source The DigitalSource to use.
+     */
+    explicit DutyCycle(DigitalSource* source);
+    /**
+     * Constructs a DutyCycle input from a DigitalSource input.
+     *
+     * <p> This class does not own the inputted source.
+     *
+     * @param source The DigitalSource to use.
+     */
+    explicit DutyCycle(std::shared_ptr<DigitalSource> source);
 
-  /**
-   * Close the DutyCycle and free all resources.
-   */
-  ~DutyCycle() override;
+    /**
+     * Close the DutyCycle and free all resources.
+     */
+    ~DutyCycle() override;
 
-  DutyCycle(DutyCycle&&) = default;
-  DutyCycle& operator=(DutyCycle&&) = default;
+    DutyCycle(DutyCycle&&) = default;
+    DutyCycle& operator=(DutyCycle&&) = default;
 
-  /**
-   * Get the frequency of the duty cycle signal.
-   *
-   * @return frequency in Hertz
-   */
-  int GetFrequency() const;
+    /**
+     * Get the frequency of the duty cycle signal.
+     *
+     * @return frequency in Hertz
+     */
+    int GetFrequency() const;
 
-  /**
-   * Get the output ratio of the duty cycle signal.
-   *
-   * <p> 0 means always low, 1 means always high.
-   *
-   * @return output ratio between 0 and 1
-   */
-  double GetOutput() const;
+    /**
+     * Get the output ratio of the duty cycle signal.
+     *
+     * <p> 0 means always low, 1 means always high.
+     *
+     * @return output ratio between 0 and 1
+     */
+    double GetOutput() const;
 
-  /**
-   * Get the raw output ratio of the duty cycle signal.
-   *
-   * <p> 0 means always low, an output equal to
-   * GetOutputScaleFactor() means always high.
-   *
-   * @return output ratio in raw units
-   */
-  unsigned int GetOutputRaw() const;
+    /**
+     * Get the raw output ratio of the duty cycle signal.
+     *
+     * <p> 0 means always low, an output equal to
+     * GetOutputScaleFactor() means always high.
+     *
+     * @return output ratio in raw units
+     */
+    unsigned int GetOutputRaw() const;
 
-  /**
-   * Get the scale factor of the output.
-   *
-   * <p> An output equal to this value is always high, and then linearly scales
-   * down to 0. Divide the result of getOutputRaw by this in order to get the
-   * percentage between 0 and 1.
-   *
-   * @return the output scale factor
-   */
-  unsigned int GetOutputScaleFactor() const;
+    /**
+     * Get the scale factor of the output.
+     *
+     * <p> An output equal to this value is always high, and then linearly
+     * scales down to 0. Divide the result of getOutputRaw by this in order to
+     * get the percentage between 0 and 1.
+     *
+     * @return the output scale factor
+     */
+    unsigned int GetOutputScaleFactor() const;
 
-  /**
-   * Get the FPGA index for the DutyCycle.
-   *
-   * @return the FPGA index
-   */
-  int GetFPGAIndex() const;
+    /**
+     * Get the FPGA index for the DutyCycle.
+     *
+     * @return the FPGA index
+     */
+    int GetFPGAIndex() const;
 
-  /**
-   * Get the channel of the source.
-   *
-   * @return the source channel
-   */
-  int GetSourceChannel() const;
+    /**
+     * Get the channel of the source.
+     *
+     * @return the source channel
+     */
+    int GetSourceChannel() const;
 
- protected:
-  void InitSendable(SendableBuilder& builder) override;
+  protected:
+    void InitSendable(SendableBuilder& builder) override;
 
- private:
-  void InitDutyCycle();
-  std::shared_ptr<DigitalSource> m_source;
-  hal::Handle<HAL_DutyCycleHandle> m_handle;
+  private:
+    void InitDutyCycle();
+    std::shared_ptr<DigitalSource> m_source;
+    hal::Handle<HAL_DutyCycleHandle> m_handle;
 };
-}  // namespace frc
+} // namespace frc

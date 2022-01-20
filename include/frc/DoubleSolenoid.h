@@ -24,101 +24,101 @@ class SendableBuilder;
 class DoubleSolenoid : public SolenoidBase,
                        public Sendable,
                        public SendableHelper<DoubleSolenoid> {
- public:
-  enum Value { kOff, kForward, kReverse };
+  public:
+    enum Value { kOff, kForward, kReverse };
 
-  /**
-   * Constructor.
-   *
-   * Uses the default PCM ID of 0.
-   *
-   * @param forwardChannel The forward channel number on the PCM (0..7).
-   * @param reverseChannel The reverse channel number on the PCM (0..7).
-   */
-  explicit DoubleSolenoid(int forwardChannel, int reverseChannel);
+    /**
+     * Constructor.
+     *
+     * Uses the default PCM ID of 0.
+     *
+     * @param forwardChannel The forward channel number on the PCM (0..7).
+     * @param reverseChannel The reverse channel number on the PCM (0..7).
+     */
+    explicit DoubleSolenoid(int forwardChannel, int reverseChannel);
 
-  /**
-   * Constructor.
-   *
-   * @param moduleNumber   The CAN ID of the PCM.
-   * @param forwardChannel The forward channel on the PCM to control (0..7).
-   * @param reverseChannel The reverse channel on the PCM to control (0..7).
-   */
-  DoubleSolenoid(int moduleNumber, int forwardChannel, int reverseChannel);
+    /**
+     * Constructor.
+     *
+     * @param moduleNumber   The CAN ID of the PCM.
+     * @param forwardChannel The forward channel on the PCM to control (0..7).
+     * @param reverseChannel The reverse channel on the PCM to control (0..7).
+     */
+    DoubleSolenoid(int moduleNumber, int forwardChannel, int reverseChannel);
 
-  ~DoubleSolenoid() override;
+    ~DoubleSolenoid() override;
 
-  DoubleSolenoid(DoubleSolenoid&&) = default;
-  DoubleSolenoid& operator=(DoubleSolenoid&&) = default;
+    DoubleSolenoid(DoubleSolenoid&&) = default;
+    DoubleSolenoid& operator=(DoubleSolenoid&&) = default;
 
-  /**
-   * Set the value of a solenoid.
-   *
-   * @param value The value to set (Off, Forward or Reverse)
-   */
-  virtual void Set(Value value);
+    /**
+     * Set the value of a solenoid.
+     *
+     * @param value The value to set (Off, Forward or Reverse)
+     */
+    virtual void Set(Value value);
 
-  /**
-   * Read the current value of the solenoid.
-   *
-   * @return The current value of the solenoid.
-   */
-  virtual Value Get() const;
+    /**
+     * Read the current value of the solenoid.
+     *
+     * @return The current value of the solenoid.
+     */
+    virtual Value Get() const;
 
-  /**
-   * Toggle the value of the solenoid.
-   *
-   * If the solenoid is set to forward, it'll be set to reverse. If the solenoid
-   * is set to reverse, it'll be set to forward. If the solenoid is set to off,
-   * nothing happens.
-   */
-  void Toggle();
+    /**
+     * Toggle the value of the solenoid.
+     *
+     * If the solenoid is set to forward, it'll be set to reverse. If the
+     * solenoid is set to reverse, it'll be set to forward. If the solenoid is
+     * set to off, nothing happens.
+     */
+    void Toggle();
 
-  /**
-   * Get the forward channel.
-   *
-   * @return the forward channel.
-   */
-  int GetFwdChannel() const;
+    /**
+     * Get the forward channel.
+     *
+     * @return the forward channel.
+     */
+    int GetFwdChannel() const;
 
-  /**
-   * Get the reverse channel.
-   *
-   * @return the reverse channel.
-   */
-  int GetRevChannel() const;
+    /**
+     * Get the reverse channel.
+     *
+     * @return the reverse channel.
+     */
+    int GetRevChannel() const;
 
-  /**
-   * Check if the forward solenoid is blacklisted.
-   *
-   * If a solenoid is shorted, it is added to the blacklist and disabled until
-   * power cycle, or until faults are cleared.
-   *
-   * @see ClearAllPCMStickyFaults()
-   * @return If solenoid is disabled due to short.
-   */
-  bool IsFwdSolenoidBlackListed() const;
+    /**
+     * Check if the forward solenoid is blacklisted.
+     *
+     * If a solenoid is shorted, it is added to the blacklist and disabled until
+     * power cycle, or until faults are cleared.
+     *
+     * @see ClearAllPCMStickyFaults()
+     * @return If solenoid is disabled due to short.
+     */
+    bool IsFwdSolenoidBlackListed() const;
 
-  /**
-   * Check if the reverse solenoid is blacklisted.
-   *
-   * If a solenoid is shorted, it is added to the blacklist and disabled until
-   * power cycle, or until faults are cleared.
-   *
-   * @see ClearAllPCMStickyFaults()
-   * @return If solenoid is disabled due to short.
-   */
-  bool IsRevSolenoidBlackListed() const;
+    /**
+     * Check if the reverse solenoid is blacklisted.
+     *
+     * If a solenoid is shorted, it is added to the blacklist and disabled until
+     * power cycle, or until faults are cleared.
+     *
+     * @see ClearAllPCMStickyFaults()
+     * @return If solenoid is disabled due to short.
+     */
+    bool IsRevSolenoidBlackListed() const;
 
-  void InitSendable(SendableBuilder& builder) override;
+    void InitSendable(SendableBuilder& builder) override;
 
- private:
-  int m_forwardChannel;  // The forward channel on the module to control.
-  int m_reverseChannel;  // The reverse channel on the module to control.
-  int m_forwardMask;     // The mask for the forward channel.
-  int m_reverseMask;     // The mask for the reverse channel.
-  hal::Handle<HAL_SolenoidHandle> m_forwardHandle;
-  hal::Handle<HAL_SolenoidHandle> m_reverseHandle;
+  private:
+    int m_forwardChannel; // The forward channel on the module to control.
+    int m_reverseChannel; // The reverse channel on the module to control.
+    int m_forwardMask;    // The mask for the forward channel.
+    int m_reverseMask;    // The mask for the reverse channel.
+    hal::Handle<HAL_SolenoidHandle> m_forwardHandle;
+    hal::Handle<HAL_SolenoidHandle> m_reverseHandle;
 };
 
-}  // namespace frc
+} // namespace frc

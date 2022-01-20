@@ -40,8 +40,8 @@ namespace units {
  * @anchor accelerationContainers
  * @sa See unit_t for more information on unit type containers.
  */
-#if !defined(DISABLE_PREDEFINED_UNITS) || \
-    defined(ENABLE_PREDEFINED_ACCELERATION_UNITS)
+#if !defined(DISABLE_PREDEFINED_UNITS) ||                                      \
+        defined(ENABLE_PREDEFINED_ACCELERATION_UNITS)
 UNIT_ADD(acceleration, meters_per_second_squared, meters_per_second_squared,
          mps_sq, unit<std::ratio<1>, units::category::acceleration_unit>)
 UNIT_ADD(acceleration, feet_per_second_squared, feet_per_second_squared, fps_sq,
@@ -53,4 +53,4 @@ UNIT_ADD_CATEGORY_TRAIT(acceleration)
 #endif
 
 using namespace acceleration;
-}  // namespace units
+} // namespace units

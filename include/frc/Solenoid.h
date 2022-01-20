@@ -23,91 +23,91 @@ class SendableBuilder;
 class Solenoid : public SolenoidBase,
                  public Sendable,
                  public SendableHelper<Solenoid> {
- public:
-  /**
-   * Constructor using the default PCM ID (0).
-   *
-   * @param channel The channel on the PCM to control (0..7).
-   */
-  explicit Solenoid(int channel);
+  public:
+    /**
+     * Constructor using the default PCM ID (0).
+     *
+     * @param channel The channel on the PCM to control (0..7).
+     */
+    explicit Solenoid(int channel);
 
-  /**
-   * Constructor.
-   *
-   * @param moduleNumber The CAN ID of the PCM the solenoid is attached to
-   * @param channel      The channel on the PCM to control (0..7).
-   */
-  Solenoid(int moduleNumber, int channel);
+    /**
+     * Constructor.
+     *
+     * @param moduleNumber The CAN ID of the PCM the solenoid is attached to
+     * @param channel      The channel on the PCM to control (0..7).
+     */
+    Solenoid(int moduleNumber, int channel);
 
-  ~Solenoid() override;
+    ~Solenoid() override;
 
-  Solenoid(Solenoid&&) = default;
-  Solenoid& operator=(Solenoid&&) = default;
+    Solenoid(Solenoid&&) = default;
+    Solenoid& operator=(Solenoid&&) = default;
 
-  /**
-   * Set the value of a solenoid.
-   *
-   * @param on Turn the solenoid output off or on.
-   */
-  virtual void Set(bool on);
+    /**
+     * Set the value of a solenoid.
+     *
+     * @param on Turn the solenoid output off or on.
+     */
+    virtual void Set(bool on);
 
-  /**
-   * Read the current value of the solenoid.
-   *
-   * @return The current value of the solenoid.
-   */
-  virtual bool Get() const;
+    /**
+     * Read the current value of the solenoid.
+     *
+     * @return The current value of the solenoid.
+     */
+    virtual bool Get() const;
 
-  /**
-   * Toggle the value of the solenoid.
-   *
-   * If the solenoid is set to on, it'll be turned off. If the solenoid is set
-   * to off, it'll be turned on.
-   */
-  void Toggle();
+    /**
+     * Toggle the value of the solenoid.
+     *
+     * If the solenoid is set to on, it'll be turned off. If the solenoid is set
+     * to off, it'll be turned on.
+     */
+    void Toggle();
 
-  /**
-   * Get the channel this solenoid is connected to.
-   */
-  int GetChannel() const;
+    /**
+     * Get the channel this solenoid is connected to.
+     */
+    int GetChannel() const;
 
-  /**
-   * Check if solenoid is blacklisted.
-   *
-   * If a solenoid is shorted, it is added to the blacklist and
-   * disabled until power cycle, or until faults are cleared.
-   *
-   * @see ClearAllPCMStickyFaults()
-   *
-   * @return If solenoid is disabled due to short.
-   */
-  bool IsBlackListed() const;
+    /**
+     * Check if solenoid is blacklisted.
+     *
+     * If a solenoid is shorted, it is added to the blacklist and
+     * disabled until power cycle, or until faults are cleared.
+     *
+     * @see ClearAllPCMStickyFaults()
+     *
+     * @return If solenoid is disabled due to short.
+     */
+    bool IsBlackListed() const;
 
-  /**
-   * Set the pulse duration in the PCM. This is used in conjunction with
-   * the startPulse method to allow the PCM to control the timing of a pulse.
-   * The timing can be controlled in 0.01 second increments.
-   *
-   * @param durationSeconds The duration of the pulse, from 0.01 to 2.55
-   *                        seconds.
-   *
-   * @see startPulse()
-   */
-  void SetPulseDuration(double durationSeconds);
+    /**
+     * Set the pulse duration in the PCM. This is used in conjunction with
+     * the startPulse method to allow the PCM to control the timing of a pulse.
+     * The timing can be controlled in 0.01 second increments.
+     *
+     * @param durationSeconds The duration of the pulse, from 0.01 to 2.55
+     *                        seconds.
+     *
+     * @see startPulse()
+     */
+    void SetPulseDuration(double durationSeconds);
 
-  /**
-   * Trigger the PCM to generate a pulse of the duration set in
-   * setPulseDuration.
-   *
-   * @see setPulseDuration()
-   */
-  void StartPulse();
+    /**
+     * Trigger the PCM to generate a pulse of the duration set in
+     * setPulseDuration.
+     *
+     * @see setPulseDuration()
+     */
+    void StartPulse();
 
-  void InitSendable(SendableBuilder& builder) override;
+    void InitSendable(SendableBuilder& builder) override;
 
- private:
-  hal::Handle<HAL_SolenoidHandle> m_solenoidHandle;
-  int m_channel;  // The channel on the module to control
+  private:
+    hal::Handle<HAL_SolenoidHandle> m_solenoidHandle;
+    int m_channel; // The channel on the module to control
 };
 
-}  // namespace frc
+} // namespace frc

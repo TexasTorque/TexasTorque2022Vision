@@ -41,6 +41,6 @@
 namespace hal {
 using namespace nFPGA;
 using namespace nRoboRIO_FPGANamespace;
-}  // namespace hal
+} // namespace hal
 
 #pragma GCC diagnostic pop

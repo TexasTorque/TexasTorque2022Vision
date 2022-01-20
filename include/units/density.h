@@ -39,8 +39,8 @@ namespace units {
  * @anchor densityContainers
  * @sa See unit_t for more information on unit type containers.
  */
-#if !defined(DISABLE_PREDEFINED_UNITS) || \
-    defined(ENABLE_PREDEFINED_DENSITY_UNITS)
+#if !defined(DISABLE_PREDEFINED_UNITS) ||                                      \
+        defined(ENABLE_PREDEFINED_DENSITY_UNITS)
 UNIT_ADD(density, kilograms_per_cubic_meter, kilograms_per_cubic_meter,
          kg_per_cu_m, unit<std::ratio<1>, units::category::density_unit>)
 UNIT_ADD(density, grams_per_milliliter, grams_per_milliliter, g_per_mL,
@@ -67,4 +67,4 @@ UNIT_ADD_CATEGORY_TRAIT(density)
 #endif
 
 using namespace density;
-}  // namespace units
+} // namespace units

@@ -67,133 +67,132 @@ namespace frc {
  * Combining this with Note 1 - the impetus is on YOU as a developer to make
  * sure Calculate() gets called at the desired, constant frequency!
  */
-template <class T>
-class LinearFilter {
- public:
-  /**
-   * Create a linear FIR or IIR filter.
-   *
-   * @param ffGains The "feed forward" or FIR gains.
-   * @param fbGains The "feed back" or IIR gains.
-   */
-  LinearFilter(wpi::ArrayRef<double> ffGains, wpi::ArrayRef<double> fbGains)
-      : m_inputs(ffGains.size()),
-        m_outputs(fbGains.size()),
-        m_inputGains(ffGains),
-        m_outputGains(fbGains) {
-    static int instances = 0;
-    instances++;
-    wpi::math::MathSharedStore::ReportUsage(
-        wpi::math::MathUsageId::kFilter_Linear, 1);
-  }
-
-  /**
-   * Create a linear FIR or IIR filter.
-   *
-   * @param ffGains The "feed forward" or FIR gains.
-   * @param fbGains The "feed back" or IIR gains.
-   */
-  LinearFilter(std::initializer_list<double> ffGains,
-               std::initializer_list<double> fbGains)
-      : LinearFilter(wpi::makeArrayRef(ffGains.begin(), ffGains.end()),
-                     wpi::makeArrayRef(fbGains.begin(), fbGains.end())) {}
-
-  // Static methods to create commonly used filters
-  /**
-   * Creates a one-pole IIR low-pass filter of the form:<br>
-   *   y[n] = (1 - gain) * x[n] + gain * y[n-1]<br>
-   * where gain = e<sup>-dt / T</sup>, T is the time constant in seconds
-   *
-   * Note: T = 1 / (2 pi f) where f is the cutoff frequency in Hz, the frequency
-   * above which the input starts to attenuate.
-   *
-   * This filter is stable for time constants greater than zero.
-   *
-   * @param timeConstant The discrete-time time constant in seconds.
-   * @param period       The period in seconds between samples taken by the
-   *                     user.
-   */
-  static LinearFilter<T> SinglePoleIIR(double timeConstant,
-                                       units::second_t period) {
-    double gain = std::exp(-period.to<double>() / timeConstant);
-    return LinearFilter(1.0 - gain, -gain);
-  }
-
-  /**
-   * Creates a first-order high-pass filter of the form:<br>
-   *   y[n] = gain * x[n] + (-gain) * x[n-1] + gain * y[n-1]<br>
-   * where gain = e<sup>-dt / T</sup>, T is the time constant in seconds
-   *
-   * Note: T = 1 / (2 pi f) where f is the cutoff frequency in Hz, the frequency
-   * below which the input starts to attenuate.
-   *
-   * This filter is stable for time constants greater than zero.
-   *
-   * @param timeConstant The discrete-time time constant in seconds.
-   * @param period       The period in seconds between samples taken by the
-   *                     user.
-   */
-  static LinearFilter<T> HighPass(double timeConstant, units::second_t period) {
-    double gain = std::exp(-period.to<double>() / timeConstant);
-    return LinearFilter({gain, -gain}, {-gain});
-  }
-
-  /**
-   * Creates a K-tap FIR moving average filter of the form:<br>
-   *   y[n] = 1/k * (x[k] + x[k-1] + … + x[0])
-   *
-   * This filter is always stable.
-   *
-   * @param taps The number of samples to average over. Higher = smoother but
-   *             slower
-   */
-  static LinearFilter<T> MovingAverage(int taps) {
-    assert(taps > 0);
-
-    std::vector<double> gains(taps, 1.0 / taps);
-    return LinearFilter(gains, {});
-  }
-
-  /**
-   * Reset the filter state.
-   */
-  void Reset() {
-    m_inputs.reset();
-    m_outputs.reset();
-  }
-
-  /**
-   * Calculates the next value of the filter.
-   *
-   * @param input Current input value.
-   *
-   * @return The filtered value at this step
-   */
-  T Calculate(T input) {
-    T retVal = T(0.0);
-
-    // Rotate the inputs
-    m_inputs.push_front(input);
-
-    // Calculate the new value
-    for (size_t i = 0; i < m_inputGains.size(); i++) {
-      retVal += m_inputs[i] * m_inputGains[i];
-    }
-    for (size_t i = 0; i < m_outputGains.size(); i++) {
-      retVal -= m_outputs[i] * m_outputGains[i];
+template<class T> class LinearFilter {
+  public:
+    /**
+     * Create a linear FIR or IIR filter.
+     *
+     * @param ffGains The "feed forward" or FIR gains.
+     * @param fbGains The "feed back" or IIR gains.
+     */
+    LinearFilter(wpi::ArrayRef<double> ffGains, wpi::ArrayRef<double> fbGains)
+        : m_inputs(ffGains.size()), m_outputs(fbGains.size()),
+          m_inputGains(ffGains), m_outputGains(fbGains) {
+        static int instances = 0;
+        instances++;
+        wpi::math::MathSharedStore::ReportUsage(
+                wpi::math::MathUsageId::kFilter_Linear, 1);
     }
 
-    // Rotate the outputs
-    m_outputs.push_front(retVal);
+    /**
+     * Create a linear FIR or IIR filter.
+     *
+     * @param ffGains The "feed forward" or FIR gains.
+     * @param fbGains The "feed back" or IIR gains.
+     */
+    LinearFilter(std::initializer_list<double> ffGains,
+                 std::initializer_list<double> fbGains)
+        : LinearFilter(wpi::makeArrayRef(ffGains.begin(), ffGains.end()),
+                       wpi::makeArrayRef(fbGains.begin(), fbGains.end())) {
+    }
 
-    return retVal;
-  }
+    // Static methods to create commonly used filters
+    /**
+     * Creates a one-pole IIR low-pass filter of the form:<br>
+     *   y[n] = (1 - gain) * x[n] + gain * y[n-1]<br>
+     * where gain = e<sup>-dt / T</sup>, T is the time constant in seconds
+     *
+     * Note: T = 1 / (2 pi f) where f is the cutoff frequency in Hz, the
+     * frequency above which the input starts to attenuate.
+     *
+     * This filter is stable for time constants greater than zero.
+     *
+     * @param timeConstant The discrete-time time constant in seconds.
+     * @param period       The period in seconds between samples taken by the
+     *                     user.
+     */
+    static LinearFilter<T> SinglePoleIIR(double timeConstant,
+                                         units::second_t period) {
+        double gain = std::exp(-period.to<double>() / timeConstant);
+        return LinearFilter(1.0 - gain, -gain);
+    }
 
- private:
-  wpi::circular_buffer<T> m_inputs;
-  wpi::circular_buffer<T> m_outputs;
-  std::vector<double> m_inputGains;
-  std::vector<double> m_outputGains;
+    /**
+     * Creates a first-order high-pass filter of the form:<br>
+     *   y[n] = gain * x[n] + (-gain) * x[n-1] + gain * y[n-1]<br>
+     * where gain = e<sup>-dt / T</sup>, T is the time constant in seconds
+     *
+     * Note: T = 1 / (2 pi f) where f is the cutoff frequency in Hz, the
+     * frequency below which the input starts to attenuate.
+     *
+     * This filter is stable for time constants greater than zero.
+     *
+     * @param timeConstant The discrete-time time constant in seconds.
+     * @param period       The period in seconds between samples taken by the
+     *                     user.
+     */
+    static LinearFilter<T> HighPass(double timeConstant,
+                                    units::second_t period) {
+        double gain = std::exp(-period.to<double>() / timeConstant);
+        return LinearFilter({gain, -gain}, {-gain});
+    }
+
+    /**
+     * Creates a K-tap FIR moving average filter of the form:<br>
+     *   y[n] = 1/k * (x[k] + x[k-1] + … + x[0])
+     *
+     * This filter is always stable.
+     *
+     * @param taps The number of samples to average over. Higher = smoother but
+     *             slower
+     */
+    static LinearFilter<T> MovingAverage(int taps) {
+        assert(taps > 0);
+
+        std::vector<double> gains(taps, 1.0 / taps);
+        return LinearFilter(gains, {});
+    }
+
+    /**
+     * Reset the filter state.
+     */
+    void Reset() {
+        m_inputs.reset();
+        m_outputs.reset();
+    }
+
+    /**
+     * Calculates the next value of the filter.
+     *
+     * @param input Current input value.
+     *
+     * @return The filtered value at this step
+     */
+    T Calculate(T input) {
+        T retVal = T(0.0);
+
+        // Rotate the inputs
+        m_inputs.push_front(input);
+
+        // Calculate the new value
+        for (size_t i = 0; i < m_inputGains.size(); i++) {
+            retVal += m_inputs[i] * m_inputGains[i];
+        }
+        for (size_t i = 0; i < m_outputGains.size(); i++) {
+            retVal -= m_outputs[i] * m_outputGains[i];
+        }
+
+        // Rotate the outputs
+        m_outputs.push_front(retVal);
+
+        return retVal;
+    }
+
+  private:
+    wpi::circular_buffer<T> m_inputs;
+    wpi::circular_buffer<T> m_outputs;
+    std::vector<double> m_inputGains;
+    std::vector<double> m_outputGains;
 };
 
-}  // namespace frc
+} // namespace frc
