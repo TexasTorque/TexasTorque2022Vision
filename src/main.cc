@@ -1,4 +1,12 @@
+//
+// Copyright (c) Texas Torque 2022
+//
+// Authors: Justus, 
+//
+
 #include <iostream>
+#include <stdexcept>
+
 #include <networktables/NetworkTable.h>
 #include <networktables/NetworkTableInstance.h>
 
@@ -14,13 +22,16 @@ class Bound {
     }
 };
 
-enum Alliance { RED, BLUE };
+// Am going to replace above w below
+/*
+typedef struct {
+	cv::Scalar upper, lower;
+} Bound;
 
-Bound getDetectionColor(int nt) {
-    // return RED;
-    return BLUE;
+Bound newBound(cv::Scalar l, cv::Scalar u) {
+	return { .lower = l , .upper = u }:
 }
-
+*/
 
 // NetworkTable Spec:
 
@@ -35,61 +46,55 @@ Bound getDetectionColor(int nt) {
 //     Value:   -1/2w < x < 1/2w
 //     Default: 0.0
 
-Bound fetchDetectionBounds(nt::NetworkTableInstance ntInstance) {
-    std::shared_ptr<nt::NetworkTable> allianceColorTable = ntInstance.GetTable("ball_detection");
-    std::string color = (*allianceColorTable.get()).GetEntry("alliance_color").GetString("none");
+nt::NetworkTable initializeNetworkTable(std::string identifier) {
+    nt::NetworkTableInstance ntInstance = nt::NetworkTableInstance::GetDefault();
+    std::shared_ptr<nt::NetworkTable> programTable = ntInstance.GetTable(identifier);
+    return (*programTable.get());
+}
+
+Bound fetchDetectionBounds(nt::NetworkTable tableInstance) {
+    std::string color = tableInstance.GetEntry("alliance_color").GetString("none");
     if (color == "none") throw std::runtime_error("Alliance color could not read from network tables");
-    if (color == "red") return Bound(cv::Scalar(170, 70, 50), cv::Scalar(180, 255, 255));
-    if (color == "blue") return Bound(cv::Scalar(90, 50, 70), cv::Scalar(128, 255, 255));
-    std::printf("Invalid alliance\n");
-    exit(-1);
-    return Bound(cv::Scalar(0, 0, 0), cv::Scalar(0, 0, 0));
+    else if (color == "red") return Bound(cv::Scalar(170, 70, 50), cv::Scalar(180, 255, 255));
+    else if (color == "blue") return Bound(cv::Scalar(90, 50, 70), cv::Scalar(128, 255, 255));
+    else throw std::runtime_error("Alliance color could not be parsed");
+}
+
+cv::VideoCapture initializeVideoCapture(int cameraDevice) {
+    cv::VideoCapture capture;
+    capture.open(cameraDevice);
+    if (!capture.isOpened()) throw std::runtime_error("Could not open video capture");
+	return capture;
+}
+
+void checkForFrameEmpty(cv::Mat frame) {
+	if (frame.empty())
+		throw std::runtime_error("Frame is empty");
 }
 
 int main(int argc, char** argv) {
-    nt::NetworkTableInstance ntInstance =
-            nt::NetworkTableInstance::GetDefault();
-
-    // We can probably use a single table for everything.
-    // Do we really have enough entries to warrent it?
+  	
+	nt:NetworkTable programTable = initializeNetworkTable("ball_detection");
 
     Bound detectionBounds = fetchDetectionBounds(ntInstance);
 
-    std::shared_ptr<nt::NetworkTable> allianceColorTable =
-            ntInstance.GetTable("AllianceColor");
-    bool isRed =
-            (*allianceColorTable.get()).GetEntry("RedBlue").GetBoolean(false);
-
-    // Possible one liner
-    // (*ntInstance.GetTable("AllianceColor").get()).GetEntry("RedBlue").GetBoolean(false);
-
-    int cameraDevice = 0;
-    cv::VideoCapture capture;
-    capture.open(cameraDevice);
-    if (!capture.isOpened())
-        std::printf("[ERROR] Cannot open video capture!\n");
-
+    cv::VideoCapture capture = initializeVideoCapture(0);
+	
+	// Allocating buffers - plz allocate as many buffers as you can to save on meory allocation
     cv::Mat frame, mask, ellipse;
 
-    Alliance alliance = getAllianceFromNT(0);
-
-    std::shared_ptr<nt::NetworkTable> ballTable =
-            ntInstance.GetTable("BallTable");
-    nt::NetworkTableEntry ballEntry = (*ballTable.get()).GetEntry("ballentry");
+    nt::NetworkTableEntry ballEntry = programTable.GetEntry("ball_horizontal_position");
 
     // Initialize program loop while reading
     // frames and incrementing frame counter
     for (int fc = 0; capture.read(frame); fc++) {
-        if (frame.empty()) {
-            std::printf("[ERROR] Frame is empty!\n");
-            break;
-        }
-
-        // Update the mask
-        std::printf(isRed ? "Red" : "Blue");
+		checkForFrameEmpty(frame);
+		
+		
 
         ballEntry.SetDouble(-1);
 
         // Output log and frame while checking for keyboard break
+	
     }
 }
