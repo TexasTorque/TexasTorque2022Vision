@@ -1,9 +1,11 @@
 //
 // Copyright (c) Texas Torque 2022
 //
-// Authors: Justus, 
+// Authors: Justus, Jacob, Omar, Jack
 //
 
+#include <chrono>
+#include <ctime>
 #include <iostream>
 #include <stdexcept>
 
@@ -15,14 +17,15 @@
 #include "opencv2/objdetect.hpp"
 #include "opencv2/videoio.hpp"
 
-class Bound {
-  public:
+#define PTR(sharedPtr) (*sharedPtr.get()) // Very unsafe - for use by C++ Professionals(TM) only!
+typedef std::shared_ptr<nt::NetworkTable> NetworkTablePointer;
+
+class Bound { public:
     cv::Scalar upper, lower;
-    Bound(cv::Scalar u, cv::Scalar l) : upper(u), lower(l) {
-    }
+    Bound(cv::Scalar u, cv::Scalar l) : upper(u), lower(l) {}
 };
 
-// Am going to replace above w below
+// Am maybe going to replace above w/ below
 /*
 typedef struct {
 	cv::Scalar upper, lower;
@@ -32,6 +35,28 @@ Bound newBound(cv::Scalar l, cv::Scalar u) {
 	return { .lower = l , .upper = u }:
 }
 */
+
+time_t fetchTimeNow() {
+	using std::chrono::system_clock;
+	return system_clock::to_time_t(system_clock::now());
+}
+
+class StopWatch {
+	private:
+	time_t start;
+
+  	public: 
+	StopWatch(void) { restart() }
+	void restart(void) { this->start = fetchTimeNow(); }
+	long elapsed(void) { return fetchTimeNow() - this->start };
+	double calculateFPS(long frame) {
+		if (long span = elapsed() > 0) return frame / (double) span;
+		else return 0;
+	}
+};
+
+
+	
 
 // NetworkTable Spec:
 
@@ -43,17 +68,19 @@ Bound newBound(cv::Scalar l, cv::Scalar u) {
 //     Default: "none"
 //   Entry:     ball_horizontal_position
 //     Type:    double
-//     Value:   -1/2w < x < 1/2w
+//     Value:   -1/2w <= x <= 1/2w
+//     Default: 0.0
+//   Entry: 	frames_per_second
+//     Type:    double
+//     Value: 	0 <= x
 //     Default: 0.0
 
-nt::NetworkTable initializeNetworkTable(std::string identifier) {
-    nt::NetworkTableInstance ntInstance = nt::NetworkTableInstance::GetDefault();
-    std::shared_ptr<nt::NetworkTable> programTable = ntInstance.GetTable(identifier);
-    return (*programTable.get());
+NetworkTablePointer initializeNetworkTable(std::string identifier) {
+	return nt::NetworkTableInstance::GetDefault().GetTable(identifier);
 }
 
-Bound fetchDetectionBounds(nt::NetworkTable tableInstance) {
-    std::string color = tableInstance.GetEntry("alliance_color").GetString("none");
+Bound fetchDetectionBounds(NetworkTablePointer tablePointer) {
+    std::string color = PTR(tablePointer).GetEntry("alliance_color").GetString("none");
     if (color == "none") throw std::runtime_error("Alliance color could not read from network tables");
     else if (color == "red") return Bound(cv::Scalar(170, 70, 50), cv::Scalar(180, 255, 255));
     else if (color == "blue") return Bound(cv::Scalar(90, 50, 70), cv::Scalar(128, 255, 255));
@@ -72,29 +99,33 @@ void checkForFrameEmpty(cv::Mat frame) {
 		throw std::runtime_error("Frame is empty");
 }
 
+
+
 int main(int argc, char** argv) {
   	
-	nt:NetworkTable programTable = initializeNetworkTable("ball_detection");
+	NetworkTablePointer programTablePointer = initializeNetworkTable("ball_detection");
 
-    Bound detectionBounds = fetchDetectionBounds(ntInstance);
+    Bound detectionBounds = fetchDetectionBounds(programTablePointer);
 
     cv::VideoCapture capture = initializeVideoCapture(0);
 	
 	// Allocating buffers - plz allocate as many buffers as you can to save on meory allocation
     cv::Mat frame, mask, ellipse;
 
-    nt::NetworkTableEntry ballEntry = programTable.GetEntry("ball_horizontal_position");
-
+    nt::NetworkTableEntry ballEntry = PTR(programTablePointer).GetEntry("ball_horizontal_position");
+    nt::NetworkTableEntry fpsEntry = PTR(programTablePointer).GetEntry("frames_per_second");
+	
+	StopWatch timer = StopWatch();
     // Initialize program loop while reading
     // frames and incrementing frame counter
-    for (int fc = 0; capture.read(frame); fc++) {
+    for (long count = 0, double fps; capture.read(frame); count++, fps = ) {
 		checkForFrameEmpty(frame);
 		
-		
 
-        ballEntry.SetDouble(-1);
 
-        // Output log and frame while checking for keyboard break
-	
+		std::printf("FPS: %f\n", fps);
+		fpsEntry.SetDouble(
+
+        ballEntry.SetDouble(count);
     }
 }

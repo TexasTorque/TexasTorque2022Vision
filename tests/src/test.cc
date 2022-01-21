@@ -1,5 +1,6 @@
 #include <chrono>
 #include <ctime>
+#include <cmath>
 #include <iostream>
 
 #include "opencv2/highgui.hpp"
@@ -26,12 +27,15 @@ class StopWatch {
     int elapsed(void) {
         return timeNow() - start;
     }
-    double fps(int f) {
-        if (int e = elapsed() > 0)
-            return f / (double)e;
-        else
-            return 0;
+    int fps(int f) {
+		//std::printf("Frame: %d     Elapsed: %d    FPS: %d\n", f, elapsed(), f / elapsed()); 
+		int e;
+		return (e = elapsed() > 0) ? f / e : 0;
     }
+
+	int roundedFps(int f) {
+		return ceil(this->fps(f));
+	}
 };
 
 void fatal(const std::string& msg) {
@@ -195,7 +199,7 @@ int main(int argc, char** argv) {
 
     // Initialize program loop while reading
     // frames and incrementing frame counter
-    for (int fc = 0; capture.read(frame); fc++) {
+    for (int fc, fps = 0; capture.read(frame); fps = timer.fps(++fc)) {
         if (frame.empty()) {
             printf("[ERROR] Frame is empty!\n");
             break;
@@ -207,6 +211,9 @@ int main(int argc, char** argv) {
         // Output log and frame while checking for keyboard break
         cv::imshow("[INPUT]", frame);
         cv::imshow("[OUTPUT]", mask);
+
+		std::printf("Frame: %d     Elapsed: %d    FPS: %d\n", fc, timer.elapsed(), fps); 
+
         if (cv::waitKey(10) == 27) break;
     }
 
