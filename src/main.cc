@@ -16,16 +16,31 @@ class Bound {
 
 enum Alliance { RED, BLUE };
 
-Alliance getAllianceFromNT(int nt) {
+Bound getDetectionColor(int nt) {
     // return RED;
     return BLUE;
 }
 
-Bound detectionRange(Alliance alliance) {
-    if (alliance == RED)
-        return Bound(cv::Scalar(170, 70, 50), cv::Scalar(180, 255, 255));
-    else if (alliance == BLUE)
-        return Bound(cv::Scalar(90, 50, 70), cv::Scalar(128, 255, 255));
+
+// NetworkTable Spec:
+
+// Table:       ball_detection
+//   Entry:     alliance_color 
+//     Type:    string
+//     Value:   "blue"
+//     Value:   "red"
+//     Default: "none"
+//   Entry:     ball_horizontal_position
+//     Type:    double
+//     Value:   -1/2w < x < 1/2w
+//     Default: 0.0
+
+Bound fetchDetectionBounds(nt::NetworkTableInstance ntInstance) {
+    std::shared_ptr<nt::NetworkTable> allianceColorTable = ntInstance.GetTable("ball_detection");
+    std::string color = (*allianceColorTable.get()).GetEntry("alliance_color").GetString("none");
+    if (color == "none") throw std::runtime_error("Alliance color could not read from network tables");
+    if (color == "red") return Bound(cv::Scalar(170, 70, 50), cv::Scalar(180, 255, 255));
+    if (color == "blue") return Bound(cv::Scalar(90, 50, 70), cv::Scalar(128, 255, 255));
     std::printf("Invalid alliance\n");
     exit(-1);
     return Bound(cv::Scalar(0, 0, 0), cv::Scalar(0, 0, 0));
@@ -37,6 +52,8 @@ int main(int argc, char** argv) {
 
     // We can probably use a single table for everything.
     // Do we really have enough entries to warrent it?
+
+    Bound detectionBounds = fetchDetectionBounds(ntInstance);
 
     std::shared_ptr<nt::NetworkTable> allianceColorTable =
             ntInstance.GetTable("AllianceColor");
