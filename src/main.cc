@@ -118,13 +118,11 @@ int main(int argc, char** argv) {
 	StopWatch timer = StopWatch();
     // Initialize program loop while reading
     // frames and incrementing frame counter
-    for (long count = 0, double fps; capture.read(frame); count++, fps = ) {
+    for (long count = 0; capture.read(frame); count++) {
+	//for (long count, fps = 0, 0; capture.read(frame); fps = timer.calculateFPS(++count))
 		checkForFrameEmpty(frame);
 		
-
-
-		std::printf("FPS: %f\n", fps);
-		fpsEntry.SetDouble(
+		fpsEntry.SetDouble(timer.calculateFPS(count));
 
         ballEntry.SetDouble(count);
     }
