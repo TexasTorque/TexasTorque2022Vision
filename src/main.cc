@@ -46,12 +46,13 @@ class StopWatch {
 	time_t start;
 
   	public: 
-	StopWatch(void) { restart() }
+	StopWatch(void) { restart(); }
 	void restart(void) { this->start = fetchTimeNow(); }
-	long elapsed(void) { return fetchTimeNow() - this->start };
-	double calculateFPS(long frame) {
-		if (long span = elapsed() > 0) return frame / (double) span;
-		else return 0;
+	long elapsed(void) { return fetchTimeNow() - this->start; };
+	long calculateFPS(long frame) {
+		long span = elapsed();
+		if (span > 0) return frame / span;
+		return 0;
 	}
 };
 
@@ -118,8 +119,7 @@ int main(int argc, char** argv) {
 	StopWatch timer = StopWatch();
     // Initialize program loop while reading
     // frames and incrementing frame counter
-    for (long count = 0; capture.read(frame); count++) {
-	//for (long count, fps = 0, 0; capture.read(frame); fps = timer.calculateFPS(++count))
+    for (long count, fps = 0; capture.read(frame); timer.calculateFPS(++count)) {
 		checkForFrameEmpty(frame);
 		
 		fpsEntry.SetDouble(timer.calculateFPS(count));

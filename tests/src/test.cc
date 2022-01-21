@@ -29,8 +29,9 @@ class StopWatch {
     }
     int fps(int f) {
 		//std::printf("Frame: %d     Elapsed: %d    FPS: %d\n", f, elapsed(), f / elapsed()); 
-		int e;
-		return (e = elapsed() > 0) ? f / e : 0;
+		int e = elapsed();
+		if (e <= 0) return -1;
+		return f / e;
     }
 
 	int roundedFps(int f) {
@@ -200,6 +201,7 @@ int main(int argc, char** argv) {
     // Initialize program loop while reading
     // frames and incrementing frame counter
     for (int fc, fps = 0; capture.read(frame); fps = timer.fps(++fc)) {
+		std::printf("%d -> ", timer.fps(fc));
         if (frame.empty()) {
             printf("[ERROR] Frame is empty!\n");
             break;
