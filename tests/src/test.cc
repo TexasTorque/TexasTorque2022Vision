@@ -55,7 +55,7 @@ class Bound {
 
 Bound detectionRange(Alliance alliance) {
     if (alliance == RED)
-        return Bound(cv::Scalar(170, 70, 50), cv::Scalar(180, 255, 255));
+        return Bound(cv::Scalar(0, 70, 50), cv::Scalar(10, 255, 255));
     else if (alliance == BLUE)
         return Bound(cv::Scalar(90, 50, 70), cv::Scalar(128, 255, 255));
     else
@@ -201,14 +201,13 @@ int main(int argc, char** argv) {
     // Initialize program loop while reading
     // frames and incrementing frame counter
     for (int fc, fps = 0; capture.read(frame); fps = timer.fps(++fc)) {
-		std::printf("%d -> ", timer.fps(fc));
         if (frame.empty()) {
             printf("[ERROR] Frame is empty!\n");
             break;
         }
 
         // Update the mask
-        update(&frame, &mask, BLUE);
+        update(&frame, &mask, RED);
 
         // Output log and frame while checking for keyboard break
         cv::imshow("[INPUT]", frame);
