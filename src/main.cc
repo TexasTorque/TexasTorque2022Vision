@@ -20,9 +20,23 @@
 #define PTR(sharedPtr) (*sharedPtr.get()) // Very unsafe - for use by C++ Professionals(TM) only!
 typedef std::shared_ptr<nt::NetworkTable> NetworkTablePointer;
 
+enum Color { RED, BLUE };
+
 class Bound { public:
+	Color color;
     cv::Scalar upper, lower;
-    Bound(cv::Scalar u, cv::Scalar l) : upper(u), lower(l) {}
+    Bound(Color color) : color(color) {
+		if (color == RED) {
+			//upper = cv::Scalar(170, 70, 50);
+			//lower = cv::Scalar(180, 255, 255);
+			upper = cv::Scalar(43, 18, 234);
+			lower = cv::Scalar(110, 172, 255);
+		} else if (color == BLUE) {
+    		upper = cv::Scalar(90, 50, 70);
+			lower = cv::Scalar(128, 255, 255);
+		} else
+			throw std::runtime_error("Unknown color");
+	}
 };
 
 // Am maybe going to replace above w/ below
@@ -56,9 +70,6 @@ class StopWatch {
 	}
 };
 
-
-	
-
 // NetworkTable Spec:
 
 // Table:       ball_detection
@@ -74,7 +85,7 @@ class StopWatch {
 //   Entry: 	frames_per_second
 //     Type:    double
 //     Value: 	0 <= x
-//     Default: 0.0
+//     Default: -1.0
 
 NetworkTablePointer initializeNetworkTable(std::string identifier) {
 	return nt::NetworkTableInstance::GetDefault().GetTable(identifier);
@@ -83,8 +94,8 @@ NetworkTablePointer initializeNetworkTable(std::string identifier) {
 Bound fetchDetectionBounds(NetworkTablePointer tablePointer) {
     std::string color = PTR(tablePointer).GetEntry("alliance_color").GetString("none");
     if (color == "none") throw std::runtime_error("Alliance color could not read from network tables");
-    else if (color == "red") return Bound(cv::Scalar(170, 70, 50), cv::Scalar(180, 255, 255));
-    else if (color == "blue") return Bound(cv::Scalar(90, 50, 70), cv::Scalar(128, 255, 255));
+    else if (color == "red") return Bound(RED);
+    else if (color == "blue") return Bound(BLUE);
     else throw std::runtime_error("Alliance color could not be parsed");
 }
 
@@ -100,7 +111,51 @@ void checkForFrameEmpty(cv::Mat frame) {
 		throw std::runtime_error("Frame is empty");
 }
 
+// I think I have a better algo for this, I dont know...
+cv::Vec3f fetchBiggestCircle(std::vector<cv::Vec3f> circles) {
+    cv::Vec3f biggest;
+    int bigrad = 0;
+    for (size_t i = 0; i < circles.size(); i++) {
+        if(circles[i][2] > bigrad) {
+            bigrad = circles[i][2];
+            biggest = circles[i];
+        }
+    }
+	return biggest;
+}
 
+cv::Point processCenter(cv::Mat* input, cv::Mat* output, Bound bounds) {
+    if (bounds.color == RED) *input = ~*input; // invert color space to allow const
+
+    cv::cvtColor(*input, *output, cv::COLOR_BGR2HSV);
+    inRange(*output, bounds.lower, bounds.upper, *output);
+
+    medianBlur(*output, *output, 17);
+    erode(*output, *output, cv::Mat(), cv::Point(-1, -1), 3);
+    dilate(*output, *output, cv::Mat(), cv::Point(-1, -1), 5);
+    morphologyEx(*output, *output, cv::MORPH_HITMISS, cv::Mat());
+
+    std::vector<cv::Vec3f> circles;
+    HoughCircles(*output, circles, cv::HOUGH_GRADIENT, 1, 25, 30, 15, 50, 0);
+	cv::Vec3f biggest = fetchBiggestCircle(circles);
+
+    cv::Point center = cv::Point(biggest[0], biggest[1]);
+    // circle center
+    cv::circle(*input, center, 1, cv::Scalar(0,100,100), 3, cv::LINE_AA);
+
+    // circle outline
+	//int radius = biggest[2];
+	//circle(*input, center, radius, cv::Scalar(255,0,255), 3, cv::LINE_AA);
+    //
+	//cv::Moments m = cv::moments(*output);
+	//double hu[7];
+	//cv::HuMoments(m, hu);
+	//int cX = m.m10 / m.m00;
+	//int cY = m.m01 / m.m00;
+	//cv::circle(*output, cv::Point(cX, cY), 5, (255, 255, 255), -1);
+
+	return center;
+}
 
 int main(int argc, char** argv) {
   	
@@ -111,7 +166,7 @@ int main(int argc, char** argv) {
     cv::VideoCapture capture = initializeVideoCapture(0);
 	
 	// Allocating buffers - plz allocate as many buffers as you can to save on meory allocation
-    cv::Mat frame, mask, ellipse;
+    cv::Mat frame, output, ellipse;
 
     nt::NetworkTableEntry ballEntry = PTR(programTablePointer).GetEntry("ball_horizontal_position");
     nt::NetworkTableEntry fpsEntry = PTR(programTablePointer).GetEntry("frames_per_second");
@@ -119,11 +174,21 @@ int main(int argc, char** argv) {
 	StopWatch timer = StopWatch();
     // Initialize program loop while reading
     // frames and incrementing frame counter
-    for (long count, fps = 0; capture.read(frame); timer.calculateFPS(++count)) {
-		checkForFrameEmpty(frame);
-		
-		fpsEntry.SetDouble(timer.calculateFPS(count));
 
+	std::string color = PTR(programTablePointer).GetEntry("alliance_color").GetString("none");
+
+
+    for (long count = 0; capture.read(frame); count++) {
+		checkForFrameEmpty(frame);
+		double fps = timer.calculateFPS(count);	
+
+		cv::Point center = processCenter(&frame, &output, detectionBounds);
+
+		fpsEntry.SetDouble(fps);
+
+		//if (count % 25 == 0) std::printf("FPS: %d : %f", fps, 0.);
+		//detectionBounds.lower[0]);
+		
         ballEntry.SetDouble(count);
     }
 }
