@@ -1,0 +1,3 @@
+/home/saddy/Projects/TorqueVision2022/CMakeFiles/TorqueVision.dir
+/home/saddy/Projects/TorqueVision2022/CMakeFiles/edit_cache.dir
+/home/saddy/Projects/TorqueVision2022/CMakeFiles/rebuild_cache.dir
