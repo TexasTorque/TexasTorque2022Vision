@@ -56,9 +56,6 @@ class StopWatch {
 	}
 };
 
-
-	
-
 // NetworkTable Spec:
 
 // Table:       ball_detection
@@ -74,7 +71,7 @@ class StopWatch {
 //   Entry: 	frames_per_second
 //     Type:    double
 //     Value: 	0 <= x
-//     Default: 0.0
+//     Default: -1.0
 
 NetworkTablePointer initializeNetworkTable(std::string identifier) {
 	return nt::NetworkTableInstance::GetDefault().GetTable(identifier);
@@ -106,7 +103,7 @@ int main(int argc, char** argv) {
   	
 	NetworkTablePointer programTablePointer = initializeNetworkTable("ball_detection");
 
-    Bound detectionBounds = fetchDetectionBounds(programTablePointer);
+    //Bound detectionBounds = fetchDetectionBounds(programTablePointer);
 
     cv::VideoCapture capture = initializeVideoCapture(0);
 	
@@ -119,11 +116,19 @@ int main(int argc, char** argv) {
 	StopWatch timer = StopWatch();
     // Initialize program loop while reading
     // frames and incrementing frame counter
-    for (long count, fps = 0; capture.read(frame); timer.calculateFPS(++count)) {
-		checkForFrameEmpty(frame);
-		
-		fpsEntry.SetDouble(timer.calculateFPS(count));
 
+	std::string color = PTR(programTablePointer).GetEntry("alliance_color").GetString("none");
+
+
+    for (long count = 0; capture.read(frame); count++) {
+		checkForFrameEmpty(frame);
+		double fps = timer.calculateFPS(count);	
+
+		fpsEntry.SetDouble(fps);
+
+		//if (count % 25 == 0) std::printf("FPS: %d : %f", fps, 0.);
+		//detectionBounds.lower[0]);
+		
         ballEntry.SetDouble(count);
     }
 }
