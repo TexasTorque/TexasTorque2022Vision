@@ -11,6 +11,7 @@
 
 #include <networktables/NetworkTable.h>
 #include <networktables/NetworkTableInstance.h>
+#include <cameraserver/cameraserver.h>
 
 #include "opencv2/highgui.hpp"
 #include "opencv2/imgproc.hpp"
@@ -22,7 +23,8 @@ typedef std::shared_ptr<nt::NetworkTable> NetworkTablePointer;
 
 enum Color { RED, BLUE };
 
-class Bound { public:
+class Bound { 
+public:
 	Color color;
     cv::Scalar upper, lower;
     Bound(Color color) : color(color) {
@@ -88,11 +90,19 @@ class StopWatch {
 //     Default: -1.0
 
 NetworkTablePointer initializeNetworkTable(std::string identifier) {
-	return nt::NetworkTableInstance::GetDefault().GetTable(identifier);
+	//return nt::NetworkTableInstance::GetDefault().GetTable(identifier);
+	auto instance = nt::NetworkTableInstance::GetDefault();
+	instance.StartClientTeam(1477);
+	//instance.StartDSClient();
+	while (!instance.IsConnected());
+		//std::printf("NOT CONNECTED\n");
+	return instance.GetTable(identifier);
 }
 
 Bound fetchDetectionBounds(NetworkTablePointer tablePointer) {
-    std::string color = PTR(tablePointer).GetEntry("alliance_color").GetString("none");
+    //std::string color = PTR(tablePointer).GetEntry("alliance_color").GetString("none");
+	std::string color = tablePointer->GetEntry("alliance_color").GetString("none");
+
     if (color == "none") throw std::runtime_error("Alliance color could not read from network tables");
     else if (color == "red") return Bound(RED);
     else if (color == "blue") return Bound(BLUE);
@@ -158,37 +168,51 @@ cv::Point processCenter(cv::Mat* input, cv::Mat* output, Bound bounds) {
 }
 
 int main(int argc, char** argv) {
-  	
+	
 	NetworkTablePointer programTablePointer = initializeNetworkTable("ball_detection");
 
     Bound detectionBounds = fetchDetectionBounds(programTablePointer);
+	
+    //cv::VideoCapture capture = initializeVideoCapture(0);
 
-    cv::VideoCapture capture = initializeVideoCapture(0);
+	frc::CameraServer* cameraServer = frc::CameraServer::GetInstance();
+	cs::UsbCamera usbCamera = cameraServer->StartAutomaticCapture();
+	cs::CvSink cvSink = cameraServer->GetVideo("USB Camera 0");
+	cs::CvSource cvSource = cameraServer->PutVideo("USB Camera 0", 320, 240);
 	
 	// Allocating buffers - plz allocate as many buffers as you can to save on meory allocation
     cv::Mat frame, output, ellipse;
 
-    nt::NetworkTableEntry ballEntry = PTR(programTablePointer).GetEntry("ball_horizontal_position");
-    nt::NetworkTableEntry fpsEntry = PTR(programTablePointer).GetEntry("frames_per_second");
+    nt::NetworkTableEntry ballEntry = programTablePointer->GetEntry("ball_horizontal_position");
+    nt::NetworkTableEntry fpsEntry = programTablePointer->GetEntry("frames_per_second");
 	
 	StopWatch timer = StopWatch();
     // Initialize program loop while reading
     // frames and incrementing frame counter
 
-	std::string color = PTR(programTablePointer).GetEntry("alliance_color").GetString("none");
+	std::string color = programTablePointer->GetEntry("alliance_color").GetString("none");
 
-
-    for (long count = 0; capture.read(frame); count++) {
-		checkForFrameEmpty(frame);
+    //for (long count = 0; capture.read(frame); count++) {
+	//for (long count = 0; long _ = cvSink.GrabFrame(frame); count++) {
+	long count = 0;
+	while (true) {
+		long c = cvSink.GrabFrame(frame);
+		if(c == 0) continue;
+		//checkForFrameEmpty(frame);
 		double fps = timer.calculateFPS(count);	
 
-		cv::Point center = processCenter(&frame, &output, detectionBounds);
+		//cv::Point center = processCenter(&frame, &output, detectionBounds);
+		output = frame;
 
 		fpsEntry.SetDouble(fps);
 
 		//if (count % 25 == 0) std::printf("FPS: %d : %f", fps, 0.);
 		//detectionBounds.lower[0]);
-		
-        ballEntry.SetDouble(count);
+
+		cvSource.PutFrame(output);
+
+        //ballEntry.SetDouble(count);
+		if (count % 150 == 0) timer.restart();
+		count++;
     }
 }
