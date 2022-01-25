@@ -40,37 +40,6 @@ public:
 	}
 };
 
-// Am maybe going to replace above w/ below
-/*
-typedef struct {
-	cv::Scalar upper, lower;
-} Bound;
-
-Bound newBound(cv::Scalar l, cv::Scalar u) {
-	return { .lower = l , .upper = u }:
-}
-*/
-
-time_t fetchTimeNow() {
-	using std::chrono::system_clock;
-	return system_clock::to_time_t(system_clock::now());
-}
-
-class StopWatch {
-	private:
-	time_t start;
-
-  	public: 
-	StopWatch(void) { restart(); }
-	void restart(void) { this->start = fetchTimeNow(); }
-	long elapsed(void) { return fetchTimeNow() - this->start; };
-	long calculateFPS(long frame) {
-		long span = elapsed();
-		if (span > 0) return frame / span;
-		return 0;
-	}
-};
-
 // NetworkTable Spec:
 
 // Table:       ball_detection
@@ -113,26 +82,26 @@ void checkForFrameEmpty(cv::Mat frame) {
 		throw std::runtime_error("Frame is empty");
 }
 
-// cv::Vec3f fetchBiggestCircle(std::vector<cv::Vec3f> circles) {
-//     cv::Vec3f biggest;
-//     int bigrad = 0;
-//     for (size_t i = 0; i < circles.size(); i++) {
-//         if(circles[i][2] > bigrad) {
-//             bigrad = circles[i][2];
-//             biggest = circles[i];
-//         }
-//     }
-// 	return biggest;
-// }
+ cv::Vec3f fetchBiggestCircle(std::vector<cv::Vec3f> circles) {
+     cv::Vec3f biggest;
+     int bigrad = 0;
+     for (size_t i = 0; i < circles.size(); i++) {
+         if(circles[i][2] > bigrad) {
+             bigrad = circles[i][2];
+             biggest = circles[i];
+         }
+     }
+ 	return biggest;
+ }
+//
+//cv::Vec3f fetchBiggestCircle(std::vector<cv::Vec3f> circles) {
+//	return *std::max_element(circles.begin(), circles.end(),
+//			[](const cv::Vec3f& a, const cv::Vec3f& b) { // this is a C++ lambda - >25% /g/ approved!
+//		return a[2] < b[2];
+//	});
+//}
 
-cv::Vec3f fetchBiggestCircle(std::vector<cv::Vec3f> circles) {
-	return *std::max_element(circles.begin(), circles.end(),
-			[](const cv::Vec3f& a, const cv::Vec3f& b) { // this is a C++ lambda - >25% /g/ approved!
-		return a[2] < b[2];
-	});
-}	
-
-cv::Point processCenter(cv::Mat* input, Bound bounds) {
+void processCenter(cv::Mat* input, Bound bounds, nt::NetworkTableEntry xEntry) {
     if (bounds.color == RED) *input = ~*input; // invert color space to allow const
     cvtColor(*input, *input, cv::COLOR_BGR2HSV);
     inRange(*input, bounds.lower, bounds.upper, *input);
@@ -144,12 +113,15 @@ cv::Point processCenter(cv::Mat* input, Bound bounds) {
 
     std::vector<cv::Vec3f> circles;
     HoughCircles(*input, circles, cv::HOUGH_GRADIENT, 1, 25, 30, 15, 50, 0);
-	cv::Vec3f biggest = fetchBiggestCircle(circles);
 
-    cv::Point center = cv::Point(biggest[0], biggest[1]);
-    // circle center
-    cv::circle(*input, center, 1, cv::Scalar(0,100,100), 3, cv::LINE_AA);
+    if(circles.size() > 0) {
+        cv::Vec3f biggest = fetchBiggestCircle(circles);
 
+        cv::Point center = cv::Point(biggest[0], biggest[1]);
+        // circle center
+        cv::circle(*input, center, 1, cv::Scalar(0, 100, 100), 3, cv::LINE_AA);
+        // set xEntry, unfinished but have to switch class.
+    }
     // circle outline
 	//int radius = biggest[2];
 	//circle(*input, center, radius, cv::Scalar(255,0,255), 3, cv::LINE_AA);
@@ -160,8 +132,6 @@ cv::Point processCenter(cv::Mat* input, Bound bounds) {
 	//int cX = m.m10 / m.m00;
 	//int cY = m.m01 / m.m00;
 	//cv::circle(*input, cv::Point(cX, cY), 5, (255, 255, 255), -1);
-
-	return center;
 }
 
 int main(int argc, char** argv) {
@@ -173,37 +143,23 @@ int main(int argc, char** argv) {
     cs::CvSink cvSink = cameraServer->GetVideo();
     cs::CvSource cvSource = cameraServer->PutVideo("USB Cam", 640, 480);
 	
-    // Allocating buffers - plz allocate as many buffers as you can to save on meory allocation
     cv::Mat frame;
 
     nt::NetworkTableEntry ballEntryX = programTablePointer->GetEntry("x");
     nt::NetworkTableEntry ballEntryR = programTablePointer->GetEntry("r");
     nt::NetworkTableEntry fpsEntry = programTablePointer->GetEntry("frames_per_second");
 	
-    StopWatch timer = StopWatch();
     // Initialize program loop while reading
-    // frames and incrementing frame counter
 
     std::string color = programTablePointer->GetEntry("alliance_color").GetString("none");
 
-    long count = 0;
     while (true) {
             long c = cvSink.GrabFrame(frame);
             if(c == 0) continue;
-            //checkForFrameEmpty(frame);
-            double fps = timer.calculateFPS(count);
 
             cv::Point center = processCenter(&frame, detectionBounds);
-
-            fpsEntry.SetDouble(fps);
             ballEntryX.SetDouble(center.x);
-            //if (count % 25 == 0) std::printf("FPS: %d : %f", fps, 0.);
-            //detectionBounds.lower[0]);
 
             cvSource.PutFrame(frame);
-
-            //ballEntry.SetDouble(count);
-            if (count % 150 == 0) timer.restart();
-            count++;
     }
 }

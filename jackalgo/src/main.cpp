@@ -4,6 +4,7 @@
 #include <opencv2/photo.hpp>
 
 #include <iostream>
+#include <vector>
 
 using namespace cv;
 using namespace std;
@@ -34,9 +35,13 @@ void process(Mat* input, Mat* output) {
             biggest = circles[i];
         }
     }
-    Point center = Point(biggest[0], biggest[1]);
+    Point center;
+    if(circles.size() > 0) {
+        center = Point(biggest[0], biggest[1]);
+        circle( *input, center, 1, Scalar(0,100,100), 3, LINE_AA);
+        printf("%d\n", center.x);
+    }
     // circle center
-    circle( *input, center, 1, Scalar(0,100,100), 3, LINE_AA);
     // circle outline
 //    int radius = biggest[2];
 //    circle( *input, center, radius, Scalar(255,0,255), 3, LINE_AA);
