@@ -16,21 +16,21 @@ namespace frc {
  * to be zeroed before use.
  */
 class CounterBase {
-  public:
-    enum EncodingType { k1X, k2X, k4X };
+ public:
+  enum EncodingType { k1X, k2X, k4X };
 
-    CounterBase() = default;
-    virtual ~CounterBase() = default;
+  CounterBase() = default;
+  virtual ~CounterBase() = default;
 
-    CounterBase(CounterBase&&) = default;
-    CounterBase& operator=(CounterBase&&) = default;
+  CounterBase(CounterBase&&) = default;
+  CounterBase& operator=(CounterBase&&) = default;
 
-    virtual int Get() const = 0;
-    virtual void Reset() = 0;
-    virtual double GetPeriod() const = 0;
-    virtual void SetMaxPeriod(double maxPeriod) = 0;
-    virtual bool GetStopped() const = 0;
-    virtual bool GetDirection() const = 0;
+  virtual int Get() const = 0;
+  virtual void Reset() = 0;
+  virtual double GetPeriod() const = 0;
+  virtual void SetMaxPeriod(double maxPeriod) = 0;
+  virtual bool GetStopped() const = 0;
+  virtual bool GetDirection() const = 0;
 };
 
-} // namespace frc
+}  // namespace frc

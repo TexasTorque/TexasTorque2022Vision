@@ -54,4 +54,4 @@ UNIT_ADD_CATEGORY_TRAIT(time)
 #endif
 
 using namespace time;
-} // namespace units
+}  // namespace units

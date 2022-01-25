@@ -125,6 +125,6 @@ void HAL_ResetPDPTotalEnergy(HAL_PDPHandle handle, int32_t* status);
  */
 void HAL_ClearPDPStickyFaults(HAL_PDPHandle handle, int32_t* status);
 #ifdef __cplusplus
-} // extern "C"
+}  // extern "C"
 #endif
 /** @} */

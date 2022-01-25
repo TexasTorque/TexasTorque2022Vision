@@ -299,6 +299,6 @@ HAL_Bool HAL_GetCounterDirection(HAL_CounterHandle counterHandle,
 void HAL_SetCounterReverseDirection(HAL_CounterHandle counterHandle,
                                     HAL_Bool reverseDirection, int32_t* status);
 #ifdef __cplusplus
-} // extern "C"
+}  // extern "C"
 #endif
 /** @} */

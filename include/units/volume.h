@@ -38,8 +38,8 @@ namespace units {
  * @anchor volumeContainers
  * @sa See unit_t for more information on unit type containers.
  */
-#if !defined(DISABLE_PREDEFINED_UNITS) ||                                      \
-        defined(ENABLE_PREDEFINED_VOLUME_UNITS)
+#if !defined(DISABLE_PREDEFINED_UNITS) || \
+    defined(ENABLE_PREDEFINED_VOLUME_UNITS)
 UNIT_ADD(volume, cubic_meter, cubic_meters, cu_m,
          unit<std::ratio<1>, units::category::volume_unit>)
 UNIT_ADD(volume, cubic_millimeter, cubic_millimeters, cu_mm,
@@ -80,4 +80,4 @@ UNIT_ADD_CATEGORY_TRAIT(volume)
 #endif
 
 using namespace volume;
-} // namespace units
+}  // namespace units

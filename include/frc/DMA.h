@@ -17,38 +17,38 @@ class AnalogInput;
 class DMASample;
 
 class DMA : public ErrorBase {
-    friend class DMASample;
+  friend class DMASample;
 
-  public:
-    DMA();
-    ~DMA() override;
+ public:
+  DMA();
+  ~DMA() override;
 
-    DMA& operator=(DMA&& other) = default;
-    DMA(DMA&& other) = default;
+  DMA& operator=(DMA&& other) = default;
+  DMA(DMA&& other) = default;
 
-    void SetPause(bool pause);
-    void SetRate(int cycles);
+  void SetPause(bool pause);
+  void SetRate(int cycles);
 
-    void AddEncoder(const Encoder* encoder);
-    void AddEncoderPeriod(const Encoder* encoder);
+  void AddEncoder(const Encoder* encoder);
+  void AddEncoderPeriod(const Encoder* encoder);
 
-    void AddCounter(const Counter* counter);
-    void AddCounterPeriod(const Counter* counter);
+  void AddCounter(const Counter* counter);
+  void AddCounterPeriod(const Counter* counter);
 
-    void AddDigitalSource(const DigitalSource* digitalSource);
+  void AddDigitalSource(const DigitalSource* digitalSource);
 
-    void AddDutyCycle(const DutyCycle* digitalSource);
+  void AddDutyCycle(const DutyCycle* digitalSource);
 
-    void AddAnalogInput(const AnalogInput* analogInput);
-    void AddAveragedAnalogInput(const AnalogInput* analogInput);
-    void AddAnalogAccumulator(const AnalogInput* analogInput);
+  void AddAnalogInput(const AnalogInput* analogInput);
+  void AddAveragedAnalogInput(const AnalogInput* analogInput);
+  void AddAnalogAccumulator(const AnalogInput* analogInput);
 
-    void SetExternalTrigger(DigitalSource* source, bool rising, bool falling);
+  void SetExternalTrigger(DigitalSource* source, bool rising, bool falling);
 
-    void StartDMA(int queueDepth);
-    void StopDMA();
+  void StartDMA(int queueDepth);
+  void StopDMA();
 
-  private:
-    hal::Handle<HAL_DMAHandle> dmaHandle;
+ private:
+  hal::Handle<HAL_DMAHandle> dmaHandle;
 };
-} // namespace frc
+}  // namespace frc

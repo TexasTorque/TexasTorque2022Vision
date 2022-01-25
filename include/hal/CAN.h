@@ -32,10 +32,10 @@
  * Storage for CAN Stream Messages.
  */
 struct HAL_CANStreamMessage {
-    uint32_t messageID;
-    uint32_t timeStamp;
-    uint8_t data[8];
-    uint8_t dataSize;
+  uint32_t messageID;
+  uint32_t timeStamp;
+  uint8_t data[8];
+  uint8_t dataSize;
 };
 
 #ifdef __cplusplus
@@ -114,6 +114,6 @@ void HAL_CAN_GetCANStatus(float* percentBusUtilization, uint32_t* busOffCount,
                           uint32_t* transmitErrorCount, int32_t* status);
 
 #ifdef __cplusplus
-} // extern "C"
+}  // extern "C"
 #endif
 /** @} */

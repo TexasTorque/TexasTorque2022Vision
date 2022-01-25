@@ -39,11 +39,11 @@ namespace units {
  * @anchor solidAngleContainers
  * @sa See unit_t for more information on unit type containers.
  */
-#if !defined(DISABLE_PREDEFINED_UNITS) ||                                      \
-        defined(ENABLE_PREDEFINED_SOLID_ANGLE_UNITS)
+#if !defined(DISABLE_PREDEFINED_UNITS) || \
+    defined(ENABLE_PREDEFINED_SOLID_ANGLE_UNITS)
 UNIT_ADD_WITH_METRIC_PREFIXES(
-        solid_angle, steradian, steradians, sr,
-        unit<std::ratio<1>, units::category::solid_angle_unit>)
+    solid_angle, steradian, steradians, sr,
+    unit<std::ratio<1>, units::category::solid_angle_unit>)
 UNIT_ADD(solid_angle, degree_squared, degrees_squared, sq_deg,
          squared<angle::degrees>)
 UNIT_ADD(solid_angle, spat, spats, sp,
@@ -53,4 +53,4 @@ UNIT_ADD_CATEGORY_TRAIT(solid_angle)
 #endif
 
 using namespace solid_angle;
-} // namespace units
+}  // namespace units

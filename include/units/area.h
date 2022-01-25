@@ -53,4 +53,4 @@ UNIT_ADD_CATEGORY_TRAIT(area)
 #endif
 
 using namespace area;
-} // namespace units
+}  // namespace units

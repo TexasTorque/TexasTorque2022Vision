@@ -26,50 +26,50 @@ namespace nt::EntryListenerFlags {
  * @ingroup ntcore_cpp_api
  */
 enum {
-    /**
-     * Initial listener addition.
-     * Set this flag to receive immediate notification of entries matching the
-     * flag criteria (generally only useful when combined with kNew).
-     */
-    kImmediate = NT_NOTIFY_IMMEDIATE,
+  /**
+   * Initial listener addition.
+   * Set this flag to receive immediate notification of entries matching the
+   * flag criteria (generally only useful when combined with kNew).
+   */
+  kImmediate = NT_NOTIFY_IMMEDIATE,
 
-    /**
-     * Changed locally.
-     * Set this flag to receive notification of both local changes and changes
-     * coming from remote nodes.  By default, notifications are only generated
-     * for remote changes.  Must be combined with some combination of kNew,
-     * kDelete, kUpdate, and kFlags to receive notifications of those respective
-     * events.
-     */
-    kLocal = NT_NOTIFY_LOCAL,
+  /**
+   * Changed locally.
+   * Set this flag to receive notification of both local changes and changes
+   * coming from remote nodes.  By default, notifications are only generated
+   * for remote changes.  Must be combined with some combination of kNew,
+   * kDelete, kUpdate, and kFlags to receive notifications of those respective
+   * events.
+   */
+  kLocal = NT_NOTIFY_LOCAL,
 
-    /**
-     * Newly created entry.
-     * Set this flag to receive a notification when an entry is created.
-     */
-    kNew = NT_NOTIFY_NEW,
+  /**
+   * Newly created entry.
+   * Set this flag to receive a notification when an entry is created.
+   */
+  kNew = NT_NOTIFY_NEW,
 
-    /**
-     * Entry was deleted.
-     * Set this flag to receive a notification when an entry is deleted.
-     */
-    kDelete = NT_NOTIFY_DELETE,
+  /**
+   * Entry was deleted.
+   * Set this flag to receive a notification when an entry is deleted.
+   */
+  kDelete = NT_NOTIFY_DELETE,
 
-    /**
-     * Entry's value changed.
-     * Set this flag to receive a notification when an entry's value (or type)
-     * changes.
-     */
-    kUpdate = NT_NOTIFY_UPDATE,
+  /**
+   * Entry's value changed.
+   * Set this flag to receive a notification when an entry's value (or type)
+   * changes.
+   */
+  kUpdate = NT_NOTIFY_UPDATE,
 
-    /**
-     * Entry's flags changed.
-     * Set this flag to receive a notification when an entry's flags value
-     * changes.
-     */
-    kFlags = NT_NOTIFY_FLAGS
+  /**
+   * Entry's flags changed.
+   * Set this flag to receive a notification when an entry's flags value
+   * changes.
+   */
+  kFlags = NT_NOTIFY_FLAGS
 };
 
-} // namespace nt::EntryListenerFlags
+}  // namespace nt::EntryListenerFlags
 
-#endif // NTCORE_NETWORKTABLES_ENTRYLISTENERFLAGS_H_
+#endif  // NTCORE_NETWORKTABLES_ENTRYLISTENERFLAGS_H_

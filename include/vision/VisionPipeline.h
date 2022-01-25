@@ -6,7 +6,7 @@
 
 namespace cv {
 class Mat;
-} // namespace cv
+}  // namespace cv
 
 namespace frc {
 
@@ -17,13 +17,13 @@ namespace frc {
  * @see VisionRunner
  */
 class VisionPipeline {
-  public:
-    virtual ~VisionPipeline() = default;
+ public:
+  virtual ~VisionPipeline() = default;
 
-    /**
-     * Processes the image input and sets the result objects. Implementations
-     * should make these objects accessible.
-     */
-    virtual void Process(cv::Mat& mat) = 0;
+  /**
+   * Processes the image input and sets the result objects. Implementations
+   * should make these objects accessible.
+   */
+  virtual void Process(cv::Mat& mat) = 0;
 };
-} // namespace frc
+}  // namespace frc

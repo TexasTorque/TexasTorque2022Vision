@@ -156,6 +156,6 @@ int32_t HAL_GetNumDutyCycles(void);
  */
 int32_t HAL_GetNumAddressableLEDs(void);
 #ifdef __cplusplus
-} // extern "C"
+}  // extern "C"
 #endif
 /** @} */

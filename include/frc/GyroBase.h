@@ -21,21 +21,21 @@ class GyroBase : public Gyro,
                  public PIDSource,
                  public Sendable,
                  public SendableHelper<GyroBase> {
-  public:
-    GyroBase() = default;
-    GyroBase(GyroBase&&) = default;
-    GyroBase& operator=(GyroBase&&) = default;
+ public:
+  GyroBase() = default;
+  GyroBase(GyroBase&&) = default;
+  GyroBase& operator=(GyroBase&&) = default;
 
-    // PIDSource interface
-    /**
-     * Get the PIDOutput for the PIDSource base object. Can be set to return
-     * angle or rate using SetPIDSourceType(). Defaults to angle.
-     *
-     * @return The PIDOutput (angle or rate, defaults to angle)
-     */
-    double PIDGet() override;
+  // PIDSource interface
+  /**
+   * Get the PIDOutput for the PIDSource base object. Can be set to return
+   * angle or rate using SetPIDSourceType(). Defaults to angle.
+   *
+   * @return The PIDOutput (angle or rate, defaults to angle)
+   */
+  double PIDGet() override;
 
-    void InitSendable(SendableBuilder& builder) override;
+  void InitSendable(SendableBuilder& builder) override;
 };
 
-} // namespace frc
+}  // namespace frc

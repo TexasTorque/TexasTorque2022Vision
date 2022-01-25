@@ -38,8 +38,8 @@ namespace units {
  * @anchor concentrationContainers
  * @sa See unit_t for more information on unit type containers.
  */
-#if !defined(DISABLE_PREDEFINED_UNITS) ||                                      \
-        defined(ENABLE_PREDEFINED_CONCENTRATION_UNITS)
+#if !defined(DISABLE_PREDEFINED_UNITS) || \
+    defined(ENABLE_PREDEFINED_CONCENTRATION_UNITS)
 UNIT_ADD(concentration, ppm, parts_per_million, ppm,
          unit<std::ratio<1, 1000000>, units::category::scalar_unit>)
 UNIT_ADD(concentration, ppb, parts_per_billion, ppb,
@@ -53,4 +53,4 @@ UNIT_ADD_CATEGORY_TRAIT(concentration)
 #endif
 
 using namespace concentration;
-} // namespace units
+}  // namespace units

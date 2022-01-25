@@ -37,14 +37,14 @@ namespace units {
  * @anchor currentContainers
  * @sa See unit_t for more information on unit type containers.
  */
-#if !defined(DISABLE_PREDEFINED_UNITS) ||                                      \
-        defined(ENABLE_PREDEFINED_CURRENT_UNITS)
+#if !defined(DISABLE_PREDEFINED_UNITS) || \
+    defined(ENABLE_PREDEFINED_CURRENT_UNITS)
 UNIT_ADD_WITH_METRIC_PREFIXES(
-        current, ampere, amperes, A,
-        unit<std::ratio<1>, units::category::current_unit>)
+    current, ampere, amperes, A,
+    unit<std::ratio<1>, units::category::current_unit>)
 
 UNIT_ADD_CATEGORY_TRAIT(current)
 #endif
 
 using namespace current;
-} // namespace units
+}  // namespace units

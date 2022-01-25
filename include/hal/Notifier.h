@@ -113,6 +113,6 @@ uint64_t HAL_WaitForNotifierAlarm(HAL_NotifierHandle notifierHandle,
                                   int32_t* status);
 
 #ifdef __cplusplus
-} // extern "C"
+}  // extern "C"
 #endif
 /** @} */

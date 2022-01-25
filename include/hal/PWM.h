@@ -225,6 +225,6 @@ int32_t HAL_GetPWMLoopTiming(int32_t* status);
  */
 uint64_t HAL_GetPWMCycleStartTime(int32_t* status);
 #ifdef __cplusplus
-} // extern "C"
+}  // extern "C"
 #endif
 /** @} */

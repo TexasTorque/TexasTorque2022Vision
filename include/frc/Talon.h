@@ -25,17 +25,17 @@ namespace frc {
  * \li 0.989ms = full "reverse"
  */
 class Talon : public PWMSpeedController {
-  public:
-    /**
-     * Constructor for a Talon (original or Talon SR).
-     *
-     * @param channel The PWM channel number that the Talon is attached to. 0-9
-     *                are on-board, 10-19 are on the MXP port
-     */
-    explicit Talon(int channel);
+ public:
+  /**
+   * Constructor for a Talon (original or Talon SR).
+   *
+   * @param channel The PWM channel number that the Talon is attached to. 0-9
+   *                are on-board, 10-19 are on the MXP port
+   */
+  explicit Talon(int channel);
 
-    Talon(Talon&&) = default;
-    Talon& operator=(Talon&&) = default;
+  Talon(Talon&&) = default;
+  Talon& operator=(Talon&&) = default;
 };
 
-} // namespace frc
+}  // namespace frc

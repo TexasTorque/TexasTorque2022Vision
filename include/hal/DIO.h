@@ -200,6 +200,6 @@ void HAL_SetFilterPeriod(int32_t filterIndex, int64_t value, int32_t* status);
  */
 int64_t HAL_GetFilterPeriod(int32_t filterIndex, int32_t* status);
 #ifdef __cplusplus
-} // extern "C"
+}  // extern "C"
 #endif
 /** @} */

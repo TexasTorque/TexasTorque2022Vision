@@ -25,17 +25,17 @@ namespace frc {
  * \li 0.997ms = full "reverse"
  */
 class VictorSP : public PWMSpeedController {
-  public:
-    /**
-     * Constructor for a Victor SP.
-     *
-     * @param channel The PWM channel that the VictorSP is attached to. 0-9 are
-     *                on-board, 10-19 are on the MXP port
-     */
-    explicit VictorSP(int channel);
+ public:
+  /**
+   * Constructor for a Victor SP.
+   *
+   * @param channel The PWM channel that the VictorSP is attached to. 0-9 are
+   *                on-board, 10-19 are on the MXP port
+   */
+  explicit VictorSP(int channel);
 
-    VictorSP(VictorSP&&) = default;
-    VictorSP& operator=(VictorSP&&) = default;
+  VictorSP(VictorSP&&) = default;
+  VictorSP& operator=(VictorSP&&) = default;
 };
 
-} // namespace frc
+}  // namespace frc

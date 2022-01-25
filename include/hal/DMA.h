@@ -21,11 +21,11 @@ HAL_ENUM(HAL_DMAReadStatus ) {
 // clang-format on
 
 struct HAL_DMASample {
-    uint32_t readBuffer[74];
-    int32_t channelOffsets[22];
-    uint64_t timeStamp;
-    uint32_t captureSize;
-    uint8_t triggerChannels;
+  uint32_t readBuffer[74];
+  int32_t channelOffsets[22];
+  uint64_t timeStamp;
+  uint32_t captureSize;
+  uint8_t triggerChannels;
 };
 
 #ifdef __cplusplus
@@ -73,9 +73,11 @@ void HAL_StopDMA(HAL_DMAHandle handle, int32_t* status);
 
 void* HAL_GetDMADirectPointer(HAL_DMAHandle handle);
 
-enum HAL_DMAReadStatus
-HAL_ReadDMADirect(void* dmaPointer, HAL_DMASample* dmaSample, int32_t timeoutMs,
-                  int32_t* remainingOut, int32_t* status);
+enum HAL_DMAReadStatus HAL_ReadDMADirect(void* dmaPointer,
+                                         HAL_DMASample* dmaSample,
+                                         int32_t timeoutMs,
+                                         int32_t* remainingOut,
+                                         int32_t* status);
 
 enum HAL_DMAReadStatus HAL_ReadDMA(HAL_DMAHandle handle,
                                    HAL_DMASample* dmaSample, int32_t timeoutMs,
@@ -120,5 +122,5 @@ int32_t HAL_GetDMASampleDutyCycleOutputRaw(const HAL_DMASample* dmaSample,
                                            int32_t* status);
 
 #ifdef __cplusplus
-} // extern "C"
+}  // extern "C"
 #endif

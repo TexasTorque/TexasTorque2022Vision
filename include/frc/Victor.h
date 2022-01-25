@@ -29,17 +29,17 @@ namespace frc {
  * \li 1.026ms = full "reverse"
  */
 class Victor : public PWMSpeedController {
-  public:
-    /**
-     * Constructor for a Victor.
-     *
-     * @param channel The PWM channel number that the Victor is attached to. 0-9
-     *                are on-board, 10-19 are on the MXP port
-     */
-    explicit Victor(int channel);
+ public:
+  /**
+   * Constructor for a Victor.
+   *
+   * @param channel The PWM channel number that the Victor is attached to. 0-9
+   *                are on-board, 10-19 are on the MXP port
+   */
+  explicit Victor(int channel);
 
-    Victor(Victor&&) = default;
-    Victor& operator=(Victor&&) = default;
+  Victor(Victor&&) = default;
+  Victor& operator=(Victor&&) = default;
 };
 
-} // namespace frc
+}  // namespace frc

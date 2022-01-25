@@ -93,6 +93,6 @@ void HAL_SetShowExtensionsNotFoundMessages(HAL_Bool showMessage);
 void HAL_OnShutdown(void* param, void (*func)(void*));
 
 #ifdef __cplusplus
-} // extern "C"
+}  // extern "C"
 #endif
 /** @} */

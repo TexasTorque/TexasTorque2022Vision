@@ -34,6 +34,6 @@ namespace hal {
  */
 using SPIPort = Handle<HAL_SPIPort, HAL_SPI_kInvalid>;
 
-} // namespace hal
+}  // namespace hal
 #endif
 /** @} */

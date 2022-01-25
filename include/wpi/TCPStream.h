@@ -34,38 +34,38 @@ struct sockaddr_in;
 namespace wpi {
 
 class TCPStream : public NetworkStream {
-    int m_sd;
-    std::string m_peerIP;
-    int m_peerPort;
-    bool m_blocking;
+  int m_sd;
+  std::string m_peerIP;
+  int m_peerPort;
+  bool m_blocking;
 
-  public:
-    friend class TCPAcceptor;
-    friend class TCPConnector;
+ public:
+  friend class TCPAcceptor;
+  friend class TCPConnector;
 
-    ~TCPStream() override;
+  ~TCPStream() override;
 
-    size_t send(const char* buffer, size_t len, Error* err) override;
-    size_t receive(char* buffer, size_t len, Error* err,
-                   int timeout = 0) override;
-    void close() final;
+  size_t send(const char* buffer, size_t len, Error* err) override;
+  size_t receive(char* buffer, size_t len, Error* err,
+                 int timeout = 0) override;
+  void close() final;
 
-    StringRef getPeerIP() const override;
-    int getPeerPort() const override;
-    void setNoDelay() override;
-    bool setBlocking(bool enabled) override;
-    int getNativeHandle() const override;
+  StringRef getPeerIP() const override;
+  int getPeerPort() const override;
+  void setNoDelay() override;
+  bool setBlocking(bool enabled) override;
+  int getNativeHandle() const override;
 
-    TCPStream(const TCPStream& stream) = delete;
-    TCPStream& operator=(const TCPStream&) = delete;
+  TCPStream(const TCPStream& stream) = delete;
+  TCPStream& operator=(const TCPStream&) = delete;
 
-  private:
-    bool WaitForReadEvent(int timeout);
+ private:
+  bool WaitForReadEvent(int timeout);
 
-    TCPStream(int sd, sockaddr_in* address);
-    TCPStream() = delete;
+  TCPStream(int sd, sockaddr_in* address);
+  TCPStream() = delete;
 };
 
-} // namespace wpi
+}  // namespace wpi
 
-#endif // WPIUTIL_WPI_TCPSTREAM_H_
+#endif  // WPIUTIL_WPI_TCPSTREAM_H_

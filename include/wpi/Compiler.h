@@ -23,39 +23,39 @@
 #endif
 
 #ifndef __has_feature
-#define __has_feature(x) 0
+# define __has_feature(x) 0
 #endif
 
 #ifndef __has_extension
-#define __has_extension(x) 0
+# define __has_extension(x) 0
 #endif
 
 #ifndef __has_attribute
-#define __has_attribute(x) 0
+# define __has_attribute(x) 0
 #endif
 
 #ifndef __has_cpp_attribute
-#define __has_cpp_attribute(x) 0
+# define __has_cpp_attribute(x) 0
 #endif
 
 #ifndef __has_builtin
-#define __has_builtin(x) 0
+# define __has_builtin(x) 0
 #endif
 
 /// \macro LLVM_GNUC_PREREQ
 /// Extend the default __GNUC_PREREQ even if glibc's features.h isn't
 /// available.
 #ifndef LLVM_GNUC_PREREQ
-#if defined(__GNUC__) && defined(__GNUC_MINOR__) && defined(__GNUC_PATCHLEVEL__)
-#define LLVM_GNUC_PREREQ(maj, min, patch)                                      \
-    ((__GNUC__ << 20) + (__GNUC_MINOR__ << 10) + __GNUC_PATCHLEVEL__ >=        \
+# if defined(__GNUC__) && defined(__GNUC_MINOR__) && defined(__GNUC_PATCHLEVEL__)
+#  define LLVM_GNUC_PREREQ(maj, min, patch) \
+    ((__GNUC__ << 20) + (__GNUC_MINOR__ << 10) + __GNUC_PATCHLEVEL__ >= \
      ((maj) << 20) + ((min) << 10) + (patch))
-#elif defined(__GNUC__) && defined(__GNUC_MINOR__)
-#define LLVM_GNUC_PREREQ(maj, min, patch)                                      \
+# elif defined(__GNUC__) && defined(__GNUC_MINOR__)
+#  define LLVM_GNUC_PREREQ(maj, min, patch) \
     ((__GNUC__ << 20) + (__GNUC_MINOR__ << 10) >= ((maj) << 20) + ((min) << 10))
-#else
-#define LLVM_GNUC_PREREQ(maj, min, patch) 0
-#endif
+# else
+#  define LLVM_GNUC_PREREQ(maj, min, patch) 0
+# endif
 #endif
 
 /// \macro LLVM_MSC_PREREQ
@@ -275,16 +275,17 @@
 // LLVM_ATTRIBUTE_DEPRECATED(decl, "message")
 #ifndef LLVM_ATTRIBUTE_DEPRECATED
 #if __has_feature(attribute_deprecated_with_message)
-#define LLVM_ATTRIBUTE_DEPRECATED(decl, message)                               \
-    decl __attribute__((deprecated(message)))
+# define LLVM_ATTRIBUTE_DEPRECATED(decl, message) \
+  decl __attribute__((deprecated(message)))
 #elif defined(__GNUC__)
-#define LLVM_ATTRIBUTE_DEPRECATED(decl, message)                               \
-    decl __attribute__((deprecated))
+# define LLVM_ATTRIBUTE_DEPRECATED(decl, message) \
+  decl __attribute__((deprecated))
 #elif defined(_MSC_VER)
-#define LLVM_ATTRIBUTE_DEPRECATED(decl, message)                               \
-    __declspec(deprecated(message)) decl
+# define LLVM_ATTRIBUTE_DEPRECATED(decl, message) \
+  __declspec(deprecated(message)) decl
 #else
-#define LLVM_ATTRIBUTE_DEPRECATED(decl, message) decl
+# define LLVM_ATTRIBUTE_DEPRECATED(decl, message) \
+  decl
 #endif
 #endif
 
@@ -293,9 +294,9 @@
 /// compiler to reach this point.  Otherwise is not defined.
 #ifndef LLVM_BUILTIN_UNREACHABLE
 #if __has_builtin(__builtin_unreachable) || LLVM_GNUC_PREREQ(4, 5, 0)
-#define LLVM_BUILTIN_UNREACHABLE __builtin_unreachable()
+# define LLVM_BUILTIN_UNREACHABLE __builtin_unreachable()
 #elif defined(_MSC_VER)
-#define LLVM_BUILTIN_UNREACHABLE __assume(false)
+# define LLVM_BUILTIN_UNREACHABLE __assume(false)
 #endif
 #endif
 
@@ -303,15 +304,15 @@
 /// which causes the program to exit abnormally.
 #ifndef LLVM_BUILTIN_TRAP
 #if __has_builtin(__builtin_trap) || LLVM_GNUC_PREREQ(4, 3, 0)
-#define LLVM_BUILTIN_TRAP __builtin_trap()
+# define LLVM_BUILTIN_TRAP __builtin_trap()
 #elif defined(_MSC_VER)
 // The __debugbreak intrinsic is supported by MSVC, does not require forward
 // declarations involving platform-specific typedefs (unlike RaiseException),
 // results in a call to vectored exception handlers, and encodes to a short
 // instruction that still causes the trapping behavior we want.
-#define LLVM_BUILTIN_TRAP __debugbreak()
+# define LLVM_BUILTIN_TRAP __debugbreak()
 #else
-#define LLVM_BUILTIN_TRAP *(volatile int*)0x11 = 0
+# define LLVM_BUILTIN_TRAP *(volatile int*)0x11 = 0
 #endif
 #endif
 
@@ -320,17 +321,17 @@
 /// under a debugger.
 #ifndef LLVM_BUILTIN_DEBUGTRAP
 #if __has_builtin(__builtin_debugtrap)
-#define LLVM_BUILTIN_DEBUGTRAP __builtin_debugtrap()
+# define LLVM_BUILTIN_DEBUGTRAP __builtin_debugtrap()
 #elif defined(_MSC_VER)
 // The __debugbreak intrinsic is supported by MSVC and breaks while
 // running under the debugger, and also supports invoking a debugger
 // when the OS is configured appropriately.
-#define LLVM_BUILTIN_DEBUGTRAP __debugbreak()
+# define LLVM_BUILTIN_DEBUGTRAP __debugbreak()
 #else
 // Just continue execution when built with compilers that have no
 // support. This is a debugging aid and not intended to force the
 // program to abort if encountered.
-#define LLVM_BUILTIN_DEBUGTRAP
+# define LLVM_BUILTIN_DEBUGTRAP
 #endif
 #endif
 
@@ -338,13 +339,13 @@
 /// Returns a pointer with an assumed alignment.
 #ifndef LLVM_ASSUME_ALIGNED
 #if __has_builtin(__builtin_assume_aligned) || LLVM_GNUC_PREREQ(4, 7, 0)
-#define LLVM_ASSUME_ALIGNED(p, a) __builtin_assume_aligned(p, a)
+# define LLVM_ASSUME_ALIGNED(p, a) __builtin_assume_aligned(p, a)
 #elif defined(LLVM_BUILTIN_UNREACHABLE)
 // As of today, clang does not support __builtin_assume_aligned.
-#define LLVM_ASSUME_ALIGNED(p, a)                                              \
-    (((uintptr_t(p) % (a)) == 0) ? (p) : (LLVM_BUILTIN_UNREACHABLE, (p)))
+# define LLVM_ASSUME_ALIGNED(p, a) \
+           (((uintptr_t(p) % (a)) == 0) ? (p) : (LLVM_BUILTIN_UNREACHABLE, (p)))
 #else
-#define LLVM_ASSUME_ALIGNED(p, a) (p)
+# define LLVM_ASSUME_ALIGNED(p, a) (p)
 #endif
 #endif
 
@@ -352,9 +353,9 @@
 /// Used to specify a minimum alignment for a structure or variable.
 #ifndef LLVM_ALIGNAS
 #if __GNUC__ && !__has_feature(cxx_alignas) && !LLVM_GNUC_PREREQ(4, 8, 1)
-#define LLVM_ALIGNAS(x) __attribute__((aligned(x)))
+# define LLVM_ALIGNAS(x) __attribute__((aligned(x)))
 #else
-#define LLVM_ALIGNAS(x) alignas(x)
+# define LLVM_ALIGNAS(x) alignas(x)
 #endif
 #endif
 
@@ -378,13 +379,13 @@
 /// LLVM_PACKED_END
 #ifndef LLVM_PACKED
 #ifdef _MSC_VER
-#define LLVM_PACKED(d) __pragma(pack(push, 1)) d __pragma(pack(pop))
-#define LLVM_PACKED_START __pragma(pack(push, 1))
-#define LLVM_PACKED_END __pragma(pack(pop))
+# define LLVM_PACKED(d) __pragma(pack(push, 1)) d __pragma(pack(pop))
+# define LLVM_PACKED_START __pragma(pack(push, 1))
+# define LLVM_PACKED_END   __pragma(pack(pop))
 #else
-#define LLVM_PACKED(d) d __attribute__((packed))
-#define LLVM_PACKED_START _Pragma("pack(push, 1)")
-#define LLVM_PACKED_END _Pragma("pack(pop)")
+# define LLVM_PACKED(d) d __attribute__((packed))
+# define LLVM_PACKED_START _Pragma("pack(push, 1)")
+# define LLVM_PACKED_END   _Pragma("pack(pop)")
 #endif
 #endif
 
@@ -394,15 +395,15 @@
 /// the preprocessor.
 #ifndef LLVM_PTR_SIZE
 #ifdef __SIZEOF_POINTER__
-#define LLVM_PTR_SIZE __SIZEOF_POINTER__
+# define LLVM_PTR_SIZE __SIZEOF_POINTER__
 #elif defined(_WIN64)
-#define LLVM_PTR_SIZE 8
+# define LLVM_PTR_SIZE 8
 #elif defined(_WIN32)
-#define LLVM_PTR_SIZE 4
+# define LLVM_PTR_SIZE 4
 #elif defined(_MSC_VER)
-#error "could not determine LLVM_PTR_SIZE as a constant int for MSVC"
+# error "could not determine LLVM_PTR_SIZE as a constant int for MSVC"
 #else
-#define LLVM_PTR_SIZE sizeof(void*)
+# define LLVM_PTR_SIZE sizeof(void *)
 #endif
 #endif
 
@@ -481,13 +482,13 @@ namespace wpi {
 /// like posix_memalign due to portability. It is mostly intended to allow
 /// compatibility with platforms that, after aligned allocation was added, use
 /// reduced default alignment.
-inline void* allocate_buffer(size_t Size, size_t Alignment) {
-    return ::operator new(Size
+inline void *allocate_buffer(size_t Size, size_t Alignment) {
+  return ::operator new(Size
 #ifdef __cpp_aligned_new
-                          ,
-                          std::align_val_t(Alignment)
+                        ,
+                        std::align_val_t(Alignment)
 #endif
-    );
+  );
 }
 
 /// Deallocate a buffer of memory with the given size and alignment.
@@ -497,17 +498,17 @@ inline void* allocate_buffer(size_t Size, size_t Alignment) {
 ///
 /// The pointer must have been allocated with the corresponding new operator,
 /// most likely using the above helper.
-inline void deallocate_buffer(void* Ptr, size_t Size, size_t Alignment) {
-    ::operator delete(Ptr
+inline void deallocate_buffer(void *Ptr, size_t Size, size_t Alignment) {
+  ::operator delete(Ptr
 #ifdef __cpp_sized_deallocation
-                      ,
-                      Size
+                    ,
+                    Size
 #endif
 #ifdef __cpp_aligned_new
-                      ,
-                      std::align_val_t(Alignment)
+                    ,
+                    std::align_val_t(Alignment)
 #endif
-    );
+  );
 }
 
 } // End namespace wpi

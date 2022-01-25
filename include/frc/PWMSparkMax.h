@@ -25,17 +25,17 @@ namespace frc {
  * \li 0.999ms = full "reverse"
  */
 class PWMSparkMax : public PWMSpeedController {
-  public:
-    /**
-     * Constructor for a SPARK MAX.
-     *
-     * @param channel The PWM channel that the SPARK MAX is attached to. 0-9 are
-     *                on-board, 10-19 are on the MXP port
-     */
-    explicit PWMSparkMax(int channel);
+ public:
+  /**
+   * Constructor for a SPARK MAX.
+   *
+   * @param channel The PWM channel that the SPARK MAX is attached to. 0-9 are
+   *                on-board, 10-19 are on the MXP port
+   */
+  explicit PWMSparkMax(int channel);
 
-    PWMSparkMax(PWMSparkMax&&) = default;
-    PWMSparkMax& operator=(PWMSparkMax&&) = default;
+  PWMSparkMax(PWMSparkMax&&) = default;
+  PWMSparkMax& operator=(PWMSparkMax&&) = default;
 };
 
-} // namespace frc
+}  // namespace frc

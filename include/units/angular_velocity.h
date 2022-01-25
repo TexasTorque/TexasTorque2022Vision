@@ -40,8 +40,8 @@ namespace units {
  * @anchor angularVelocityContainers
  * @sa See unit_t for more information on unit type containers.
  */
-#if !defined(DISABLE_PREDEFINED_UNITS) ||                                      \
-        defined(ENABLE_PREDEFINED_ANGULAR_VELOCITY_UNITS)
+#if !defined(DISABLE_PREDEFINED_UNITS) || \
+    defined(ENABLE_PREDEFINED_ANGULAR_VELOCITY_UNITS)
 UNIT_ADD(angular_velocity, radians_per_second, radians_per_second, rad_per_s,
          unit<std::ratio<1>, units::category::angular_velocity_unit>)
 UNIT_ADD(angular_velocity, degrees_per_second, degrees_per_second, deg_per_s,
@@ -55,4 +55,4 @@ UNIT_ADD_CATEGORY_TRAIT(angular_velocity)
 #endif
 
 using namespace angular_velocity;
-} // namespace units
+}  // namespace units

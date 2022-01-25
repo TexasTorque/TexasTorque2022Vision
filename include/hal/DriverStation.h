@@ -273,6 +273,6 @@ void HAL_ObserveUserProgramTeleop(void);
 void HAL_ObserveUserProgramTest(void);
 
 #ifdef __cplusplus
-} // extern "C"
+}  // extern "C"
 #endif
 /** @} */

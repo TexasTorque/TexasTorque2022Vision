@@ -34,103 +34,103 @@ class PIDOutput;
  * @deprecated Use frc2::PIDController class instead.
  */
 class PIDController : public PIDBase, public Controller {
-  public:
-    /**
-     * Allocate a PID object with the given constants for P, I, D.
-     *
-     * @param Kp     the proportional coefficient
-     * @param Ki     the integral coefficient
-     * @param Kd     the derivative coefficient
-     * @param source The PIDSource object that is used to get values
-     * @param output The PIDOutput object that is set to the output value
-     * @param period the loop time for doing calculations in seconds. This
-     *               particularly affects calculations of the integral and
-     *               differential terms. The default is 0.05 (50ms).
-     */
-    WPI_DEPRECATED("Use frc2::PIDController class instead.")
-    PIDController(double p, double i, double d, PIDSource* source,
-                  PIDOutput* output, double period = 0.05);
+ public:
+  /**
+   * Allocate a PID object with the given constants for P, I, D.
+   *
+   * @param Kp     the proportional coefficient
+   * @param Ki     the integral coefficient
+   * @param Kd     the derivative coefficient
+   * @param source The PIDSource object that is used to get values
+   * @param output The PIDOutput object that is set to the output value
+   * @param period the loop time for doing calculations in seconds. This
+   *               particularly affects calculations of the integral and
+   *               differential terms. The default is 0.05 (50ms).
+   */
+  WPI_DEPRECATED("Use frc2::PIDController class instead.")
+  PIDController(double p, double i, double d, PIDSource* source,
+                PIDOutput* output, double period = 0.05);
 
-    /**
-     * Allocate a PID object with the given constants for P, I, D.
-     *
-     * @param Kp     the proportional coefficient
-     * @param Ki     the integral coefficient
-     * @param Kd     the derivative coefficient
-     * @param source The PIDSource object that is used to get values
-     * @param output The PIDOutput object that is set to the output value
-     * @param period the loop time for doing calculations in seconds. This
-     *               particularly affects calculations of the integral and
-     *               differential terms. The default is 0.05 (50ms).
-     */
-    WPI_DEPRECATED("Use frc2::PIDController class instead.")
-    PIDController(double p, double i, double d, double f, PIDSource* source,
-                  PIDOutput* output, double period = 0.05);
+  /**
+   * Allocate a PID object with the given constants for P, I, D.
+   *
+   * @param Kp     the proportional coefficient
+   * @param Ki     the integral coefficient
+   * @param Kd     the derivative coefficient
+   * @param source The PIDSource object that is used to get values
+   * @param output The PIDOutput object that is set to the output value
+   * @param period the loop time for doing calculations in seconds. This
+   *               particularly affects calculations of the integral and
+   *               differential terms. The default is 0.05 (50ms).
+   */
+  WPI_DEPRECATED("Use frc2::PIDController class instead.")
+  PIDController(double p, double i, double d, double f, PIDSource* source,
+                PIDOutput* output, double period = 0.05);
 
-    /**
-     * Allocate a PID object with the given constants for P, I, D.
-     *
-     * @param Kp     the proportional coefficient
-     * @param Ki     the integral coefficient
-     * @param Kd     the derivative coefficient
-     * @param source The PIDSource object that is used to get values
-     * @param output The PIDOutput object that is set to the output value
-     * @param period the loop time for doing calculations in seconds. This
-     *               particularly affects calculations of the integral and
-     *               differential terms. The default is 0.05 (50ms).
-     */
-    WPI_DEPRECATED("Use frc2::PIDController class instead.")
-    PIDController(double p, double i, double d, PIDSource& source,
-                  PIDOutput& output, double period = 0.05);
+  /**
+   * Allocate a PID object with the given constants for P, I, D.
+   *
+   * @param Kp     the proportional coefficient
+   * @param Ki     the integral coefficient
+   * @param Kd     the derivative coefficient
+   * @param source The PIDSource object that is used to get values
+   * @param output The PIDOutput object that is set to the output value
+   * @param period the loop time for doing calculations in seconds. This
+   *               particularly affects calculations of the integral and
+   *               differential terms. The default is 0.05 (50ms).
+   */
+  WPI_DEPRECATED("Use frc2::PIDController class instead.")
+  PIDController(double p, double i, double d, PIDSource& source,
+                PIDOutput& output, double period = 0.05);
 
-    /**
-     * Allocate a PID object with the given constants for P, I, D.
-     *
-     * @param Kp     the proportional coefficient
-     * @param Ki     the integral coefficient
-     * @param Kd     the derivative coefficient
-     * @param source The PIDSource object that is used to get values
-     * @param output The PIDOutput object that is set to the output value
-     * @param period the loop time for doing calculations in seconds. This
-     *               particularly affects calculations of the integral and
-     *               differential terms. The default is 0.05 (50ms).
-     */
-    WPI_DEPRECATED("Use frc2::PIDController class instead.")
-    PIDController(double p, double i, double d, double f, PIDSource& source,
-                  PIDOutput& output, double period = 0.05);
+  /**
+   * Allocate a PID object with the given constants for P, I, D.
+   *
+   * @param Kp     the proportional coefficient
+   * @param Ki     the integral coefficient
+   * @param Kd     the derivative coefficient
+   * @param source The PIDSource object that is used to get values
+   * @param output The PIDOutput object that is set to the output value
+   * @param period the loop time for doing calculations in seconds. This
+   *               particularly affects calculations of the integral and
+   *               differential terms. The default is 0.05 (50ms).
+   */
+  WPI_DEPRECATED("Use frc2::PIDController class instead.")
+  PIDController(double p, double i, double d, double f, PIDSource& source,
+                PIDOutput& output, double period = 0.05);
 
-    ~PIDController() override;
+  ~PIDController() override;
 
-    /**
-     * Begin running the PIDController.
-     */
-    void Enable() override;
+  /**
+   * Begin running the PIDController.
+   */
+  void Enable() override;
 
-    /**
-     * Stop running the PIDController, this sets the output to zero before
-     * stopping.
-     */
-    void Disable() override;
+  /**
+   * Stop running the PIDController, this sets the output to zero before
+   * stopping.
+   */
+  void Disable() override;
 
-    /**
-     * Set the enabled state of the PIDController.
-     */
-    void SetEnabled(bool enable);
+  /**
+   * Set the enabled state of the PIDController.
+   */
+  void SetEnabled(bool enable);
 
-    /**
-     * Return true if PIDController is enabled.
-     */
-    bool IsEnabled() const;
+  /**
+   * Return true if PIDController is enabled.
+   */
+  bool IsEnabled() const;
 
-    /**
-     * Reset the previous error, the integral term, and disable the controller.
-     */
-    void Reset() override;
+  /**
+   * Reset the previous error, the integral term, and disable the controller.
+   */
+  void Reset() override;
 
-    void InitSendable(SendableBuilder& builder) override;
+  void InitSendable(SendableBuilder& builder) override;
 
-  private:
-    std::unique_ptr<Notifier> m_controlLoop;
+ private:
+  std::unique_ptr<Notifier> m_controlLoop;
 };
 
-} // namespace frc
+}  // namespace frc

@@ -35,14 +35,15 @@ namespace wpi {
 class Logger;
 
 class TCPConnector {
-  public:
-    static std::unique_ptr<NetworkStream>
-    connect(const char* server, int port, Logger& logger, int timeout = 0);
-    static std::unique_ptr<NetworkStream>
-    connect_parallel(ArrayRef<std::pair<const char*, int>> servers,
-                     Logger& logger, int timeout = 0);
+ public:
+  static std::unique_ptr<NetworkStream> connect(const char* server, int port,
+                                                Logger& logger,
+                                                int timeout = 0);
+  static std::unique_ptr<NetworkStream> connect_parallel(
+      ArrayRef<std::pair<const char*, int>> servers, Logger& logger,
+      int timeout = 0);
 };
 
-} // namespace wpi
+}  // namespace wpi
 
-#endif // WPIUTIL_WPI_TCPCONNECTOR_H_
+#endif  // WPIUTIL_WPI_TCPCONNECTOR_H_

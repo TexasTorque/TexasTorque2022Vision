@@ -12,18 +12,18 @@
 namespace wpi {
 
 class NetworkAcceptor {
-  public:
-    NetworkAcceptor() = default;
-    virtual ~NetworkAcceptor() = default;
+ public:
+  NetworkAcceptor() = default;
+  virtual ~NetworkAcceptor() = default;
 
-    virtual int start() = 0;
-    virtual void shutdown() = 0;
-    virtual std::unique_ptr<NetworkStream> accept() = 0;
+  virtual int start() = 0;
+  virtual void shutdown() = 0;
+  virtual std::unique_ptr<NetworkStream> accept() = 0;
 
-    NetworkAcceptor(const NetworkAcceptor&) = delete;
-    NetworkAcceptor& operator=(const NetworkAcceptor&) = delete;
+  NetworkAcceptor(const NetworkAcceptor&) = delete;
+  NetworkAcceptor& operator=(const NetworkAcceptor&) = delete;
 };
 
-} // namespace wpi
+}  // namespace wpi
 
-#endif // WPIUTIL_WPI_NETWORKACCEPTOR_H_
+#endif  // WPIUTIL_WPI_NETWORKACCEPTOR_H_

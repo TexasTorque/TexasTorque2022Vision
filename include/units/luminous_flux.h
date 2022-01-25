@@ -38,14 +38,14 @@ namespace units {
  * @anchor luminousFluxContainers
  * @sa See unit_t for more information on unit type containers.
  */
-#if !defined(DISABLE_PREDEFINED_UNITS) ||                                      \
-        defined(ENABLE_PREDEFINED_LUMINOUS_FLUX_UNITS)
+#if !defined(DISABLE_PREDEFINED_UNITS) || \
+    defined(ENABLE_PREDEFINED_LUMINOUS_FLUX_UNITS)
 UNIT_ADD_WITH_METRIC_PREFIXES(
-        luminous_flux, lumen, lumens, lm,
-        unit<std::ratio<1>, units::category::luminous_flux_unit>)
+    luminous_flux, lumen, lumens, lm,
+    unit<std::ratio<1>, units::category::luminous_flux_unit>)
 
 UNIT_ADD_CATEGORY_TRAIT(luminous_flux)
 #endif
 
 using namespace luminous_flux;
-} // namespace units
+}  // namespace units

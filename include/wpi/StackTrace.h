@@ -16,6 +16,6 @@ namespace wpi {
  */
 std::string GetStackTrace(int offset);
 
-} // namespace wpi
+}  // namespace wpi
 
-#endif // WPIUTIL_WPI_STACKTRACE_H_
+#endif  // WPIUTIL_WPI_STACKTRACE_H_

@@ -41,8 +41,8 @@ namespace units {
  * @anchor temperatureContainers
  * @sa See unit_t for more information on unit type containers.
  */
-#if !defined(DISABLE_PREDEFINED_UNITS) ||                                      \
-        defined(ENABLE_PREDEFINED_TEMPERATURE_UNITS)
+#if !defined(DISABLE_PREDEFINED_UNITS) || \
+    defined(ENABLE_PREDEFINED_TEMPERATURE_UNITS)
 UNIT_ADD(temperature, kelvin, kelvin, K,
          unit<std::ratio<1>, units::category::temperature_unit>)
 UNIT_ADD(temperature, celsius, celsius, degC,
@@ -56,4 +56,4 @@ UNIT_ADD_CATEGORY_TRAIT(temperature)
 #endif
 
 using namespace temperature;
-} // namespace units
+}  // namespace units

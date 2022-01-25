@@ -22,41 +22,41 @@ class ErrorBase;
  * Error object represents a library error.
  */
 class Error {
-  public:
-    using Code = int;
+ public:
+  using Code = int;
 
-    Error() = default;
-    Error(Code code, const wpi::Twine& contextMessage, wpi::StringRef filename,
-          wpi::StringRef function, int lineNumber,
-          const ErrorBase* originatingObject);
+  Error() = default;
+  Error(Code code, const wpi::Twine& contextMessage, wpi::StringRef filename,
+        wpi::StringRef function, int lineNumber,
+        const ErrorBase* originatingObject);
 
-    bool operator<(const Error& rhs) const;
+  bool operator<(const Error& rhs) const;
 
-    Code GetCode() const;
-    std::string GetMessage() const;
-    std::string GetFilename() const;
-    std::string GetFunction() const;
-    int GetLineNumber() const;
-    const ErrorBase* GetOriginatingObject() const;
-    double GetTimestamp() const;
-    void Clear();
-    void Set(Code code, const wpi::Twine& contextMessage,
-             wpi::StringRef filename, wpi::StringRef function, int lineNumber,
-             const ErrorBase* originatingObject);
+  Code GetCode() const;
+  std::string GetMessage() const;
+  std::string GetFilename() const;
+  std::string GetFunction() const;
+  int GetLineNumber() const;
+  const ErrorBase* GetOriginatingObject() const;
+  double GetTimestamp() const;
+  void Clear();
+  void Set(Code code, const wpi::Twine& contextMessage, wpi::StringRef filename,
+           wpi::StringRef function, int lineNumber,
+           const ErrorBase* originatingObject);
 
-  private:
-    void Report();
+ private:
+  void Report();
 
-    Code m_code = 0;
-    std::string m_message;
-    std::string m_filename;
-    std::string m_function;
-    int m_lineNumber = 0;
-    const ErrorBase* m_originatingObject = nullptr;
-    double m_timestamp = 0.0;
+  Code m_code = 0;
+  std::string m_message;
+  std::string m_filename;
+  std::string m_function;
+  int m_lineNumber = 0;
+  const ErrorBase* m_originatingObject = nullptr;
+  double m_timestamp = 0.0;
 };
 
-} // namespace frc
+}  // namespace frc
 
 #ifdef _WIN32
 #pragma pop_macro("GetMessage")

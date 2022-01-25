@@ -9,8 +9,8 @@
 #define HAL_kAddressableLEDMaxLength 5460
 
 struct HAL_AddressableLEDData {
-    uint8_t b;
-    uint8_t g;
-    uint8_t r;
-    uint8_t padding;
+  uint8_t b;
+  uint8_t g;
+  uint8_t r;
+  uint8_t padding;
 };

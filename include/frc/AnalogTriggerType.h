@@ -7,10 +7,10 @@
 namespace frc {
 
 enum class AnalogTriggerType {
-    kInWindow = 0,
-    kState = 1,
-    kRisingPulse = 2,
-    kFallingPulse = 3
+  kInWindow = 0,
+  kState = 1,
+  kRisingPulse = 2,
+  kFallingPulse = 3
 };
 
-} // namespace frc
+}  // namespace frc

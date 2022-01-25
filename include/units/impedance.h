@@ -37,14 +37,14 @@ namespace units {
  * @anchor impedanceContainers
  * @sa See unit_t for more information on unit type containers.
  */
-#if !defined(DISABLE_PREDEFINED_UNITS) ||                                      \
-        defined(ENABLE_PREDEFINED_IMPEDANCE_UNITS)
+#if !defined(DISABLE_PREDEFINED_UNITS) || \
+    defined(ENABLE_PREDEFINED_IMPEDANCE_UNITS)
 UNIT_ADD_WITH_METRIC_PREFIXES(
-        impedance, ohm, ohms, Ohm,
-        unit<std::ratio<1>, units::category::impedance_unit>)
+    impedance, ohm, ohms, Ohm,
+    unit<std::ratio<1>, units::category::impedance_unit>)
 
 UNIT_ADD_CATEGORY_TRAIT(impedance)
 #endif
 
 using namespace impedance;
-} // namespace units
+}  // namespace units

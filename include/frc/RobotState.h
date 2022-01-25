@@ -7,15 +7,15 @@
 namespace frc {
 
 class RobotState {
-  public:
-    RobotState() = delete;
+ public:
+  RobotState() = delete;
 
-    static bool IsDisabled();
-    static bool IsEnabled();
-    static bool IsEStopped();
-    static bool IsOperatorControl();
-    static bool IsAutonomous();
-    static bool IsTest();
+  static bool IsDisabled();
+  static bool IsEnabled();
+  static bool IsEStopped();
+  static bool IsOperatorControl();
+  static bool IsAutonomous();
+  static bool IsTest();
 };
 
-} // namespace frc
+}  // namespace frc

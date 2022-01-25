@@ -36,4 +36,4 @@ void GetOperatingDirectory(wpi::SmallVectorImpl<char>& result);
  */
 void GetDeployDirectory(wpi::SmallVectorImpl<char>& result);
 
-} // namespace frc::filesystem
+}  // namespace frc::filesystem

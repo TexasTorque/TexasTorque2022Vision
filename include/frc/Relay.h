@@ -33,75 +33,75 @@ class SendableBuilder;
 class Relay : public MotorSafety,
               public Sendable,
               public SendableHelper<Relay> {
-  public:
-    enum Value { kOff, kOn, kForward, kReverse };
-    enum Direction { kBothDirections, kForwardOnly, kReverseOnly };
+ public:
+  enum Value { kOff, kOn, kForward, kReverse };
+  enum Direction { kBothDirections, kForwardOnly, kReverseOnly };
 
-    /**
-     * Relay constructor given a channel.
-     *
-     * This code initializes the relay and reserves all resources that need to
-     * be locked. Initially the relay is set to both lines at 0v.
-     *
-     * @param channel   The channel number (0-3).
-     * @param direction The direction that the Relay object will control.
-     */
-    explicit Relay(int channel, Direction direction = kBothDirections);
+  /**
+   * Relay constructor given a channel.
+   *
+   * This code initializes the relay and reserves all resources that need to be
+   * locked. Initially the relay is set to both lines at 0v.
+   *
+   * @param channel   The channel number (0-3).
+   * @param direction The direction that the Relay object will control.
+   */
+  explicit Relay(int channel, Direction direction = kBothDirections);
 
-    /**
-     * Free the resource associated with a relay.
-     *
-     * The relay channels are set to free and the relay output is turned off.
-     */
-    ~Relay() override;
+  /**
+   * Free the resource associated with a relay.
+   *
+   * The relay channels are set to free and the relay output is turned off.
+   */
+  ~Relay() override;
 
-    Relay(Relay&&) = default;
-    Relay& operator=(Relay&&) = default;
+  Relay(Relay&&) = default;
+  Relay& operator=(Relay&&) = default;
 
-    /**
-     * Set the relay state.
-     *
-     * Valid values depend on which directions of the relay are controlled by
-     * the object.
-     *
-     * When set to kBothDirections, the relay can be any of the four states:
-     * 0v-0v, 0v-12v, 12v-0v, 12v-12v
-     *
-     * When set to kForwardOnly or kReverseOnly, you can specify the constant
-     * for the direction or you can simply specify kOff and kOn.  Using only
-     * kOff and kOn is recommended.
-     *
-     * @param value The state to set the relay.
-     */
-    void Set(Value value);
+  /**
+   * Set the relay state.
+   *
+   * Valid values depend on which directions of the relay are controlled by the
+   * object.
+   *
+   * When set to kBothDirections, the relay can be any of the four states:
+   * 0v-0v, 0v-12v, 12v-0v, 12v-12v
+   *
+   * When set to kForwardOnly or kReverseOnly, you can specify the constant for
+   * the direction or you can simply specify kOff and kOn.  Using only kOff and
+   * kOn is recommended.
+   *
+   * @param value The state to set the relay.
+   */
+  void Set(Value value);
 
-    /**
-     * Get the Relay State
-     *
-     * Gets the current state of the relay.
-     *
-     * When set to kForwardOnly or kReverseOnly, value is returned as kOn/kOff
-     * not kForward/kReverse (per the recommendation in Set).
-     *
-     * @return The current state of the relay as a Relay::Value
-     */
-    Value Get() const;
+  /**
+   * Get the Relay State
+   *
+   * Gets the current state of the relay.
+   *
+   * When set to kForwardOnly or kReverseOnly, value is returned as kOn/kOff not
+   * kForward/kReverse (per the recommendation in Set).
+   *
+   * @return The current state of the relay as a Relay::Value
+   */
+  Value Get() const;
 
-    int GetChannel() const;
+  int GetChannel() const;
 
-    // MotorSafety interface
-    void StopMotor() override;
+  // MotorSafety interface
+  void StopMotor() override;
 
-    void GetDescription(wpi::raw_ostream& desc) const override;
+  void GetDescription(wpi::raw_ostream& desc) const override;
 
-    void InitSendable(SendableBuilder& builder) override;
+  void InitSendable(SendableBuilder& builder) override;
 
-  private:
-    int m_channel;
-    Direction m_direction;
+ private:
+  int m_channel;
+  Direction m_direction;
 
-    hal::Handle<HAL_RelayHandle> m_forwardHandle;
-    hal::Handle<HAL_RelayHandle> m_reverseHandle;
+  hal::Handle<HAL_RelayHandle> m_forwardHandle;
+  hal::Handle<HAL_RelayHandle> m_reverseHandle;
 };
 
-} // namespace frc
+}  // namespace frc

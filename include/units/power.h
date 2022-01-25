@@ -48,4 +48,4 @@ UNIT_ADD_CATEGORY_TRAIT(power)
 #endif
 
 using namespace power;
-} // namespace units
+}  // namespace units

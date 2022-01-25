@@ -38,14 +38,14 @@ namespace units {
  * @anchor capacitanceContainers
  * @sa See unit_t for more information on unit type containers.
  */
-#if !defined(DISABLE_PREDEFINED_UNITS) ||                                      \
-        defined(ENABLE_PREDEFINED_CAPACITANCE_UNITS)
+#if !defined(DISABLE_PREDEFINED_UNITS) || \
+    defined(ENABLE_PREDEFINED_CAPACITANCE_UNITS)
 UNIT_ADD_WITH_METRIC_PREFIXES(
-        capacitance, farad, farads, F,
-        unit<std::ratio<1>, units::category::capacitance_unit>)
+    capacitance, farad, farads, F,
+    unit<std::ratio<1>, units::category::capacitance_unit>)
 
 UNIT_ADD_CATEGORY_TRAIT(capacitance)
 #endif
 
 using namespace capacitance;
-} // namespace units
+}  // namespace units

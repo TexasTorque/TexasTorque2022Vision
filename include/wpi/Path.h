@@ -59,24 +59,22 @@ enum class Style { windows, posix, native };
 class const_iterator
     : public iterator_facade_base<const_iterator, std::input_iterator_tag,
                                   const StringRef> {
-    StringRef Path;      ///< The entire path.
-    StringRef Component; ///< The current component. Not necessarily in Path.
-    size_t Position;     ///< The iterators current position within Path.
-    Style S;             ///< The path style to use.
+  StringRef Path;      ///< The entire path.
+  StringRef Component; ///< The current component. Not necessarily in Path.
+  size_t    Position;  ///< The iterators current position within Path.
+  Style S;             ///< The path style to use.
 
-    // An end iterator has Position = Path.size() + 1.
-    friend const_iterator begin(StringRef path, Style style);
-    friend const_iterator end(StringRef path);
+  // An end iterator has Position = Path.size() + 1.
+  friend const_iterator begin(StringRef path, Style style);
+  friend const_iterator end(StringRef path);
 
-  public:
-    reference operator*() const {
-        return Component;
-    }
-    const_iterator& operator++(); // preincrement
-    bool operator==(const const_iterator& RHS) const;
+public:
+  reference operator*() const { return Component; }
+  const_iterator &operator++();    // preincrement
+  bool operator==(const const_iterator &RHS) const;
 
-    /// Difference in bytes between this and RHS.
-    ptrdiff_t operator-(const const_iterator& RHS) const;
+  /// Difference in bytes between this and RHS.
+  ptrdiff_t operator-(const const_iterator &RHS) const;
 };
 
 /// Reverse path iterator.
@@ -87,23 +85,21 @@ class const_iterator
 class reverse_iterator
     : public iterator_facade_base<reverse_iterator, std::input_iterator_tag,
                                   const StringRef> {
-    StringRef Path;      ///< The entire path.
-    StringRef Component; ///< The current component. Not necessarily in Path.
-    size_t Position;     ///< The iterators current position within Path.
-    Style S;             ///< The path style to use.
+  StringRef Path;      ///< The entire path.
+  StringRef Component; ///< The current component. Not necessarily in Path.
+  size_t    Position;  ///< The iterators current position within Path.
+  Style S;             ///< The path style to use.
 
-    friend reverse_iterator rbegin(StringRef path, Style style);
-    friend reverse_iterator rend(StringRef path);
+  friend reverse_iterator rbegin(StringRef path, Style style);
+  friend reverse_iterator rend(StringRef path);
 
-  public:
-    reference operator*() const {
-        return Component;
-    }
-    reverse_iterator& operator++(); // preincrement
-    bool operator==(const reverse_iterator& RHS) const;
+public:
+  reference operator*() const { return Component; }
+  reverse_iterator &operator++();    // preincrement
+  bool operator==(const reverse_iterator &RHS) const;
 
-    /// Difference in bytes between this and RHS.
-    ptrdiff_t operator-(const reverse_iterator& RHS) const;
+  /// Difference in bytes between this and RHS.
+  ptrdiff_t operator-(const reverse_iterator &RHS) const;
 };
 
 /// Get begin iterator over \a path.
@@ -140,7 +136,7 @@ reverse_iterator rend(StringRef path);
 /// @endcode
 ///
 /// @param path A path that is modified to not have a file component.
-void remove_filename(SmallVectorImpl<char>& path, Style style = Style::native);
+void remove_filename(SmallVectorImpl<char> &path, Style style = Style::native);
 
 /// Replace the file extension of \a path with \a extension.
 ///
@@ -154,7 +150,7 @@ void remove_filename(SmallVectorImpl<char>& path, Style style = Style::native);
 /// @param extension The extension to be added. It may be empty. It may also
 ///                  optionally start with a '.', if it does not, one will be
 ///                  prepended.
-void replace_extension(SmallVectorImpl<char>& path, const Twine& extension,
+void replace_extension(SmallVectorImpl<char> &path, const Twine &extension,
                        Style style = Style::native);
 
 /// Replace matching path prefix with another path.
@@ -170,8 +166,8 @@ void replace_extension(SmallVectorImpl<char>& path, const Twine& extension,
 ///        start with \a NewPrefix.
 /// @param OldPrefix The path prefix to strip from \a Path.
 /// @param NewPrefix The path prefix to replace \a NewPrefix with.
-void replace_path_prefix(SmallVectorImpl<char>& Path,
-                         const StringRef& OldPrefix, const StringRef& NewPrefix,
+void replace_path_prefix(SmallVectorImpl<char> &Path,
+                         const StringRef &OldPrefix, const StringRef &NewPrefix,
                          Style style = Style::native);
 
 /// Append to path.
@@ -184,11 +180,13 @@ void replace_path_prefix(SmallVectorImpl<char>& Path,
 ///
 /// @param path Set to \a path + \a component.
 /// @param a The component to be appended to \a path.
-void append(SmallVectorImpl<char>& path, const Twine& a, const Twine& b = "",
-            const Twine& c = "", const Twine& d = "");
+void append(SmallVectorImpl<char> &path, const Twine &a,
+                                         const Twine &b = "",
+                                         const Twine &c = "",
+                                         const Twine &d = "");
 
-void append(SmallVectorImpl<char>& path, Style style, const Twine& a,
-            const Twine& b = "", const Twine& c = "", const Twine& d = "");
+void append(SmallVectorImpl<char> &path, Style style, const Twine &a,
+            const Twine &b = "", const Twine &c = "", const Twine &d = "");
 
 /// Append to path.
 ///
@@ -201,7 +199,7 @@ void append(SmallVectorImpl<char>& path, Style style, const Twine& a,
 /// @param path Set to \a path + [\a begin, \a end).
 /// @param begin Start of components to append.
 /// @param end One past the end of components to append.
-void append(SmallVectorImpl<char>& path, const_iterator begin,
+void append(SmallVectorImpl<char> &path, const_iterator begin,
             const_iterator end, Style style = Style::native);
 
 /// @}
@@ -214,7 +212,7 @@ void append(SmallVectorImpl<char>& path, const_iterator begin,
 ///
 /// @param path A path that is transformed to native format.
 /// @param result Holds the result of the transformation.
-void native(const Twine& path, SmallVectorImpl<char>& result,
+void native(const Twine &path, SmallVectorImpl<char> &result,
             Style style = Style::native);
 
 /// Convert path to the native form in place. This is used to give paths to
@@ -222,7 +220,7 @@ void native(const Twine& path, SmallVectorImpl<char>& result,
 /// on Windows all '/' are converted to '\'.
 ///
 /// @param path A path that is transformed to native format.
-void native(SmallVectorImpl<char>& path, Style style = Style::native);
+void native(SmallVectorImpl<char> &path, Style style = Style::native);
 
 /// Replaces backslashes with slashes if Windows.
 ///
@@ -361,13 +359,13 @@ StringRef get_separator(Style style = Style::native);
 /// (e.g., TEMP on Windows, TMPDIR on *nix) to specify a temporary directory.
 ///
 /// @param result Holds the resulting path name.
-void system_temp_directory(bool erasedOnReboot, SmallVectorImpl<char>& result);
+void system_temp_directory(bool erasedOnReboot, SmallVectorImpl<char> &result);
 
 /// Get the user's home directory.
 ///
 /// @param result Holds the resulting path name.
 /// @result True if a home directory is set, false otherwise.
-bool home_directory(SmallVectorImpl<char>& result);
+bool home_directory(SmallVectorImpl<char> &result);
 
 /// Has root name?
 ///
@@ -375,7 +373,7 @@ bool home_directory(SmallVectorImpl<char>& result);
 ///
 /// @param path Input path.
 /// @result True if the path has a root name, false otherwise.
-bool has_root_name(const Twine& path, Style style = Style::native);
+bool has_root_name(const Twine &path, Style style = Style::native);
 
 /// Has root directory?
 ///
@@ -383,7 +381,7 @@ bool has_root_name(const Twine& path, Style style = Style::native);
 ///
 /// @param path Input path.
 /// @result True if the path has a root directory, false otherwise.
-bool has_root_directory(const Twine& path, Style style = Style::native);
+bool has_root_directory(const Twine &path, Style style = Style::native);
 
 /// Has root path?
 ///
@@ -391,7 +389,7 @@ bool has_root_directory(const Twine& path, Style style = Style::native);
 ///
 /// @param path Input path.
 /// @result True if the path has a root path, false otherwise.
-bool has_root_path(const Twine& path, Style style = Style::native);
+bool has_root_path(const Twine &path, Style style = Style::native);
 
 /// Has relative path?
 ///
@@ -399,7 +397,7 @@ bool has_root_path(const Twine& path, Style style = Style::native);
 ///
 /// @param path Input path.
 /// @result True if the path has a relative path, false otherwise.
-bool has_relative_path(const Twine& path, Style style = Style::native);
+bool has_relative_path(const Twine &path, Style style = Style::native);
 
 /// Has parent path?
 ///
@@ -407,7 +405,7 @@ bool has_relative_path(const Twine& path, Style style = Style::native);
 ///
 /// @param path Input path.
 /// @result True if the path has a parent path, false otherwise.
-bool has_parent_path(const Twine& path, Style style = Style::native);
+bool has_parent_path(const Twine &path, Style style = Style::native);
 
 /// Has filename?
 ///
@@ -415,7 +413,7 @@ bool has_parent_path(const Twine& path, Style style = Style::native);
 ///
 /// @param path Input path.
 /// @result True if the path has a filename, false otherwise.
-bool has_filename(const Twine& path, Style style = Style::native);
+bool has_filename(const Twine &path, Style style = Style::native);
 
 /// Has stem?
 ///
@@ -423,7 +421,7 @@ bool has_filename(const Twine& path, Style style = Style::native);
 ///
 /// @param path Input path.
 /// @result True if the path has a stem, false otherwise.
-bool has_stem(const Twine& path, Style style = Style::native);
+bool has_stem(const Twine &path, Style style = Style::native);
 
 /// Has extension?
 ///
@@ -431,19 +429,19 @@ bool has_stem(const Twine& path, Style style = Style::native);
 ///
 /// @param path Input path.
 /// @result True if the path has a extension, false otherwise.
-bool has_extension(const Twine& path, Style style = Style::native);
+bool has_extension(const Twine &path, Style style = Style::native);
 
 /// Is path absolute?
 ///
 /// @param path Input path.
 /// @result True if the path is absolute, false if it is not.
-bool is_absolute(const Twine& path, Style style = Style::native);
+bool is_absolute(const Twine &path, Style style = Style::native);
 
 /// Is path relative?
 ///
 /// @param path Input path.
 /// @result True if the path is relative, false if it is not.
-bool is_relative(const Twine& path, Style style = Style::native);
+bool is_relative(const Twine &path, Style style = Style::native);
 
 /// Remove redundant leading "./" pieces and consecutive separators.
 ///
@@ -457,11 +455,11 @@ StringRef remove_leading_dotslash(StringRef path, Style style = Style::native);
 /// @param remove_dot_dot specify if '../' (except for leading "../") should be
 /// removed
 /// @result True if path was changed
-bool remove_dots(SmallVectorImpl<char>& path, bool remove_dot_dot = false,
+bool remove_dots(SmallVectorImpl<char> &path, bool remove_dot_dot = false,
                  Style style = Style::native);
 
 #if defined(_WIN32)
-std::error_code widenPath(const Twine& Path8, SmallVectorImpl<wchar_t>& Path16);
+std::error_code widenPath(const Twine &Path8, SmallVectorImpl<wchar_t> &Path16);
 #endif
 
 } // end namespace path

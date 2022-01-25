@@ -19,8 +19,8 @@
 extern "C" {
 #endif
 
-HAL_AddressableLEDHandle
-HAL_InitializeAddressableLED(HAL_DigitalHandle outputPort, int32_t* status);
+HAL_AddressableLEDHandle HAL_InitializeAddressableLED(
+    HAL_DigitalHandle outputPort, int32_t* status);
 
 void HAL_FreeAddressableLED(HAL_AddressableLEDHandle handle);
 
@@ -53,6 +53,6 @@ void HAL_StopAddressableLEDOutput(HAL_AddressableLEDHandle handle,
                                   int32_t* status);
 
 #ifdef __cplusplus
-} // extern "C"
+}  // extern "C"
 #endif
 /** @} */

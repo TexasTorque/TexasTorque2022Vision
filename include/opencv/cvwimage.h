@@ -37,6 +37,7 @@
 // or tort (including negligence or otherwise) arising in any way out of
 // the use of this software, even if advised of the possibility of such damage.
 
+
 #ifndef OPENCV_OLD_WIMAGE_HPP
 #define OPENCV_OLD_WIMAGE_HPP
 

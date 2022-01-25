@@ -40,8 +40,8 @@ namespace units {
  * @anchor torqueContainers
  * @sa See unit_t for more information on unit type containers.
  */
-#if !defined(DISABLE_PREDEFINED_UNITS) ||                                      \
-        defined(ENABLE_PREDEFINED_TORQUE_UNITS)
+#if !defined(DISABLE_PREDEFINED_UNITS) || \
+    defined(ENABLE_PREDEFINED_TORQUE_UNITS)
 UNIT_ADD(torque, newton_meter, newton_meters, Nm,
          unit<std::ratio<1>, units::energy::joule>)
 UNIT_ADD(torque, foot_pound, foot_pounds, ftlb,
@@ -57,4 +57,4 @@ UNIT_ADD_CATEGORY_TRAIT(torque)
 #endif
 
 using namespace torque;
-} // namespace units
+}  // namespace units

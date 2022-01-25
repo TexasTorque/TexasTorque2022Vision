@@ -14,17 +14,17 @@ namespace nt {
  * @ingroup ntcore_cpp_api
  */
 enum class NetworkTableType {
-    kUnassigned = NT_UNASSIGNED,
-    kBoolean = NT_BOOLEAN,
-    kDouble = NT_DOUBLE,
-    kString = NT_STRING,
-    kRaw = NT_RAW,
-    kBooleanArray = NT_BOOLEAN_ARRAY,
-    kDoubleArray = NT_DOUBLE_ARRAY,
-    kStringArray = NT_STRING_ARRAY,
-    kRpc = NT_RPC
+  kUnassigned = NT_UNASSIGNED,
+  kBoolean = NT_BOOLEAN,
+  kDouble = NT_DOUBLE,
+  kString = NT_STRING,
+  kRaw = NT_RAW,
+  kBooleanArray = NT_BOOLEAN_ARRAY,
+  kDoubleArray = NT_DOUBLE_ARRAY,
+  kStringArray = NT_STRING_ARRAY,
+  kRpc = NT_RPC
 };
 
-} // namespace nt
+}  // namespace nt
 
-#endif // NTCORE_NETWORKTABLES_NETWORKTABLETYPE_H_
+#endif  // NTCORE_NETWORKTABLES_NETWORKTABLETYPE_H_

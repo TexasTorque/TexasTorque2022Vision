@@ -38,14 +38,14 @@ namespace units {
  * @anchor luminousIntensityContainers
  * @sa See unit_t for more information on unit type containers.
  */
-#if !defined(DISABLE_PREDEFINED_UNITS) ||                                      \
-        defined(ENABLE_PREDEFINED_LUMINOUS_INTENSITY_UNITS)
+#if !defined(DISABLE_PREDEFINED_UNITS) || \
+    defined(ENABLE_PREDEFINED_LUMINOUS_INTENSITY_UNITS)
 UNIT_ADD_WITH_METRIC_PREFIXES(
-        luminous_intensity, candela, candelas, cd,
-        unit<std::ratio<1>, units::category::luminous_intensity_unit>)
+    luminous_intensity, candela, candelas, cd,
+    unit<std::ratio<1>, units::category::luminous_intensity_unit>)
 
 UNIT_ADD_CATEGORY_TRAIT(luminous_intensity)
 #endif
 
 using namespace luminous_intensity;
-} // namespace units
+}  // namespace units

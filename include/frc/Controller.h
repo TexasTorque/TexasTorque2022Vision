@@ -18,24 +18,24 @@ namespace frc {
  * @deprecated Only used by the deprecated PIDController
  */
 class Controller {
-  public:
-    WPI_DEPRECATED("Only used by the deprecated PIDController")
-    Controller() = default;
-    virtual ~Controller() = default;
+ public:
+  WPI_DEPRECATED("Only used by the deprecated PIDController")
+  Controller() = default;
+  virtual ~Controller() = default;
 
-    Controller(Controller&&) = default;
-    Controller& operator=(Controller&&) = default;
+  Controller(Controller&&) = default;
+  Controller& operator=(Controller&&) = default;
 
-    /**
-     * Allows the control loop to run
-     */
-    virtual void Enable() = 0;
+  /**
+   * Allows the control loop to run
+   */
+  virtual void Enable() = 0;
 
-    /**
-     * Stops the control loop from running until explicitly re-enabled by
-     * calling enable()
-     */
-    virtual void Disable() = 0;
+  /**
+   * Stops the control loop from running until explicitly re-enabled by calling
+   * enable()
+   */
+  virtual void Disable() = 0;
 };
 
-} // namespace frc
+}  // namespace frc

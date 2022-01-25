@@ -29,4 +29,4 @@ UNIT_ADD(angular_acceleration, degrees_per_second_squared,
 UNIT_ADD_CATEGORY_TRAIT(angular_acceleration)
 
 using namespace angular_acceleration;
-} // namespace units
+}  // namespace units

@@ -25,17 +25,17 @@ namespace frc {
  * \li 0.999ms = full "reverse"
  */
 class Spark : public PWMSpeedController {
-  public:
-    /**
-     * Constructor for a SPARK.
-     *
-     * @param channel The PWM channel that the SPARK is attached to. 0-9 are
-     *                on-board, 10-19 are on the MXP port
-     */
-    explicit Spark(int channel);
+ public:
+  /**
+   * Constructor for a SPARK.
+   *
+   * @param channel The PWM channel that the SPARK is attached to. 0-9 are
+   *                on-board, 10-19 are on the MXP port
+   */
+  explicit Spark(int channel);
 
-    Spark(Spark&&) = default;
-    Spark& operator=(Spark&&) = default;
+  Spark(Spark&&) = default;
+  Spark& operator=(Spark&&) = default;
 };
 
-} // namespace frc
+}  // namespace frc

@@ -241,6 +241,6 @@ int32_t HAL_GetAnalogOffset(HAL_AnalogInputHandle analogPortHandle,
 double HAL_GetAnalogValueToVolts(HAL_AnalogInputHandle analogPortHandle,
                                  int32_t rawValue, int32_t* status);
 #ifdef __cplusplus
-} // extern "C"
+}  // extern "C"
 #endif
 /** @} */
