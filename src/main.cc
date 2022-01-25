@@ -99,8 +99,7 @@ NetworkTablePointer initializeNetworkTable(std::string identifier) {
 }
 
 Bound fetchDetectionBounds(NetworkTablePointer tablePointer) {
-    //std::string color = PTR(tablePointer).GetEntry("alliance_color").GetString("none");
-	std::string color = tablePointer->GetEntry("alliance_color").GetString("none");
+    std::string color = tablePointer->GetEntry("alliance_color").GetString("none");
 
     if (color == "none") throw std::runtime_error("Alliance color could not read from network tables");
     else if (color == "red") return Bound(RED);
@@ -108,12 +107,6 @@ Bound fetchDetectionBounds(NetworkTablePointer tablePointer) {
     else throw std::runtime_error("Alliance color could not be parsed");
 }
 
-cv::VideoCapture initializeVideoCapture(int cameraDevice) {
-    cv::VideoCapture capture;
-    capture.open(cameraDevice);
-    if (!capture.isOpened()) throw std::runtime_error("Could not open video capture");
-	return capture;
-}
 
 void checkForFrameEmpty(cv::Mat frame) {
 	if (frame.empty())
@@ -139,18 +132,18 @@ cv::Vec3f fetchBiggestCircle(std::vector<cv::Vec3f> circles) {
 	});
 }	
 
-cv::Point processCenter(cv::Mat* input, cv::Mat* output, Bound bounds) {
+cv::Point processCenter(cv::Mat* input, Bound bounds) {
     if (bounds.color == RED) *input = ~*input; // invert color space to allow const
-    cvtColor(*input, *output, cv::COLOR_BGR2HSV);
-    inRange(*output, bounds.lower, bounds.upper, *output);
+    cvtColor(*input, *input, cv::COLOR_BGR2HSV);
+    inRange(*input, bounds.lower, bounds.upper, *input);
 
-    medianBlur(*output, *output, 17);
-    erode(*output, *output, cv::Mat(), cv::Point(-1, -1), 3);
-    dilate(*output, *output, cv::Mat(), cv::Point(-1, -1), 5);
-    morphologyEx(*output, *output, cv::MORPH_HITMISS, cv::Mat());
+    medianBlur(*input, *input, 17);
+    erode(*input, *input, cv::Mat(), cv::Point(-1, -1), 3);
+    dilate(*input, *input, cv::Mat(), cv::Point(-1, -1), 5);
+    morphologyEx(*input, *input, cv::MORPH_HITMISS, cv::Mat());
 
     std::vector<cv::Vec3f> circles;
-    HoughCircles(*output, circles, cv::HOUGH_GRADIENT, 1, 25, 30, 15, 50, 0);
+    HoughCircles(*input, circles, cv::HOUGH_GRADIENT, 1, 25, 30, 15, 50, 0);
 	cv::Vec3f biggest = fetchBiggestCircle(circles);
 
     cv::Point center = cv::Point(biggest[0], biggest[1]);
@@ -161,62 +154,56 @@ cv::Point processCenter(cv::Mat* input, cv::Mat* output, Bound bounds) {
 	//int radius = biggest[2];
 	//circle(*input, center, radius, cv::Scalar(255,0,255), 3, cv::LINE_AA);
     //
-	//cv::Moments m = cv::moments(*output);
+	//cv::Moments m = cv::moments(*input);
 	//double hu[7];
 	//cv::HuMoments(m, hu);
 	//int cX = m.m10 / m.m00;
 	//int cY = m.m01 / m.m00;
-	//cv::circle(*output, cv::Point(cX, cY), 5, (255, 255, 255), -1);
+	//cv::circle(*input, cv::Point(cX, cY), 5, (255, 255, 255), -1);
 
 	return center;
 }
 
 int main(int argc, char** argv) {
-	
-	NetworkTablePointer programTablePointer = initializeNetworkTable("ball_detection");
+    NetworkTablePointer programTablePointer = initializeNetworkTable("ball_detection");
 
     Bound detectionBounds = fetchDetectionBounds(programTablePointer);
-	
-    //cv::VideoCapture capture = initializeVideoCapture(0);
 
-	frc::CameraServer* cameraServer = frc::CameraServer::GetInstance();
-	cs::CvSink cvSink = cameraServer->GetVideo("USB Camera 0");
-	cs::CvSource cvSource = cameraServer->PutVideo("USB Cam", 320, 240);
+    frc::CameraServer* cameraServer = frc::CameraServer::GetInstance();
+    cs::CvSink cvSink = cameraServer->GetVideo();
+    cs::CvSource cvSource = cameraServer->PutVideo("USB Cam", 640, 480);
 	
-	// Allocating buffers - plz allocate as many buffers as you can to save on meory allocation
-    cv::Mat frame, output, ellipse;
+    // Allocating buffers - plz allocate as many buffers as you can to save on meory allocation
+    cv::Mat frame;
 
     nt::NetworkTableEntry ballEntryX = programTablePointer->GetEntry("x");
     nt::NetworkTableEntry ballEntryR = programTablePointer->GetEntry("r");
     nt::NetworkTableEntry fpsEntry = programTablePointer->GetEntry("frames_per_second");
 	
-	StopWatch timer = StopWatch();
+    StopWatch timer = StopWatch();
     // Initialize program loop while reading
     // frames and incrementing frame counter
 
-	std::string color = programTablePointer->GetEntry("alliance_color").GetString("none");
-        printf("hello\n");
+    std::string color = programTablePointer->GetEntry("alliance_color").GetString("none");
 
-    //for (long count = 0; capture.read(frame); count++) {
-	//for (long count = 0; long _ = cvSink.GrabFrame(frame); count++) {
-	long count = 0;
-	while (true) {
-		long c = cvSink.GrabFrame(frame);
-		if(c == 0) continue;
-		//checkForFrameEmpty(frame);
-		double fps = timer.calculateFPS(count);	
+    long count = 0;
+    while (true) {
+            long c = cvSink.GrabFrame(frame);
+            if(c == 0) continue;
+            //checkForFrameEmpty(frame);
+            double fps = timer.calculateFPS(count);
 
-		cv::Point center = processCenter(&frame, &output, detectionBounds);
+            cv::Point center = processCenter(&frame, detectionBounds);
 
-		fpsEntry.SetDouble(fps);
-                ballEntryX.SetDouble(center.x);
-		//if (count % 25 == 0) std::printf("FPS: %d : %f", fps, 0.);
-		//detectionBounds.lower[0]);
+            fpsEntry.SetDouble(fps);
+            ballEntryX.SetDouble(center.x);
+            //if (count % 25 == 0) std::printf("FPS: %d : %f", fps, 0.);
+            //detectionBounds.lower[0]);
 
-		cvSource.PutFrame(output);
+            cvSource.PutFrame(frame);
 
-        //ballEntry.SetDouble(count);
-		if (count % 150 == 0) timer.restart();
-		count++;
+            //ballEntry.SetDouble(count);
+            if (count % 150 == 0) timer.restart();
+            count++;
     }
 }
