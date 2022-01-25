@@ -26,6 +26,7 @@ def list_ports():
         if not camera.isOpened():
             is_working = False
             print("Port %s is not working." %dev_port)
+
         else:
             is_reading, img = camera.read()
             w = camera.get(3)

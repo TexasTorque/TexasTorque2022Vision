@@ -54,10 +54,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/saddy/Projects/TorqueVision2022
+CMAKE_SOURCE_DIR = /home/saddy/Projects/TexasTorque2022Vision/jackalgo
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/saddy/Projects/TorqueVision2022
+CMAKE_BINARY_DIR = /home/saddy/Projects/TexasTorque2022Vision/jackalgo
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -81,14 +81,14 @@ clean: CMakeFiles/TorqueVision.dir/clean
 CMakeFiles/TorqueVision.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/TorqueVision.dir/build.make CMakeFiles/TorqueVision.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/TorqueVision.dir/build.make CMakeFiles/TorqueVision.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/saddy/Projects/TorqueVision2022/CMakeFiles --progress-num=1,2 "Built target TorqueVision"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/saddy/Projects/TexasTorque2022Vision/jackalgo/CMakeFiles --progress-num=1,2 "Built target TorqueVision"
 .PHONY : CMakeFiles/TorqueVision.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/TorqueVision.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/saddy/Projects/TorqueVision2022/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/saddy/Projects/TexasTorque2022Vision/jackalgo/CMakeFiles 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/TorqueVision.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/saddy/Projects/TorqueVision2022/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/saddy/Projects/TexasTorque2022Vision/jackalgo/CMakeFiles 0
 .PHONY : CMakeFiles/TorqueVision.dir/rule
 
 # Convenience name for target.

@@ -34,7 +34,7 @@ include CMakeFiles/rules.ninja
 #############################################
 # Logical path to working directory; prefix for absolute paths.
 
-cmake_ninja_workdir = /home/saddy/Projects/TorqueVision2022/
+cmake_ninja_workdir = /home/saddy/Projects/TexasTorque2022Vision/jackalgo/
 # =============================================================================
 # Object build statements for EXECUTABLE target TorqueVision
 
@@ -44,7 +44,7 @@ cmake_ninja_workdir = /home/saddy/Projects/TorqueVision2022/
 
 build cmake_object_order_depends_target_TorqueVision: phony || CMakeFiles/TorqueVision.dir
 
-build CMakeFiles/TorqueVision.dir/src/main.cpp.o: CXX_COMPILER__TorqueVision_ /home/saddy/Projects/TorqueVision2022/src/main.cpp || cmake_object_order_depends_target_TorqueVision
+build CMakeFiles/TorqueVision.dir/src/main.cpp.o: CXX_COMPILER__TorqueVision_ /home/saddy/Projects/TexasTorque2022Vision/jackalgo/src/main.cpp || cmake_object_order_depends_target_TorqueVision
   DEP_FILE = CMakeFiles/TorqueVision.dir/src/main.cpp.o.d
   INCLUDES = -isystem /usr/include/opencv4
   OBJECT_DIR = CMakeFiles/TorqueVision.dir
@@ -75,7 +75,7 @@ build TorqueVision: CXX_EXECUTABLE_LINKER__TorqueVision_ CMakeFiles/TorqueVision
 # Utility command for edit_cache
 
 build CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/saddy/Projects/TorqueVision2022 && /usr/bin/ccmake -S/home/saddy/Projects/TorqueVision2022 -B/home/saddy/Projects/TorqueVision2022
+  COMMAND = cd /home/saddy/Projects/TexasTorque2022Vision/jackalgo && /usr/bin/ccmake -S/home/saddy/Projects/TexasTorque2022Vision/jackalgo -B/home/saddy/Projects/TexasTorque2022Vision/jackalgo
   DESC = Running CMake cache editor...
   pool = console
   restat = 1
@@ -87,7 +87,7 @@ build edit_cache: phony CMakeFiles/edit_cache.util
 # Utility command for rebuild_cache
 
 build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/saddy/Projects/TorqueVision2022 && /usr/bin/cmake --regenerate-during-build -S/home/saddy/Projects/TorqueVision2022 -B/home/saddy/Projects/TorqueVision2022
+  COMMAND = cd /home/saddy/Projects/TexasTorque2022Vision/jackalgo && /usr/bin/cmake --regenerate-during-build -S/home/saddy/Projects/TexasTorque2022Vision/jackalgo -B/home/saddy/Projects/TexasTorque2022Vision/jackalgo
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -103,7 +103,7 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 # =============================================================================
 
 #############################################
-# Folder: /home/saddy/Projects/TorqueVision2022
+# Folder: /home/saddy/Projects/TexasTorque2022Vision/jackalgo
 
 build all: phony TorqueVision
 

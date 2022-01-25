@@ -8,11 +8,17 @@
 using namespace cv;
 using namespace std;
 
-void process(Mat* input, Mat* output) {
-    *input = ~*input; // invert color space to allow const
-    cvtColor(*input,*output, COLOR_BGR2HSV);
-    inRange(*output, Scalar(43, 18, 234), Scalar(110, 172, 255), *output);
+const bool red = false;
 
+void process(Mat* input, Mat* output) {
+    if(red) {
+        *input = ~*input; // invert color space to allow const
+        cvtColor(*input,*output, COLOR_BGR2HSV);
+        inRange(*output, Scalar(43, 18, 234), Scalar(110, 172, 255), *output);
+    } else {
+        cvtColor(*input, *output, COLOR_BGR2HSV);
+        inRange(*output, Scalar(90, 50, 70), Scalar(128, 255, 255), *output);
+    }
     medianBlur(*output, *output, 17);
     erode(*output, *output, Mat(), Point(-1, -1), 3);
     dilate(*output, *output, Mat(), Point(-1, -1), 5);

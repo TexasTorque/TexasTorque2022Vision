@@ -13,6 +13,7 @@ import org.texastorque.subsystems.*;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TorqueIterative {
 
@@ -22,36 +23,25 @@ public class Robot extends TorqueIterative {
 
     ArrayList<TorqueSubsystem> subsystems = new ArrayList<TorqueSubsystem>();
 
-
-    
-    //Example of how to pull a value from NT
-    public double PullFromNT() {
-        NetworkTableInstance nTInstance = NetworkTableInstance.getDefault();
-        NetworkTable nTTable = nTInstance.getTable("BallTable");
-        NetworkTableEntry nTEntry = nTTable.getEntry("ballentry");
-        return nTEntry.getDouble(9999);
-    }
-
-    //True = Red, False = Blue
-    public void setAlliance(boolean red) {
-        NetworkTableInstance nTInstance = NetworkTableInstance.getDefault();
-        NetworkTable redBlueTable = nTInstance.getTable("AllianceColor");
-        NetworkTableEntry redBlue = redBlueTable.getEntry("RedBlue");
-        if (red) redBlue.forceSetBoolean(true); else redBlue.forceSetBoolean(false);
-    }
-    
-
+    NetworkTable ballDetectionNetworkTable = NetworkTableInstance.getDefault().getTable("ball_detection");
 
     @Override
     public void robotInit() {
-
     }
 
     @Override
     public void alwaysContinuous() {
-        feedback.update();
-        feedback.smartDashboard();
+        //feedback.update();
+        //feedback.smartDashboard();
         subsystems.forEach(TorqueSubsystem::updateSmartDashboard);
+
+        ballDetectionNetworkTable.getEntry("alliance_color").setString("blue");
+        double pos = ballDetectionNetworkTable.getEntry("ball_horizontal_position").getDouble(0);
+        double fps = ballDetectionNetworkTable.getEntry("frames_per_second").getDouble(-1);
+
+        SmartDashboard.putNumber("POS", pos);
+        SmartDashboard.putNumber("FPS", fps);
+
         //System.out.println(PullFromNT());
     }
     
