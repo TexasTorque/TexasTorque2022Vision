@@ -4,6 +4,7 @@
 // Authors: Justus, Jacob, Omar, Jack
 //
 
+#include <algorithm>
 #include <chrono>
 #include <ctime>
 #include <iostream>
@@ -119,18 +120,24 @@ void checkForFrameEmpty(cv::Mat frame) {
 		throw std::runtime_error("Frame is empty");
 }
 
-// I think I have a better algo for this, I dont know...
+// cv::Vec3f fetchBiggestCircle(std::vector<cv::Vec3f> circles) {
+//     cv::Vec3f biggest;
+//     int bigrad = 0;
+//     for (size_t i = 0; i < circles.size(); i++) {
+//         if(circles[i][2] > bigrad) {
+//             bigrad = circles[i][2];
+//             biggest = circles[i];
+//         }
+//     }
+// 	return biggest;
+// }
+
 cv::Vec3f fetchBiggestCircle(std::vector<cv::Vec3f> circles) {
-    cv::Vec3f biggest;
-    int bigrad = 0;
-    for (size_t i = 0; i < circles.size(); i++) {
-        if(circles[i][2] > bigrad) {
-            bigrad = circles[i][2];
-            biggest = circles[i];
-        }
-    }
-	return biggest;
-}
+	return *std::max_element(circles.begin(), circles.end(),
+			[](const cv::Vec3f& a, const cv::Vec3f& b) { // this is a C++ lambda - >25% /g/ approved!
+		return a[2] < b[2];
+	});
+}	
 
 cv::Point processCenter(cv::Mat* input, cv::Mat* output, Bound bounds) {
     if (bounds.color == RED) *input = ~*input; // invert color space to allow const
