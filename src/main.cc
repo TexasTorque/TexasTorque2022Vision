@@ -9,9 +9,9 @@
 #include <iostream>
 #include <stdexcept>
 
-#include <networktables/NetworkTable.h>
-#include <networktables/NetworkTableInstance.h>
-#include <cameraserver/cameraserver.h>
+#include "networktables/NetworkTable.h"
+#include "networktables/NetworkTableInstance.h"
+#include "cameraserver/CameraServer.h"
 
 #include "opencv2/highgui.hpp"
 #include "opencv2/imgproc.hpp"
@@ -29,12 +29,10 @@ public:
     cv::Scalar upper, lower;
     Bound(Color color) : color(color) {
 		if (color == RED) {
-			//upper = cv::Scalar(170, 70, 50);
-			//lower = cv::Scalar(180, 255, 255);
 			upper = cv::Scalar(43, 18, 234);
 			lower = cv::Scalar(110, 172, 255);
 		} else if (color == BLUE) {
-    		upper = cv::Scalar(90, 50, 70);
+    		        upper = cv::Scalar(90, 50, 70);
 			lower = cv::Scalar(128, 255, 255);
 		} else
 			throw std::runtime_error("Unknown color");
@@ -136,8 +134,7 @@ cv::Vec3f fetchBiggestCircle(std::vector<cv::Vec3f> circles) {
 
 cv::Point processCenter(cv::Mat* input, cv::Mat* output, Bound bounds) {
     if (bounds.color == RED) *input = ~*input; // invert color space to allow const
-
-    cv::cvtColor(*input, *output, cv::COLOR_BGR2HSV);
+    cvtColor(*input, *output, cv::COLOR_BGR2HSV);
     inRange(*output, bounds.lower, bounds.upper, *output);
 
     medianBlur(*output, *output, 17);
@@ -176,14 +173,14 @@ int main(int argc, char** argv) {
     //cv::VideoCapture capture = initializeVideoCapture(0);
 
 	frc::CameraServer* cameraServer = frc::CameraServer::GetInstance();
-	cs::UsbCamera usbCamera = cameraServer->StartAutomaticCapture();
 	cs::CvSink cvSink = cameraServer->GetVideo("USB Camera 0");
-	cs::CvSource cvSource = cameraServer->PutVideo("USB Camera 0", 320, 240);
+	cs::CvSource cvSource = cameraServer->PutVideo("USB Cam", 320, 240);
 	
 	// Allocating buffers - plz allocate as many buffers as you can to save on meory allocation
     cv::Mat frame, output, ellipse;
 
-    nt::NetworkTableEntry ballEntry = programTablePointer->GetEntry("ball_horizontal_position");
+    nt::NetworkTableEntry ballEntryX = programTablePointer->GetEntry("x");
+    nt::NetworkTableEntry ballEntryR = programTablePointer->GetEntry("r");
     nt::NetworkTableEntry fpsEntry = programTablePointer->GetEntry("frames_per_second");
 	
 	StopWatch timer = StopWatch();
@@ -191,6 +188,7 @@ int main(int argc, char** argv) {
     // frames and incrementing frame counter
 
 	std::string color = programTablePointer->GetEntry("alliance_color").GetString("none");
+        printf("hello\n");
 
     //for (long count = 0; capture.read(frame); count++) {
 	//for (long count = 0; long _ = cvSink.GrabFrame(frame); count++) {
@@ -201,11 +199,10 @@ int main(int argc, char** argv) {
 		//checkForFrameEmpty(frame);
 		double fps = timer.calculateFPS(count);	
 
-		//cv::Point center = processCenter(&frame, &output, detectionBounds);
-		output = frame;
+		cv::Point center = processCenter(&frame, &output, detectionBounds);
 
 		fpsEntry.SetDouble(fps);
-
+                ballEntryX.SetDouble(center.x);
 		//if (count % 25 == 0) std::printf("FPS: %d : %f", fps, 0.);
 		//detectionBounds.lower[0]);
 
