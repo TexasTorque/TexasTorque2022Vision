@@ -1,3 +1,0 @@
-/home/saddy/Projects/TexasTorque2022Vision/jackalgo/CMakeFiles/TorqueVision.dir
-/home/saddy/Projects/TexasTorque2022Vision/jackalgo/CMakeFiles/edit_cache.dir
-/home/saddy/Projects/TexasTorque2022Vision/jackalgo/CMakeFiles/rebuild_cache.dir

@@ -80,6 +80,7 @@ Raspberry-Pi system libraries, not x86 or Apple ARM.
 
 To clean up the build generated `.o` files, run `make clean`.
 
+<!--
 ## Subprojects
 
 ### Scripts
@@ -97,6 +98,7 @@ to test the interface with the vision pipeline.
 
 `./tests` is a OpenCV C++ project for Unix. It is used
 to test logic before being implemented in the main pipe.
+-->
 
 ## Licensing
 

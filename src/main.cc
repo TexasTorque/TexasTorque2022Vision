@@ -26,6 +26,7 @@
 #include "opencv2/videoio.hpp"
 
 static const char* configFile = "/boot/frc.json";
+
 namespace {
 unsigned int team;
 bool server = false;
