@@ -17,8 +17,8 @@
 #include "wpi/json.h"
 #include "wpi/raw_istream.h"
 #include "wpi/raw_ostream.h"
-#include <vision/VisionPipeline.h>
-#include <vision/VisionRunner.h>
+#include "vision/VisionPipeline.h"
+#include "vision/VisionRunner.h"
 
 #include "opencv2/highgui.hpp"
 #include "opencv2/imgproc.hpp"
@@ -164,48 +164,57 @@ class Bound {
     }
 };
 
+Color readAlliancColor(nt::NetworkTableEntry* entry) {
+    std::string color = entry->GetString("none");
+    if (color == "none") throw std::runtime_error("Unknown color");
+    if (color == "red") return RED;
+    else if (color == "blue") return BLUE;
+    else throw std::runtime_error("Unknown color");
+    return RED; // never executed
+}
+
 class JacksPipeline : public frc::VisionPipeline {
   public:
-    nt::NetworkTableEntry* x;
-    nt::NetworkTableEntry* r;
+    nt::NetworkTableEntry* ballPosition;
+    nt::NetworkTableEntry* ballRadius;
     cs::CvSource cvSource =
-            frc::CameraServer::GetInstance()->PutVideo("BallD", 320, 240);
+            frc::CameraServer::GetInstance()->PutVideo("ball_detection_display", 320, 240);
     Bound bounds = Bound(RED);
+    cv::Mat frame;
 
-    JacksPipeline(nt::NetworkTableEntry* x, nt::NetworkTableEntry* r,
-                  std::string b) {
-        this->x = x;
-        this->r = r;
-        if (b == "RED") {
-            this->bounds = Bound(RED);
-        } else {
-            this->bounds = Bound(BLUE);
-        }
+    JacksPipeline(nt::NetworkTableEntry* x, nt::NetworkTableEntry* r, Color alliance) {
+        this->ballPosition = x;
+        this->ballRadius = r;
+        this->bounds = Bound(alliance);
     }
 
     void Process(cv::Mat& input) override {
+        frame = input;
+        // these dont need to be prefixed with cv:: ?
+
         if (bounds.color == RED)
-            input = ~input; // invert color space to allow const
+            frame = ~frame; // invert color space to allow const
+
         // convert to HSV color space
-        cvtColor(input, input, cv::COLOR_BGR2HSV);
+        cvtColor(frame, frame, cv::COLOR_BGR2HSV);
         // remove non-colored range
-        inRange(input, bounds.lower, bounds.upper, input);
+        inRange(frame, bounds.lower, bounds.upper, frame);
 
         // blur together features
-        medianBlur(input, input, 17);
+        medianBlur(frame, frame, 17);
 
         // erode extraneous data
-        erode(input, input, cv::Mat(), cv::Point(-1, -1), 3);
+        erode(frame, frame, cv::Mat(), cv::Point(-1, -1), 3);
 
         // dilate good data
-        dilate(input, input, cv::Mat(), cv::Point(-1, -1), 5);
+        dilate(frame, frame, cv::Mat(), cv::Point(-1, -1), 5);
 
         // Remove small details
-        morphologyEx(input, input, cv::MORPH_HITMISS, cv::Mat());
+        morphologyEx(frame, frame, cv::MORPH_HITMISS, cv::Mat());
 
         // get circles using hough-circles
         std::vector<cv::Vec3f> circles;
-        HoughCircles(input, circles, cv::HOUGH_GRADIENT, 1, 25, 30, 15, 50, 0);
+        HoughCircles(frame, circles, cv::HOUGH_GRADIENT, 1, 25, 30, 15, 50, 0);
 
         // if there is a circle
         if (circles.size() > 0) {
@@ -215,18 +224,32 @@ class JacksPipeline : public frc::VisionPipeline {
             cv::Point center = cv::Point(biggest[0], biggest[1]);
 
             // draw circle center
-            cv::circle(input, center, 1, cv::Scalar(0, 100, 100), 3,
+            cv::circle(frame, center, 1, cv::Scalar(0, 100, 100), 3,
                        cv::LINE_AA);
 
             // set x-value (px) and radius (px)
-            x->SetDouble(biggest[0]);
-            r->SetDouble(biggest[2]);
-        } else {
-            // if none are found, set default value (0)
-            x->SetDouble(0);
-            r->SetDouble(0);
-        }
+            ballPosition->SetDouble(biggest[0]);
+            ballRadius->SetDouble(biggest[2]);
 
+            for (auto&& circle : circles) {
+                cv::Point center = cv::Point(circle[0], circle[1]);
+                int radius = circle[2];
+                // draw circle
+                cv::circle(input, center, radius, cv::Scalar(255, 0, 255), 3,
+                           cv::LINE_AA); // draws the circles on the original frame
+            }
+
+        } else {
+            // if none are found, set default value (-1)
+            ballPosition->SetDouble(-1);
+            ballRadius->SetDouble(-1);
+        }   
+
+        // This is a request from the drivers. It helps when the
+        // Robot needs to do a complex operation when you can't
+        // see it, like climbing, or intaking on the other side
+        // of the hub. This shouldnt be too much of a performance
+        // issue, and if it is we can always remove it.
         cvSource.PutFrame(input);
     }
 
@@ -247,6 +270,7 @@ class JacksPipeline : public frc::VisionPipeline {
     }
 };
 } // namespace
+
 // NetworkTable Spec:
 
 // Table:       ball_detection
@@ -255,14 +279,18 @@ class JacksPipeline : public frc::VisionPipeline {
 //     Value:   "blue"
 //     Value:   "red"
 //     Default: "none"
-//   Entry:     x
+//   Entry:     position
 //     Type:    double
 //     Value:   0 <= x <= 640
-//     Default: 0.0
-//   Entry: 	r
+//     Default: -1
+//   Entry: 	radius
 //     Type:    double
 //     Value: 	0 <= 640
-//     Default: 0.0
+//     Default: -1
+
+// Default values are set to -1 if no ball is detected
+// so that having no ball is not considered having a 
+// ball on far left.
 
 int main(int argc, char* argv[]) {
     if (argc >= 2) configFile = argv[1];
@@ -280,11 +308,11 @@ int main(int argc, char* argv[]) {
         ntinst.StartDSClient();
     }
 
-    std::shared_ptr<nt::NetworkTable> table = ntinst.GetTable("ballr");
-    nt::NetworkTableEntry x = table->GetEntry("x");
-    nt::NetworkTableEntry r = table->GetEntry("r");
-    nt::NetworkTableEntry b = table->GetEntry("alliance_color");
-    std::string color = b.GetString("none");
+    std::shared_ptr<nt::NetworkTable> table = ntinst.GetTable("ball_detection");
+    nt::NetworkTableEntry ballPosition = table->GetEntry("position");
+    nt::NetworkTableEntry ballRadius = table->GetEntry("radius");
+    nt::NetworkTableEntry alliance = table->GetEntry("alliance_color");
+    Color color = readAlliancColor(&alliance);
 
     for (const auto& config : cameraConfigs)
         cameras.emplace_back(StartCamera(config));
@@ -292,7 +320,7 @@ int main(int argc, char* argv[]) {
     if (cameras.size() >= 1) {
         std::thread([&] {
             frc::VisionRunner<JacksPipeline> runner(
-                    cameras[0], new JacksPipeline(&x, &r, color),
+                    cameras[0], new JacksPipeline(&ballPosition, &ballRadius, color),
                     [&](JacksPipeline& pipeline) {});
             runner.RunForever();
         }).detach();
