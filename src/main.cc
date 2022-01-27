@@ -164,6 +164,7 @@ class Bound {
     }
 };
 
+// Could probably be replaced with 
 Color readAlliancColor(nt::NetworkTableEntry* entry) {
     std::string color = entry->GetString("none");
     if (color == "none") throw std::runtime_error("Unknown color");
@@ -241,8 +242,8 @@ class JacksPipeline : public frc::VisionPipeline {
 
         } else {
             // if none are found, set default value (-1)
-            ballPosition->SetDouble(-1);
-            ballRadius->SetDouble(-1);
+            ballPosition->SetDouble(0);
+            ballRadius->SetDouble(0);
         }   
 
         // This is a request from the drivers. It helps when the
@@ -282,15 +283,11 @@ class JacksPipeline : public frc::VisionPipeline {
 //   Entry:     position
 //     Type:    double
 //     Value:   0 <= x <= 640
-//     Default: -1
+//     Default: 0
 //   Entry: 	radius
 //     Type:    double
 //     Value: 	0 <= 640
-//     Default: -1
-
-// Default values are set to -1 if no ball is detected
-// so that having no ball is not considered having a 
-// ball on far left.
+//     Default: 0
 
 int main(int argc, char* argv[]) {
     if (argc >= 2) configFile = argv[1];
