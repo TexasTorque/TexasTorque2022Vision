@@ -169,15 +169,6 @@ namespace {
         }
     };
 
-// Could probably be replaced with 
-    Color readAlliancColor(nt::NetworkTableEntry *entry) {
-        std::string color = entry->GetString("none");
-        if (color == "none") throw std::runtime_error("Unknown color");
-        if (color == "red") return RED;
-        else if (color == "blue") return BLUE;
-        else throw std::runtime_error("Unknown color");
-        return RED; // never executed
-    }
 
     class JacksPipeline : public frc::VisionPipeline {
     public:
@@ -188,10 +179,14 @@ namespace {
         Bound bounds = Bound(RED);
         cv::Mat frame;
 
-        JacksPipeline(nt::NetworkTableEntry *x, nt::NetworkTableEntry *r, Color alliance) {
+        JacksPipeline(nt::NetworkTableEntry *x, nt::NetworkTableEntry *r, std::string alliance) {
             this->ballPosition = x;
             this->ballRadius = r;
-            this->bounds = Bound(alliance);
+            if (alliance == "RED") {
+                this->bounds = Bound(RED);
+            } else {
+                this->bounds = Bound(BLUE);
+            }
         }
 
         void Process(cv::Mat &input) override {
@@ -314,7 +309,7 @@ int main(int argc, char *argv[]) {
     nt::NetworkTableEntry ballPosition = table->GetEntry("position");
     nt::NetworkTableEntry ballRadius = table->GetEntry("radius");
     nt::NetworkTableEntry alliance = table->GetEntry("alliance_color");
-    Color color = readAlliancColor(&alliance);
+    std::string color = alliance.GetString("none");
 
     for (const auto &config: cameraConfigs)
         cameras.emplace_back(StartCamera(config));
