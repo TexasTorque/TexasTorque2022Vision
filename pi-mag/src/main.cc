@@ -187,7 +187,6 @@ namespace {
         }
 
         bool processBound(cv::Mat frame, Bound bound) {
-            int pixels = frame.rows * frame.cols;
 
             if (bounds.color == RED)
                 frame = ~frame; 
