@@ -141,9 +141,13 @@ namespace {
         wpi::outs() << "Starting camera '" << config.name << "' on " << config.path
                     << '\n';
         auto inst = frc::CameraServer::GetInstance();
+        wpi::outs() << "1\n";
         cs::UsbCamera camera{config.name, config.path};
+        wpi::outs() << "2\n";
         camera.SetConfigJson(config.config);
+        wpi::outs() << "3\n";
         camera.SetConnectionStrategy(cs::VideoSource::kConnectionKeepOpen);
+        wpi::outs() << "4\n";
 
         return camera;
     }
@@ -156,11 +160,11 @@ namespace {
     public:
         Color color;
         cv::Scalar upper, lower;
-
+// TODO:  tune more
         Bound(Color color) : color(color) {
             if (color == RED) {
-                lower = cv::Scalar(43, 18, 234);
-                upper = cv::Scalar(110, 172, 255);
+                lower = cv::Scalar(90, 50, 70);
+                upper = cv::Scalar(128, 255, 255);
             } else if (color == BLUE) {
                 lower = cv::Scalar(90, 50, 70);
                 upper = cv::Scalar(128, 255, 255);
@@ -169,34 +173,27 @@ namespace {
         }
     };
 
-
     class JustusPipeline : public frc::VisionPipeline {
     public:
         nt::NetworkTableEntry ballColor;
         cs::CvSource cvSource;
-        Bound bounds = Bound(RED);
-        cv::Mat frame;
 
         JustusPipeline(nt::NetworkTableInstance& ntinst) {  
 
             std::shared_ptr<nt::NetworkTable> table = ntinst.GetTable("ball_mag");
             cvSource = frc::CameraServer::GetInstance()->PutVideo("ball_mag_display", 320, 240);
             this->ballColor = table->GetEntry("color");
-            this->bounds = bounds;
 
         }
 
-        bool processBound(cv::Mat frame, Bound bound) {
+        bool processBound(cv::Mat frame, Color color) {
+            Bound bounds = Bound(color);
+            if (bounds.color == RED) frame = ~frame;
 
-            if (bounds.color == RED)
-                frame = ~frame; 
-
-            // convert to HSV color space
             cvtColor(frame, frame, cv::COLOR_BGR2HSV);
-            // remove non-colored range
+
             inRange(frame, bounds.lower, bounds.upper, frame);
 
-            
             // blur together features
             medianBlur(frame, frame, 17);
 
@@ -206,32 +203,44 @@ namespace {
             // dilate good data
             dilate(frame, frame, cv::Mat(), cv::Point(-1, -1), 5);
 
-            int pixels = frame.rows * frame.cols;
+            // Remove small details
+            morphologyEx(frame, frame, cv::MORPH_HITMISS, cv::Mat());
 
-            int white = 0;
-            for (int i = 0; i < frame.rows; i++) {
-                for (int j = 0; j < frame.cols; j++)
-                    if (frame.at<cv::Vec3b>(i, j).val[0] == 255)
-                        white++;
+            if (bounds.color == RED) cvSource.PutFrame(frame);
 
-                if (white > pixels / 2)
-                    return true;
+            int pixels = frame.cols * frame.rows;
+
+            int count = 0;
+            for(int i = 0; i < frame.cols; i++) {
+                for(int j = 0; j < frame.rows; j++) {
+                    if(frame.at<cv::Vec3b>(i, j)[0] == 255) {
+                        count++;
+                    }
+                    if(count > pixels / 4) return true;
+                }
             }
             return false;
-         
         }
 
-
         void Process(cv::Mat& input) override {
-            bool blue = processBound(input, Bound(BLUE));
-            bool red = processBound(input, Bound(RED));
+            checkForFrameEmpty(input);
 
-            if (red)
+            bool red = processBound(input.clone(), RED);
+            bool blue = processBound(input.clone(),  BLUE);
+
+            if (red) {
+                wpi::outs() << "RED\n";
                 ballColor.SetString("red");
-            else if (blue)
+            } else if (blue) {
+                wpi::outs() << "BLUE\n";
                 ballColor.SetString("blue");
-            else
+            } else {
+                wpi::outs() << "NONE\n";
                 ballColor.SetString("none");
+            }
+
+            //cvSource.PutFrame(input);
+
         }
 
         void checkForFrameEmpty(cv::Mat frame) {
