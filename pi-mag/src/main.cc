@@ -170,15 +170,14 @@ namespace {
     };
 
 
-    class JacksPipeline : public frc::VisionPipeline {
+    class JustusPipeline : public frc::VisionPipeline {
     public:
-        //table;
         nt::NetworkTableEntry ballColor;
         cs::CvSource cvSource;
         Bound bounds = Bound(RED);
         cv::Mat frame;
 
-        JacksPipeline(nt::NetworkTableInstance& ntinst) {  
+        JustusPipeline(nt::NetworkTableInstance& ntinst) {  
 
             std::shared_ptr<nt::NetworkTable> table = ntinst.GetTable("ball_mag");
             cvSource = frc::CameraServer::GetInstance()->PutVideo("ball_mag_display", 320, 240);
@@ -187,9 +186,11 @@ namespace {
 
         }
 
-        bool processBound(cv::Mat& frame, Bound bound) {
+        bool processBound(cv::Mat frame, Bound bound) {
+            int pixels = frame.rows * frame.cols;
+
             if (bounds.color == RED)
-                frame = ~frame; // invert color space to allow const
+                frame = ~frame; 
 
             // convert to HSV color space
             cvtColor(frame, frame, cv::COLOR_BGR2HSV);
@@ -197,40 +198,34 @@ namespace {
             inRange(frame, bounds.lower, bounds.upper, frame);
 
             
-            // // blur together features
+            // blur together features
             medianBlur(frame, frame, 17);
 
-            // // erode extraneous data
+            // erode extraneous data
             erode(frame, frame, cv::Mat(), cv::Point(-1, -1), 3);
 
-            // // dilate good data
+            // dilate good data
             dilate(frame, frame, cv::Mat(), cv::Point(-1, -1), 5);
 
-            wpi::outs() << frame.at<cv::Vec3b>(0, 0).val[0] << " " << frame.at<cv::Vec3b>(0, 0).val[1] << " " << frame.at<cv::Vec3b>(0, 0).val[2] << "\n\n\n";
+            int pixels = frame.rows * frame.cols;
 
-            /*
-            for(int i = 0; i < 320; i++) {
-                for(int j = 0; j < 240; j++) {
+            int white = 0;
+            for (int i = 0; i < frame.rows; i++) {
+                for (int j = 0; j < frame.cols; j++)
+                    if (frame.at<cv::Vec3b>(i, j).val[0] == 255)
+                        white++;
 
-                }
+                if (white > pixels / 2)
+                    return true;
             }
-            */
-
-            // // Remove small details
-            // morphologyEx(frame, frame, cv::MORPH_HITMISS, cv::Mat());
-
-            // // get circles using hough-circles
-            // std::vector <cv::Vec3f> circles;
-            // HoughCircles(frame, circles, cv::HOUGH_GRADIENT, 1, 25, 30, 15, 15, 0);
-            //return ;
+            return false;
+         
         }
 
 
         void Process(cv::Mat& input) override {
-            frame = input;
-            bool blue = processBound(frame, Bound(BLUE));
-            frame = ~frame;
-            bool red = processBound(frame, Bound(RED));
+            bool blue = processBound(input, Bound(BLUE));
+            bool red = processBound(input, Bound(RED));
 
             if (red)
                 ballColor.SetString("red");
@@ -243,20 +238,8 @@ namespace {
         void checkForFrameEmpty(cv::Mat frame) {
             if (frame.empty()) throw std::runtime_error("Frame is empty");
         }
-
-        cv::Vec3f fetchBiggestCircle(std::vector <cv::Vec3f> circles) {
-            cv::Vec3f biggest;
-            int bigrad = 0;
-            for (size_t i = 0; i < circles.size(); i++) {
-                if (circles[i][2] > bigrad) {
-                    bigrad = circles[i][2];
-                    biggest = circles[i];
-                }
-            }
-            return biggest;
-        }
     };
-} // namespace
+} 
 
 
 int main(int argc, char *argv[]) {
@@ -279,11 +262,11 @@ int main(int argc, char *argv[]) {
     // start image processing on camera 0 if present
     if (cameras.size() < 1) return -1;
 
-    JacksPipeline* pipe = new JacksPipeline(ntinst);
+    JustusPipeline* pipe = new JustusPipeline(ntinst);
     std::thread([&] {
-        frc::VisionRunner<JacksPipeline> runner(
+        frc::VisionRunner<JustusPipeline> runner(
                 cameras[0], pipe,
-                [&](JacksPipeline &pipeline) {});
+                [&](JustusPipeline &pipeline) {});
         runner.RunForever();
     }).detach();
 
