@@ -211,6 +211,7 @@ namespace {
             int pixels = frame.cols * frame.rows;
 
             int count = 0;
+            if(frame.empty()) return false;
             for(int i = 0; i < frame.cols; i++) {
                 for(int j = 0; j < frame.rows; j++) {
                     if(frame.at<cv::Vec3b>(i, j)[0] == 255) {
