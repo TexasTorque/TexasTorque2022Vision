@@ -9,6 +9,7 @@
 #include <ctime>
 #include <iostream>
 #include <stdexcept>
+#include <queue>
 
 #include "cameraserver/CameraServer.h"
 #include "networktables/NetworkTable.h"
@@ -141,13 +142,9 @@ namespace {
         wpi::outs() << "Starting camera '" << config.name << "' on " << config.path
                     << '\n';
         auto inst = frc::CameraServer::GetInstance();
-        wpi::outs() << "1\n";
         cs::UsbCamera camera{config.name, config.path};
-        wpi::outs() << "2\n";
         camera.SetConfigJson(config.config);
-        wpi::outs() << "3\n";
         camera.SetConnectionStrategy(cs::VideoSource::kConnectionKeepOpen);
-        wpi::outs() << "4\n";
 
         return camera;
     }
@@ -173,17 +170,55 @@ namespace {
         }
     };
 
+
+    class RollingMedian {
+    private:
+        int window;
+        std::deque<double> values; 
+
+    public:
+        RollingMedian(int window) {
+            this->window = window;
+        }
+
+        ~RollingMedian() {
+            values.clear();
+        }
+
+        double calculate(double value) {
+            if (values.size() >= window)
+                values.pop_front();
+            values.push_back(value);
+
+            std::vector<double> vec = {values.begin(), values.end()};
+            std::sort(vec.begin(), vec.end());
+            return (vec.size() % 2 == 0) 
+                    ? (vec[vec.size() / 2] + vec[vec.size() / 2 - 1]) / 2. 
+                    : vec[vec.size() / 2];
+            
+        }
+    };
+
     class JustusPipeline : public frc::VisionPipeline {
     public:
+        const double fullness = .4;
+
         nt::NetworkTableEntry ballColor;
+        nt::NetworkTableEntry pixelPerc;
+        nt::NetworkTableEntry pixelCount;
+        nt::NetworkTableEntry pixelPercRoll;
+        nt::NetworkTableEntry pixelCountRoll;
+
         cs::CvSource cvSource;
+
+        RollingMedian redRollingMedian = RollingMedian(20);
+        RollingMedian blueRollingMedian = RollingMedian(20);
 
         JustusPipeline(nt::NetworkTableInstance& ntinst) {  
 
             std::shared_ptr<nt::NetworkTable> table = ntinst.GetTable("ball_mag");
-            cvSource = frc::CameraServer::GetInstance()->PutVideo("ball_mag_display", 320, 240);
+            cvSource = frc::CameraServer::GetInstance()->PutVideo("ball_mag_display", 160, 120);
             this->ballColor = table->GetEntry("color");
-
         }
 
         bool processBound(cv::Mat frame, Color color) {
@@ -206,21 +241,25 @@ namespace {
             // Remove small details
             morphologyEx(frame, frame, cv::MORPH_HITMISS, cv::Mat());
 
-            if (bounds.color == RED) cvSource.PutFrame(frame);
+            // if (bounds.color == BLUE) cvSource.PutFrame(frame);
 
             int pixels = frame.cols * frame.rows;
 
             int count = 0;
-            if(frame.empty()) return false;
-            for(int i = 0; i < frame.cols; i++) {
-                for(int j = 0; j < frame.rows; j++) {
-                    if(frame.at<cv::Vec3b>(i, j)[0] == 255) {
+            for (int i = 0; i < frame.cols; i++) {
+                for (int j = 0; j < frame.rows; j++)
+                    if (frame.at<cv::Vec3b>(i, j)[0] == 255) 
                         count++;
-                    }
-                    if(count > pixels / 4) return true;
-                }
             }
-            return false;
+
+            double rollingResult;
+            if (bounds.color == RED)
+                rollingResult = redRollingMedian.calculate(count * 1.);
+            else if (bounds.color == BLUE)
+                rollingResult = blueRollingMedian.calculate(count * 1.);
+
+            double percentRoll = (rollingResult * 1.) / (pixels * 1.);
+            return percentRoll > fullness;
         }
 
         void Process(cv::Mat& input) override {
@@ -230,18 +269,16 @@ namespace {
             bool blue = processBound(input.clone(),  BLUE);
 
             if (red) {
-                wpi::outs() << "RED\n";
+                // wpi::outs() << "RED\n";
                 ballColor.SetString("red");
-            } else if (blue) {
-                wpi::outs() << "BLUE\n";
+            } else 
+            if (blue) {
+                // wpi::outs() << "BLUE\n";
                 ballColor.SetString("blue");
             } else {
-                wpi::outs() << "NONE\n";
+                // wpi::outs() << "NONE\n";
                 ballColor.SetString("none");
             }
-
-            //cvSource.PutFrame(input);
-
         }
 
         void checkForFrameEmpty(cv::Mat frame) {
