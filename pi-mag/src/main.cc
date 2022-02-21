@@ -142,11 +142,17 @@ namespace {
         wpi::outs() << "Starting camera '" << config.name << "' on " << config.path
                     << '\n';
         auto inst = frc::CameraServer::GetInstance();
+        wpi::outs() << "1\n";
         cs::UsbCamera camera{config.name, config.path};
+        wpi::outs() << "2\n";
         camera.SetConfigJson(config.config);
+        wpi::outs() << "3\n";
         camera.SetConnectionStrategy(cs::VideoSource::kConnectionKeepOpen);
+        wpi::outs() << "4\n";
 
         return camera;
+
+        
     }
 
     enum Color {
@@ -263,20 +269,21 @@ namespace {
         }
 
         void Process(cv::Mat& input) override {
+            wpi::outs() << "I HATE THIS ALSO!\n";
             checkForFrameEmpty(input);
 
             bool red = processBound(input.clone(), RED);
             bool blue = processBound(input.clone(),  BLUE);
 
             if (red) {
-                // wpi::outs() << "RED\n";
+                wpi::outs() << "RED\n";
                 ballColor.SetString("red");
             } else 
             if (blue) {
-                // wpi::outs() << "BLUE\n";
+                wpi::outs() << "BLUE\n";
                 ballColor.SetString("blue");
             } else {
-                // wpi::outs() << "NONE\n";
+                wpi::outs() << "NONE\n";
                 ballColor.SetString("none");
             }
         }
@@ -308,6 +315,8 @@ int main(int argc, char *argv[]) {
     // start image processing on camera 0 if present
     if (cameras.size() < 1) return -1;
 
+    wpi::outs() << "I HATE THIS!\n";
+
     JustusPipeline* pipe = new JustusPipeline(ntinst);
     std::thread([&] {
         frc::VisionRunner<JustusPipeline> runner(
@@ -315,6 +324,7 @@ int main(int argc, char *argv[]) {
                 [&](JustusPipeline &pipeline) {});
         runner.RunForever();
     }).detach();
+
 
     for (;;) std::this_thread::sleep_for(std::chrono::seconds(10));
 }
