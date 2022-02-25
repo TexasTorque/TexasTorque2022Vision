@@ -63,7 +63,7 @@ run forever and waste your time.
 
 Run `make` to run the Makefile. The Makefile builds
 all `.c`, `.cc`, (perfered C++ extension) and `.cpp`
-files in `./src`. 
+files in `./src`.
 
 ### Windows
 
@@ -79,26 +79,6 @@ locally*, it is build for the ARM instruction set with
 Raspberry-Pi system libraries, not x86 or Apple ARM.
 
 To clean up the build generated `.o` files, run `make clean`.
-
-<!--
-## Subprojects
-
-### Scripts
-
-`./scripts` is a directory that containts Python scripts
-used to test the functionality that will later be implemented
-into the C++ pipeline.
-
-### Project
-
-`./project` is a cross-robot WPILib project that is used
-to test the interface with the vision pipeline.
-
-### Tests
-
-`./tests` is a OpenCV C++ project for Unix. It is used
-to test logic before being implemented in the main pipe.
--->
 
 ## Licensing
 
