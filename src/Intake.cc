@@ -7,12 +7,10 @@
 #include "Intake.hh"
 
 namespace texastorque {
-    IntakePipe::IntakePipe(int index, nt::NetworkTableInstance& ntinst, Color color) {  
-            wpi::outs() << "Pipe: " << index << "\n";
-
-        std::shared_ptr<nt::NetworkTable> table = ntinst.GetTable("ball_detection_" + std::to_string(index));
+    IntakePipe::IntakePipe(std::string name, nt::NetworkTableInstance& ntinst, Color color) {  
+        std::shared_ptr<nt::NetworkTable> table = ntinst.GetTable("ball_detection_" + name);
         cvSource = frc::CameraServer::GetInstance()->PutVideo(
-                "ball_detection_display_" + std::to_string(index),
+                "ball_detection_display_" + name,
                 320, 240);
         this->ballPosition = table->GetEntry("position");
         this->ballRadius = table->GetEntry("radius");

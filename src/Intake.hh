@@ -40,7 +40,7 @@ namespace texastorque {
         IntakeBound bounds = IntakeBound(RED);
         cv::Mat frame;
 
-        IntakePipe(int index, nt::NetworkTableInstance& ntinst, Color color);
+        IntakePipe(std::string name, nt::NetworkTableInstance& ntinst, Color color);
 
         void Process(cv::Mat& input) override;
 

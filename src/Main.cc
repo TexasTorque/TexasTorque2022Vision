@@ -67,7 +67,7 @@ int main(int argc, char *argv[]) {
     nt::NetworkTableEntry alliance = table->GetEntry("IsRedAlliance");
     Color color = alliance.GetBoolean(false) ? RED : BLUE;
 
-    IntakePipe* pipe1 = new IntakePipe(0, ntinst, color);
+    IntakePipe* pipe1 = new IntakePipe("left", ntinst, color);
     std::thread([&] {
         frc::VisionRunner<IntakePipe> runner(
                 cameras[1], pipe1,
@@ -75,7 +75,7 @@ int main(int argc, char *argv[]) {
         runner.RunForever();
     }).detach();
 
-     IntakePipe* pipe2 = new IntakePipe(1, ntinst, color);
+     IntakePipe* pipe2 = new IntakePipe("right", ntinst, color);
      std::thread([&] {
         frc::VisionRunner<IntakePipe> runner(
                 cameras[2], pipe2,
