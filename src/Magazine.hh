@@ -34,7 +34,7 @@
 #include "RollingMedian.hh"
 
 namespace texastorque {
-
+    
     class MagazinePipe : public frc::VisionPipeline {
     public:
         const double fullness = .4;
@@ -53,7 +53,6 @@ namespace texastorque {
         MagazinePipe(nt::NetworkTableInstance& ntinst);
 
         bool processBound(cv::Mat frame, Color color);
-
 
         void Process(cv::Mat& input) override;
 

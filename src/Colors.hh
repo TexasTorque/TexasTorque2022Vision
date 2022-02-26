@@ -57,9 +57,9 @@ namespace texastorque {
         cv::Scalar upper, lower;
 
         IntakeBound(Color color) : color(color) {
-            if (color == RED) {
-                lower = cv::Scalar(43, 18, 234);
-                upper = cv::Scalar(110, 172, 255);
+           if (color == RED) {
+                lower = cv::Scalar(90, 50, 70);
+                upper = cv::Scalar(128, 255, 255);
             } else if (color == BLUE) {
                 lower = cv::Scalar(90, 50, 70);
                 upper = cv::Scalar(128, 255, 255);

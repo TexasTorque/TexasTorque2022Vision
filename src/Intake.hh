@@ -34,19 +34,24 @@
 namespace texastorque {
     class IntakePipe : public frc::VisionPipeline {
     public:
+        nt::NetworkTableEntry alliance;
         nt::NetworkTableEntry ballPosition;
         nt::NetworkTableEntry ballRadius;
         cs::CvSource cvSource;
         IntakeBound bounds = IntakeBound(RED);
         cv::Mat frame;
+        time_t lastTime;
 
-        IntakePipe(std::string name, nt::NetworkTableInstance& ntinst, Color color);
+        IntakePipe(std::string name, nt::NetworkTableInstance& ntinst);
+    
+        Color fetchColorFromFMS();
 
         void Process(cv::Mat& input) override;
 
         void checkForFrameEmpty(cv::Mat frame);
 
         cv::Vec3f fetchBiggestCircle(std::vector <cv::Vec3f> circles);
+        
     };
 }
 

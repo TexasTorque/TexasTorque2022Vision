@@ -8,6 +8,7 @@
 
 namespace texastorque {
 
+
     MagazinePipe::MagazinePipe(nt::NetworkTableInstance& ntinst) {  
         std::shared_ptr<nt::NetworkTable> table = ntinst.GetTable("ball_mag");
         cvSource = frc::CameraServer::GetInstance()->PutVideo("ball_mag_display", 160, 120);
@@ -54,24 +55,25 @@ namespace texastorque {
 
         double percentRoll = (rollingResult * 1.) / (pixels * 1.);
         return percentRoll > fullness;
+    
+        if (bounds.color == RED) cvSource.PutFrame(frame);
     }
 
     void MagazinePipe::Process(cv::Mat& input) {
-        wpi::outs() << "I HATE THIS ALSO!\n";
         checkForFrameEmpty(input);
 
         bool red = processBound(input.clone(), RED);
         bool blue = processBound(input.clone(),  BLUE);
 
         if (red) {
-            wpi::outs() << "RED\n";
+            // wpi::outs() << "RED\n";
             ballColor.SetString("red");
         } else 
         if (blue) {
-            wpi::outs() << "BLUE\n";
+            // wpi::outs() << "BLUE\n";
             ballColor.SetString("blue");
         } else {
-            wpi::outs() << "NONE\n";
+            // wpi::outs() << "NONE\n";
             ballColor.SetString("none");
         }
     }

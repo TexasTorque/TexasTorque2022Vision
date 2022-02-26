@@ -7,21 +7,38 @@
 #include "Intake.hh"
 
 namespace texastorque {
-    IntakePipe::IntakePipe(std::string name, nt::NetworkTableInstance& ntinst, Color color) {  
+    time_t timeNow() {
+        return std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    }   
+
+    IntakePipe::IntakePipe(std::string name, nt::NetworkTableInstance& ntinst) {  
+        std::shared_ptr<nt::NetworkTable> fmstable = ntinst.GetTable("FMSInfo");
+        alliance = fmstable->GetEntry("IsRedAlliance");
         std::shared_ptr<nt::NetworkTable> table = ntinst.GetTable("ball_detection_" + name);
         cvSource = frc::CameraServer::GetInstance()->PutVideo(
                 "ball_detection_display_" + name,
                 320, 240);
         this->ballPosition = table->GetEntry("position");
         this->ballRadius = table->GetEntry("radius");
-        this->bounds = IntakeBound(color);
+        lastTime = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+        this->bounds = IntakeBound(fetchColorFromFMS());
+    }
+
+    Color IntakePipe::fetchColorFromFMS() {
+        return alliance.GetBoolean(false) ? RED : BLUE;
     }
 
     void IntakePipe::Process(cv::Mat& input) {
+        time_t time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+        if (time - lastTime > 1) {
+            lastTime = time;
+            bounds = IntakeBound(fetchColorFromFMS());
+        }
+
         frame = input;
         // these dont need to be prefixed with cv:: ?
 
-        if (bounds.color == RED)
+        if (bounds.color == RED) 
             frame = ~frame; // invert color space to allow const
 
         // convert to HSV color space

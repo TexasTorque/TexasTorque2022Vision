@@ -53,8 +53,6 @@ int main(int argc, char *argv[]) {
     // start image processing on camera 0 if present
     if (cameras.size() < 1) return -1;
 
-    wpi::outs() << "I HATE THIS!\n";
-
     MagazinePipe* pipe = new MagazinePipe(ntinst);
     std::thread([&] {
         frc::VisionRunner<MagazinePipe> runner(
@@ -63,11 +61,8 @@ int main(int argc, char *argv[]) {
         runner.RunForever();
     }).detach();
 
-    std::shared_ptr<nt::NetworkTable> table = ntinst.GetTable("FMSInfo");
-    nt::NetworkTableEntry alliance = table->GetEntry("IsRedAlliance");
-    Color color = alliance.GetBoolean(false) ? RED : BLUE;
 
-    IntakePipe* pipe1 = new IntakePipe("left", ntinst, color);
+    IntakePipe* pipe1 = new IntakePipe("left", ntinst);
     std::thread([&] {
         frc::VisionRunner<IntakePipe> runner(
                 cameras[1], pipe1,
@@ -75,7 +70,7 @@ int main(int argc, char *argv[]) {
         runner.RunForever();
     }).detach();
 
-     IntakePipe* pipe2 = new IntakePipe("right", ntinst, color);
+     IntakePipe* pipe2 = new IntakePipe("right", ntinst);
      std::thread([&] {
         frc::VisionRunner<IntakePipe> runner(
                 cameras[2], pipe2,
