@@ -56,7 +56,7 @@ namespace texastorque {
         double percentRoll = (rollingResult * 1.) / (pixels * 1.);
         return percentRoll > fullness;
     
-        if (bounds.color == RED) cvSource.PutFrame(frame);
+        if (bounds.color == RED)cvSource.PutFrame(frame);
     }
 
     void MagazinePipe::Process(cv::Mat& input) {
