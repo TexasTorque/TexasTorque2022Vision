@@ -16,8 +16,7 @@ namespace texastorque {
         alliance = fmstable->GetEntry("IsRedAlliance");
         std::shared_ptr<nt::NetworkTable> table = ntinst.GetTable("ball_detection_" + name);
         cvSource = frc::CameraServer::GetInstance()->PutVideo(
-                "ball_detection_display_" + name,
-                320, 240);
+                "ball_detection_display_" + name, 320, 240);
         this->ballPosition = table->GetEntry("position");
         this->ballRadius = table->GetEntry("radius");
         lastTime = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
@@ -35,7 +34,7 @@ namespace texastorque {
             bounds = IntakeBound(fetchColorFromFMS());
         }
 
-        frame = input;
+        frame = input.clone();
         // these dont need to be prefixed with cv:: ?
 
         if (bounds.color == RED) 
@@ -61,6 +60,8 @@ namespace texastorque {
         // get circles using hough-circles
         std::vector <cv::Vec3f> circles;
         HoughCircles(frame, circles, cv::HOUGH_GRADIENT, 1, 25, 30, 15, 15, 0);
+
+        if (bounds.color == RED) cvSource.PutFrame(frame);
 
         // if there is a circle
         if (circles.size() > 0) {
@@ -96,7 +97,10 @@ namespace texastorque {
         // see it, like climbing, or intaking on the other side
         // of the hub. This shouldnt be too much of a performance
         // issue, and if it is we can always remove it.
-        cvSource.PutFrame(input);
+        // cvSource.PutFrame(input);
+
+     
+
     }
 
     void IntakePipe::checkForFrameEmpty(cv::Mat frame) {

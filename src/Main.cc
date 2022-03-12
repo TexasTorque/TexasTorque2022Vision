@@ -31,6 +31,10 @@
 #include "Magazine.hh"
 #include "Setup.hh"
 
+cs::VideoSource* getCameraByName(std::vector<cs::VideoSource> cameras, const std::string& name) {
+    for (auto& camera : cameras) if (camera.GetName() == name) return &camera;
+    return nullptr;
+}
 
 int main(int argc, char *argv[]) {
     using namespace texastorque;
@@ -53,31 +57,32 @@ int main(int argc, char *argv[]) {
     // start image processing on camera 0 if present
     if (cameras.size() < 1) return -1;
 
-    MagazinePipe* pipe = new MagazinePipe(ntinst);
-    std::thread([&] {
-        frc::VisionRunner<MagazinePipe> runner(
-                cameras[0], pipe,
-                [&](MagazinePipe &pipeline) {});
-        runner.RunForever();
-    }).detach();
+            // MagazinePipe* pipe = new MagazinePipe(ntinst);
+            // std::thread([&] {
+            //     frc::VisionRunner<MagazinePipe> runner(
+            //             cameras[0], pipe,
+            //             [&](MagazinePipe &pipeline) {});
+            //     runner.RunForever();
+            // }).detach();
+            wpi::outs() << "\n\nIntake Magazine \n\n";
 
+            IntakePipe* pipe1 = new IntakePipe("left", ntinst);
+            std::thread([&] {
+                frc::VisionRunner<IntakePipe> runner(
+                        *getCameraByName(cameras, "Intake Left"), pipe1,
+                        [&](IntakePipe &pipeline) {});
+                runner.RunForever();
+            }).detach();
+            wpi::outs() << "\n\nIntake Left \n\n";
 
-    IntakePipe* pipe1 = new IntakePipe("left", ntinst);
-    std::thread([&] {
-        frc::VisionRunner<IntakePipe> runner(
-                cameras[1], pipe1,
-                [&](IntakePipe &pipeline) {});
-        runner.RunForever();
-    }).detach();
-
-     IntakePipe* pipe2 = new IntakePipe("right", ntinst);
-     std::thread([&] {
-        frc::VisionRunner<IntakePipe> runner(
-                cameras[2], pipe2,
-                [&](IntakePipe &pipeline) {});
-        runner.RunForever();
-    }).detach();
-
+            IntakePipe* pipe2 = new IntakePipe("right", ntinst);
+            std::thread([&] {
+                frc::VisionRunner<IntakePipe> runner(
+                        *getCameraByName(cameras, "Intake Right"), pipe2,
+                        [&](IntakePipe &pipeline) {});
+                runner.RunForever();
+            }).detach();
+            wpi::outs() << "\n\nIntake Right \n\n";
 
     for (;;) std::this_thread::sleep_for(std::chrono::seconds(10));
 }
