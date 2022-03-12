@@ -42,6 +42,16 @@ namespace texastorque {
         cv::Mat frame;
         time_t lastTime;
 
+        nt::NetworkTableEntry lowerH;
+        nt::NetworkTableEntry lowerS;
+        nt::NetworkTableEntry lowerV;
+
+        nt::NetworkTableEntry upperH;
+        nt::NetworkTableEntry upperS;
+        nt::NetworkTableEntry upperV;
+
+        cv::Scalar upper, lower;
+
         IntakePipe(std::string name, nt::NetworkTableInstance& ntinst);
     
         Color fetchColorFromFMS();

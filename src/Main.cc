@@ -57,13 +57,13 @@ int main(int argc, char *argv[]) {
     // start image processing on camera 0 if present
     if (cameras.size() < 1) return -1;
 
-            // MagazinePipe* pipe = new MagazinePipe(ntinst);
-            // std::thread([&] {
-            //     frc::VisionRunner<MagazinePipe> runner(
-            //             cameras[0], pipe,
-            //             [&](MagazinePipe &pipeline) {});
-            //     runner.RunForever();
-            // }).detach();
+            MagazinePipe* pipe = new MagazinePipe(ntinst);
+            std::thread([&] {
+                frc::VisionRunner<MagazinePipe> runner(
+                        cameras[0], pipe,
+                        [&](MagazinePipe &pipeline) {});
+                runner.RunForever();
+            }).detach();
             wpi::outs() << "\n\nIntake Magazine \n\n";
 
             IntakePipe* pipe1 = new IntakePipe("left", ntinst);
