@@ -15,14 +15,13 @@ namespace texastorque {
         this->ballColor = table->GetEntry("color");
     }
 
-    bool MagazinePipe::processBound(cv::Mat frame, Color color) {
-        MagazineBound bounds = MagazineBound(color);
+    bool MagazinePipe::processBound(cv::Mat frame, bool isRed) {
 
-        if (bounds.color == RED) frame = ~frame;
+        if (isRed) frame = ~frame; // invert color space to allow const
 
         cvtColor(frame, frame, cv::COLOR_BGR2HSV);
 
-        inRange(frame, bounds.lower, bounds.upper, frame);
+        inRange(frame, isRed ? lowerRed : lowerBlue, isRed ? upperRed : upperBlue, frame);
 
         // blur together features
         medianBlur(frame, frame, 17);
@@ -47,23 +46,21 @@ namespace texastorque {
                     count++;
         }
 
-        double rollingResult;
-        if (bounds.color == RED)
-            rollingResult = redRollingMedian.calculate(count * 1.);
-        else if (bounds.color == BLUE)
-            rollingResult = blueRollingMedian.calculate(count * 1.);
+        double rollingResult = isRed
+                ? redRollingMedian.calculate(count * 1.) 
+                : blueRollingMedian.calculate(count * 1.);
 
         double percentRoll = (rollingResult * 1.) / (pixels * 1.);
         return percentRoll > fullness;
     
-        if (bounds.color == RED)cvSource.PutFrame(frame);
+        if (isRed) cvSource.PutFrame(frame);
     }
 
     void MagazinePipe::Process(cv::Mat& input) {
         checkForFrameEmpty(input);
 
-        bool red = processBound(input.clone(), RED);
-        bool blue = processBound(input.clone(),  BLUE);
+        bool red = processBound(input.clone(), true);
+        bool blue = processBound(input.clone(),  false);
 
         if (red) {
             // wpi::outs() << "RED\n";

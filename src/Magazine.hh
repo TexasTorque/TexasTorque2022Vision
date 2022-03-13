@@ -30,13 +30,19 @@
 #include "opencv2/objdetect.hpp"
 #include "opencv2/videoio.hpp"
 
-#include "Colors.hh"
 #include "RollingMedian.hh"
 
 namespace texastorque {
     
     class MagazinePipe : public frc::VisionPipeline {
     public:
+
+        const cv::Scalar lowerBlue = cv::Scalar(90, 50, 70);
+        const cv::Scalar upperBlue = cv::Scalar(128, 255, 255);
+
+        const cv::Scalar lowerRed = cv::Scalar(90, 50, 70);
+        const cv::Scalar upperRed = cv::Scalar(128, 255, 255);
+
         const double fullness = .4;
 
         nt::NetworkTableEntry ballColor;
@@ -52,7 +58,7 @@ namespace texastorque {
 
         MagazinePipe(nt::NetworkTableInstance& ntinst);
 
-        bool processBound(cv::Mat frame, Color color);
+        bool processBound(cv::Mat frame, bool isRed);
 
         void Process(cv::Mat& input) override;
 

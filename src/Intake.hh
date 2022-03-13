@@ -29,18 +29,22 @@
 #include "opencv2/objdetect.hpp"
 #include "opencv2/videoio.hpp"
 
-#include "Colors.hh"
-
 namespace texastorque {
     class IntakePipe : public frc::VisionPipeline {
     public:
+
+        const cv::Scalar lowerRed = cv::Scalar(0, 120, 60);
+        const cv::Scalar upperRed = cv::Scalar(20, 255, 255);
+        const cv::Scalar lowerBlue = cv::Scalar(90, 50, 50);
+        const cv::Scalar upperBlue = cv::Scalar(128, 255, 255);
+
         nt::NetworkTableEntry alliance;
         nt::NetworkTableEntry ballPosition;
         nt::NetworkTableEntry ballRadius;
         cs::CvSource cvSource;
-        IntakeBound bounds = IntakeBound(RED);
         cv::Mat frame;
         time_t lastTime;
+        bool isRed;
 
         nt::NetworkTableEntry lowerH;
         nt::NetworkTableEntry lowerS;
@@ -54,8 +58,6 @@ namespace texastorque {
 
         IntakePipe(std::string name, nt::NetworkTableInstance& ntinst);
     
-        Color fetchColorFromFMS();
-
         void Process(cv::Mat& input) override;
 
         void checkForFrameEmpty(cv::Mat frame);
