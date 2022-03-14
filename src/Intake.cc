@@ -28,7 +28,7 @@ namespace texastorque {
         lowerS.SetDouble(0);
         this->lowerV = colortable->GetEntry("Low V"); 
         lowerV.SetDouble(0);
-
+ 
         this->upperH = colortable->GetEntry("Up H"); 
         upperH.SetDouble(0);
         this->upperS = colortable->GetEntry("Up S"); 
@@ -48,17 +48,19 @@ namespace texastorque {
 
         // these dont need to be prefixed with cv:: ?
 
-        frame = input.clone();
+        frame = input.clone(); 
         
         // convert to HSV color space
-        cvtColor(frame, frame, cv::COLOR_BGR2HSV);
+        cvtColor(frame, frame, cv::COLOR_BGR2HSV); 
         // input = frame.clone(); // TMP
   
         // lower = cv::Scalar(lowerH.GetDouble(50), lowerS.GetDouble(50), lowerV.GetDouble(50)), 
-        // upper = cv::Scalar(upperH.GetDouble(100), upperS.GetDouble(100), upperV.GetDouble(100)),
+        // upper = cv::Scalar(upperH.GetDouble(100), upperS.GetDouble(100), upperV.GetDouble(100)), 
 
         // inRange(frame, lower, upper, frame); 
-        inRange(frame, isRed ? lowerRed : lowerBlue, isRed ? upperRed : upperBlue, frame);
+        inRange(frame, isRed ? lowerRed : lowerBlue, isRed ? upperRed : upperBlue, frame); 
+
+        // wpi::outs() << (isRed ? "RED" : "BLUE");
 
         // blur together features
         medianBlur(frame, frame, 17);
@@ -94,10 +96,10 @@ namespace texastorque {
  
             // draw circle center
             cv::circle(frame, center, 1, cv::Scalar(0, 100, 100), 3,
-                        cv::LINE_AA);
+                        cv::LINE_AA); 
 
             // set x-value (px) and radius (px)
-            ballPosition.SetDouble(biggest[0]);
+            ballPosition.SetDouble(biggest[0]); 
             ballRadius.SetDouble(biggest[2]);
 
             for (auto &&circle: circles) {
@@ -119,7 +121,7 @@ namespace texastorque {
         // see it, like climbing, or intaking on the other side
         // of the hub. This shouldnt be too much of a performance
         // issue, and if it is we can always remove it.
-        cvSource.PutFrame(input);
+        cvSource.PutFrame(input); 
     }
 
     void IntakePipe::checkForFrameEmpty(cv::Mat frame) {

@@ -33,13 +33,13 @@ namespace texastorque {
     class IntakePipe : public frc::VisionPipeline {
     public:
 
-        const cv::Scalar lowerRed = cv::Scalar(0, 120, 60);
-        const cv::Scalar upperRed = cv::Scalar(20, 255, 255);
+        const cv::Scalar lowerRed = cv::Scalar(0, 60, 60);
+        const cv::Scalar upperRed = cv::Scalar(40, 255, 255);
         const cv::Scalar lowerBlue = cv::Scalar(90, 50, 50);
         const cv::Scalar upperBlue = cv::Scalar(128, 255, 255);
 
         nt::NetworkTableEntry alliance;
-        nt::NetworkTableEntry ballPosition;
+        nt::NetworkTableEntry ballPosition; 
         nt::NetworkTableEntry ballRadius;
         cs::CvSource cvSource;
         cv::Mat frame;
