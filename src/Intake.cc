@@ -74,23 +74,15 @@ namespace texastorque {
             // get the largest one and send
             cv::Vec3f biggest = fetchBiggestCircle(circles); 
 
-            cv::Point center = cv::Point(biggest[0], biggest[2]);
- 
-            // draw circle center
-            cv::circle(frame, center, 1, cv::Scalar(0, 100, 100), 3,
-                        cv::LINE_AA); 
+            double x = rmX.calculate(biggest[0]);
+			double y = rmY.calculate(biggest[1]);
+			double r = rmR.calculate(biggest[2]);
 
             // set x-value (px) and radius (px)
-            ballPosition.SetDouble(biggest[0]); 
-            ballRadius.SetDouble(biggest[2]);
+            ballPosition.SetDouble(x); 
+            ballRadius.SetDouble(r);
 
-            for (auto &&circle: circles) {
-                cv::Point center = cv::Point(circle[0], circle[1]);
-                int radius = circle[2];
-                // draw circle
-                cv::circle(input, center, radius, cv::Scalar(255, 0, 255), 3,
-                            cv::LINE_AA); // draws the circles on the original frame
-            }
+            cv::circle(input, cv::Point(x, y), r, cv::Scalar(255, 0, 255), 3, cv::LINE_AA); // draws the circles on the original frame
 
         } else {
             // if none are found, set default value (-1)

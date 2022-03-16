@@ -29,6 +29,8 @@
 #include "opencv2/objdetect.hpp"
 #include "opencv2/videoio.hpp"
 
+#include "RollingMedian.hh"
+
 namespace texastorque {
     class IntakePipe : public frc::VisionPipeline {
     public:
@@ -53,7 +55,12 @@ namespace texastorque {
         void checkForFrameEmpty(cv::Mat frame);
 
         cv::Vec3f fetchBiggestCircle(std::vector <cv::Vec3f> circles);
-        
+
+        const int window = 3;
+
+        RollingMedian rmX = RollingMedian(window);
+	    RollingMedian rmY = RollingMedian(window);
+	    RollingMedian rmR = RollingMedian(window);
     };
 }
 
