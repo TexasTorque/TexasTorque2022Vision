@@ -33,8 +33,8 @@ namespace texastorque {
     class IntakePipe : public frc::VisionPipeline {
     public:
 
-        const cv::Scalar lowerRed = cv::Scalar(0, 60, 60);
-        const cv::Scalar upperRed = cv::Scalar(40, 255, 255);
+        const cv::Scalar lowerRed = cv::Scalar(75, 65, 150);
+        const cv::Scalar upperRed = cv::Scalar(100, 140, 255);
         const cv::Scalar lowerBlue = cv::Scalar(90, 50, 50);
         const cv::Scalar upperBlue = cv::Scalar(128, 255, 255);
 
@@ -45,16 +45,6 @@ namespace texastorque {
         cv::Mat frame;
         time_t lastTime;
         bool isRed;
-
-        nt::NetworkTableEntry lowerH;
-        nt::NetworkTableEntry lowerS;
-        nt::NetworkTableEntry lowerV;
-
-        nt::NetworkTableEntry upperH;
-        nt::NetworkTableEntry upperS;
-        nt::NetworkTableEntry upperV;
-
-        cv::Scalar upper, lower;
 
         IntakePipe(std::string name, nt::NetworkTableInstance& ntinst);
     

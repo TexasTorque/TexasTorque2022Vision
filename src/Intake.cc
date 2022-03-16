@@ -20,22 +20,6 @@ namespace texastorque {
         this->ballPosition = table->GetEntry("position");
         this->ballRadius = table->GetEntry("radius");
         lastTime = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-
-        std::shared_ptr<nt::NetworkTable> colortable = ntinst.GetTable("color_slider_" + name);
-        this->lowerH = colortable->GetEntry("Low H"); 
-        lowerH.SetDouble(0);
-        this->lowerS = colortable->GetEntry("Low S"); 
-        lowerS.SetDouble(0);
-        this->lowerV = colortable->GetEntry("Low V"); 
-        lowerV.SetDouble(0);
- 
-        this->upperH = colortable->GetEntry("Up H"); 
-        upperH.SetDouble(0);
-        this->upperS = colortable->GetEntry("Up S"); 
-        upperS.SetDouble(0);
-        this->upperV = colortable->GetEntry("Up V"); 
-        upperV.SetDouble(0);
-
         this->isRed = alliance.GetBoolean(false);
     }
 
@@ -49,15 +33,13 @@ namespace texastorque {
         // these dont need to be prefixed with cv:: ?
 
         frame = input.clone(); 
+
+        if (isRed) frame = ~frame;
         
         // convert to HSV color space
         cvtColor(frame, frame, cv::COLOR_BGR2HSV); 
         // input = frame.clone(); // TMP
   
-        // lower = cv::Scalar(lowerH.GetDouble(50), lowerS.GetDouble(50), lowerV.GetDouble(50)), 
-        // upper = cv::Scalar(upperH.GetDouble(100), upperS.GetDouble(100), upperV.GetDouble(100)), 
-
-        // inRange(frame, lower, upper, frame); 
         inRange(frame, isRed ? lowerRed : lowerBlue, isRed ? upperRed : upperBlue, frame); 
 
         // wpi::outs() << (isRed ? "RED" : "BLUE");
