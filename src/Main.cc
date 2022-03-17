@@ -83,5 +83,7 @@ int main(int argc, char *argv[]) {
     }).detach();
     wpi::outs() << "\n\nIntake Right \n\n";
 
+    wpi::outs() << ("What the fuck\n\n");
+
     for (;;) std::this_thread::sleep_for(std::chrono::seconds(10));
 }

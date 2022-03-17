@@ -6,7 +6,7 @@
 
 #include "Intake.hh"
 
-namespace texastorque {
+namespace texastorque { 
     time_t timeNow() {
         return std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     }   
@@ -93,9 +93,9 @@ namespace texastorque {
         // This is a request from the drivers. It helps when the
         // Robot needs to do a complex operation when you can't
         // see it, like climbing, or intaking on the other side
-        // of the hub. This shouldnt be too much of a performance
+        // of the hub. This shouldnt be too much of a performance 
         // issue, and if it is we can always remove it.
-        cvSource.PutFrame(input); 
+        cvSource.PutFrame(input);  
     }
 
     void IntakePipe::checkForFrameEmpty(cv::Mat frame) {
