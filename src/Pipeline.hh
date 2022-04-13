@@ -1,11 +1,11 @@
-//
-// Copyright (c) Texas Torque 2022
-//
-// Authors: Justus, Jacob, Omar, Jack
-//
+/**
+ * Copyright (c) Texas Torque 2022
+ *
+ * @author Justus Languell
+ */
 
-#ifndef TEXASTORQUE_ROLLINGMEDIAN
-#define TEXASTORQUE_ROLLINGMEDIAN
+#ifndef TEXASTORQUE_PIPELINE
+#define TEXASTORQUE_PIPELINE
 
 #include <algorithm>
 #include <chrono>
@@ -30,17 +30,14 @@
 #include "opencv2/videoio.hpp"
 
 namespace texastorque {
-  class RollingMedian {
-    private:
-        int window;
-        std::deque<double> values; 
-
+    class Pipeline : public frc::VisionPipeline {
     public:
-        RollingMedian(int window);
+        cs::CvSource cvSource;
+        cv::Mat frame;
 
-        ~RollingMedian();
-
-        double calculate(double value);
+        Pipeline(std::string name, nt::NetworkTableInstance& ntinst);
+    
+        void Process(cv::Mat& input) override;
     };
 }
 
