@@ -1,8 +1,8 @@
-//
-// Copyright (c) Texas Torque 2022
-//
-// Authors: Justus, Jacob, Omar, Jack
-//
+/**
+ * Copyright (c) Texas Torque 2022
+ *
+ * @author Justus Languell
+ */
 
 #include <algorithm>
 #include <chrono>
@@ -26,8 +26,7 @@
 #include "opencv2/objdetect.hpp"
 #include "opencv2/videoio.hpp"
 
-#include "Intake.hh"
-#include "Magazine.hh"
+#include "Pipeline.hh"
 #include "Setup.hh"
 
 cs::VideoSource* getCameraByName(std::vector<cs::VideoSource> cameras, const std::string& name) {
@@ -53,37 +52,16 @@ int main(int argc, char *argv[]) {
     }
     for (const auto &config: cameraConfigs)
         cameras.emplace_back(StartCamera(config));
-    // start image processing on camera 0 if present
+
     if (cameras.size() < 1) return -1;
 
-    MagazinePipe* pipe = new MagazinePipe(ntinst);
+    Pipeline* pipe = new Pipeline("right", ntinst);
     std::thread([&] {
-        frc::VisionRunner<MagazinePipe> runner(
-                cameras[0], pipe,
-                [&](MagazinePipe &pipeline) {});
+        frc::VisionRunner<Pipeline> runner(
+                *getCameraByName(cameras, "Front"), pipe,
+                [&](Pipeline &pipeline) {});
         runner.RunForever();
     }).detach();
-    wpi::outs() << "\n\nIntake Magazine \n\n";
-
-    IntakePipe* pipe1 = new IntakePipe("left", ntinst);
-    std::thread([&] {
-        frc::VisionRunner<IntakePipe> runner(
-                *getCameraByName(cameras, "Intake Left"), pipe1,
-                [&](IntakePipe &pipeline) {});
-        runner.RunForever();
-    }).detach();
-    wpi::outs() << "\n\nIntake Left \n\n";
-
-    IntakePipe* pipe2 = new IntakePipe("right", ntinst);
-    std::thread([&] {
-        frc::VisionRunner<IntakePipe> runner(
-                *getCameraByName(cameras, "Intake Right"), pipe2,
-                [&](IntakePipe &pipeline) {});
-        runner.RunForever();
-    }).detach();
-    wpi::outs() << "\n\nIntake Right \n\n";
-
-    wpi::outs() << ("What the fuck\n\n");
 
     for (;;) std::this_thread::sleep_for(std::chrono::seconds(10));
 }

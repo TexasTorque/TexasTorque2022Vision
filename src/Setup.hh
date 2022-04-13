@@ -1,8 +1,11 @@
-//
-// Copyright (c) Texas Torque 2022
-//
-// Authors: Justus, Jacob, Omar, Jack
-//
+/**
+ * Copyright (c) Texas Torque 2022
+ *
+ * @author Justus Languell
+ */
+
+// This needs to be split up between a .hh and a .cc
+// and cleaned up
 
 #ifndef TEXASTORQUE_SETUP
 #define TEXASTORQUE_SETUP
