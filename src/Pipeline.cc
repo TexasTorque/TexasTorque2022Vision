@@ -16,7 +16,9 @@ namespace texastorque {
     }
 
     void Pipeline::Process(cv::Mat& input) {
-        cvSource.PutFrame(input);  
+        cv::Mat flipped;
+        cv::flip(input, flipped, 0);
+        cvSource.PutFrame(flipped);  
     }
 }
 

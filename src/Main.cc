@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
 
     if (cameras.size() < 1) return -1;
 
-    Pipeline* pipe = new Pipeline("right", ntinst);
+    Pipeline* pipe = new Pipeline("Front", ntinst);
     std::thread([&] {
         frc::VisionRunner<Pipeline> runner(
                 *getCameraByName(cameras, "Front"), pipe,

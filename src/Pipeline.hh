@@ -33,7 +33,6 @@ namespace texastorque {
     class Pipeline : public frc::VisionPipeline {
     public:
         cs::CvSource cvSource;
-        cv::Mat frame;
 
         Pipeline(std::string name, nt::NetworkTableInstance& ntinst);
     
